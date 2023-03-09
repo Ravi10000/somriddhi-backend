@@ -6,10 +6,10 @@ const CategorySchema = new Schema({
         type: String,
         required: true
     },
-    icon: {
-        type: String,
-        required: false
-    },
+    // icon: {
+    //     type: String,
+    //     required: false
+    // },
     description: {
         type: String,
         required: false
@@ -19,7 +19,7 @@ const CategorySchema = new Schema({
         default: Date.now
     },
     createdBy: {
-        type: mongoose.Schema.type.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         default: Date.now
     }
 });

@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const BannerSchema = new Schema({
-    image: {
-        type: String,
-        required: true
-    },
+    // image: {
+    //     type: String,
+    //     required: true
+    // },
     name: {
         type: String,
         required: false
@@ -20,7 +20,7 @@ const BannerSchema = new Schema({
     },
     status: {
         type: String,
-        enum: ['Active','Inactive'],
+        enum: ['Active', 'Inactive'],
         required: false
     },
     createdAt: {
@@ -28,7 +28,7 @@ const BannerSchema = new Schema({
         default: Date.now
     },
     createdBy: {
-        type: mongoose.Schema.type.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         default: Date.now
     }
 });

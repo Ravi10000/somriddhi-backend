@@ -10,16 +10,16 @@ const NewsletterSchema = new Schema({
         type: String,
         required: false
     },
-    status:{
-        type:String,
-        enum:['Active','Inactive']
+    status: {
+        type: String,
+        enum: ['Active', 'Inactive']
     },
     createdAt: {
         type: Date,
         default: Date.now
     },
     createdBy: {
-        type: mongoose.Schema.type.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         default: Date.now
     }
 });

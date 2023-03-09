@@ -6,32 +6,32 @@ const MembershipSchema = new Schema({
         type: String,
         required: true
     },
-    image: {
-        type: String,
-        required: false
-    },
+    // image: {
+    //     type: String,
+    //     required: false
+    // },
     description: {
         type: String,
         required: false
     },
-    cashbackPercent:{
+    cashbackPercent: {
         type: double,
         required: true
     },
-    url:{
-        type:String,
+    url: {
+        type: String,
         required: true
     },
-    staus:{
-        type:String,
-        enum:['Active','Inactive']
+    status: {
+        type: String,
+        enum: ['Active', 'Inactive']
     },
     createdAt: {
         type: Date,
         default: Date.now
     },
     createdBy: {
-        type: mongoose.Schema.type.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         default: Date.now
     }
 });

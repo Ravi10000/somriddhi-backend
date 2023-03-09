@@ -3,7 +3,7 @@ const { Schema } = mongoose;
 
 const TicketSchema = new Schema({
     userid: {
-        type: mongoose.Schema.type.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         required: true
     },
     heading: {
@@ -16,20 +16,24 @@ const TicketSchema = new Schema({
     },
     status: {
         type: String,
-        enum: ['Active','Inactive'],
+        enum: ['Active', 'Inactive'],
         required: false
     },
-    replies:{
-        type: Array, //[{'text':'Hey',createdBy:ObjectId}]
-        required: false,
-        default: []
-    },
+    replies: [{
+        text: String,
+        createdBy: mongoose.Schema.type.ObjectId
+    }],
+    // replies: {
+    //     type: Array, //[{'text':'Hey',createdBy:ObjectId}]
+    //     required: false,
+    //     default: []
+    // },
     createdAt: {
         type: Date,
         default: Date.now
     },
     createdBy: {
-        type: mongoose.Schema.type.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         default: Date.now
     }
 });
@@ -40,5 +44,5 @@ module.exports = Ticket;
 //update ticket
 //get all tickets(optional field status)
 //get my tickets (fetch tickets based on userid)
-//addreply 
+//addreply
 //delete ticket

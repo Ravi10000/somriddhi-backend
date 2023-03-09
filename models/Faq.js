@@ -15,7 +15,7 @@ const FaqSchema = new Schema({
         default: Date.now
     },
     createdBy: {
-        type: mongoose.Schema.type.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         default: Date.now
     }
 });
@@ -24,5 +24,5 @@ module.exports = Faq;
 
 //create faq
 //update faq
-//get all faqs 
+//get all faqs
 //delete faq

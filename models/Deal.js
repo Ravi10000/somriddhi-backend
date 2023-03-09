@@ -6,40 +6,40 @@ const DealSchema = new Schema({
         type: String,
         required: true
     },
-    image: {
-        type: String,
-        required: false
-    },
+    // image: {
+    //     type: String,
+    //     required: false
+    // },
     description: {
         type: String,
         required: false
     },
-    cashbackPercent:{
+    cashbackPercent: {
         type: double,
         required: true
     },
-    url:{
-        type:String,
+    url: {
+        type: String,
         required: true
     },
-    categoryId:{
-        type: mongoose.Schema.type.ObjectId,
+    categoryId: {
+        type: mongoose.Schema.Types.ObjectId,
         required: true
     },
-    liveDate:{
-        type:Date,
-        required:true
+    liveDate: {
+        type: String,
+        required: true
     },
-    expiryDate:{
-        type:Date,
-        required:true
+    expiryDate: {
+        type: String,
+        required: true
     },
     createdAt: {
         type: Date,
         default: Date.now
     },
     createdBy: {
-        type: mongoose.Schema.type.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         default: Date.now
     }
 });

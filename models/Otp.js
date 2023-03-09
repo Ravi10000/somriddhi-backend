@@ -6,18 +6,22 @@ const OtpSchema = new Schema({
         type: String,
         required: true
     },
+    countryCode: {
+        type: String,
+        required: true
+    },
     otp: {
         type: String,
-        required: false
+        required: true
     },
     createdAt: {
-        type: Date,
+        type: String,
         default: Date.now
     },
-    createdBy: {
-        type: mongoose.Schema.type.ObjectId,
-        default: Date.now
-    }
+    // createdBy: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     default: Date.now
+    // }
 });
 const Otp = mongoose.model('otp', OtpSchema);
 module.exports = Otp;
