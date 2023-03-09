@@ -1,0 +1,19 @@
+{
+  "name": "somriddhi-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/arpitasaxena555/somriddhi-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/arpitasaxena555/somriddhi-backend/issues"
+  },
+  "homepage": "https://gitlab.com/arpitasaxena555/somriddhi-backend#readme"
+}
