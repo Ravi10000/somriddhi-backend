@@ -15,7 +15,7 @@ const MembershipSchema = new Schema({
         required: false
     },
     cashbackPercent: {
-        type: double,
+        type: Number,
         required: true
     },
     url: {

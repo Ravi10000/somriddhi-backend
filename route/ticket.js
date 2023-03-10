@@ -5,7 +5,7 @@ const { fetchuser } = require('../middleware/Auth');
 
 router.post('/ticket', fetchuser, createTicket);
 router.get('/ticket', fetchuser, getAllTickets);
-router.update('/ticket', fetchuser, updateTicket);
+router.patch('/ticket', fetchuser, updateTicket);
 router.delete('/ticket', fetchuser, deleteTicket);
 
 module.exports = router;

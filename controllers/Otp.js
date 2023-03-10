@@ -1,6 +1,7 @@
 const Otp = require('../models/Otp');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 
 exports.sendOtp = async (req, res) => {
@@ -21,7 +22,7 @@ exports.sendOtp = async (req, res) => {
         }
         res.status(200).json({
             status: 'success',
-            message: "OTP send Successfully!",
+            message: "OTP sent Successfully!",
             data: OTP
         })
     }
@@ -40,8 +41,8 @@ exports.verifyOtp = async (req, res) => {
         const userRecord = await Otp.findOne({ phone: req.body.phone });
         if (userRecord.otp == req.body.otp) {
             const userFound = await User.find({ phone: req.body.phone });
-            if (userFound) {
-                const token = jwt.sign({ _id: userFound._id }, JWT_SECRET, { expiresIn: '7d' });
+            if (userFound.length > 0) {
+                const token = jwt.sign({ _id: userFound._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
                 res.status(200).json({
                     status: 'success',
                     message: "User details fetched Successfully!",
@@ -60,12 +61,12 @@ exports.verifyOtp = async (req, res) => {
                 }
                 const addedUser = await User.create(newUser);
                 const savedUser = await addedUser.save();
-                const token = jwt.sign({ _id: addedUser._id }, JWT_SECRET, { expiresIn: '7d' });
+                const token = jwt.sign({ _id: addedUser._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
                 if (savedUser) {
                     res.status(200).json({
                         status: 'success',
                         message: "New user created and details fetched Successfully!",
-                        data: userFound,
+                        data: savedUser,
                         token: token
                     })
                 }
@@ -97,8 +98,8 @@ exports.newUser = async (req, res) => {
     try {
         const { fname, lname, email, phone, usertype } = req.body;
         const newUser = await User.create({ fname, lname, email, phone, usertype, isContactVerified: 'No' });
-        const token = jwt.sign({ _id: newUser._id }, JWT_SECRET, { expiresIn: '7d' });
-        const createdUser = newUser.save();
+        const token = jwt.sign({ _id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+        const createdUser = await newUser.save();
         if (createdUser) {
             res.status(200).json({
                 status: 'success',
@@ -142,7 +143,7 @@ exports.updateUser = async (req, res) => {
         let record = await User.find({ _id: req.user._id });
         if (!record) { return res.status(404).json({ "status": false, "message": "Not Found" }) }
 
-        result = await UserModel.findByIdAndUpdate(req.user._id, { $set: newData }, { new: true })
+        result = await User.findByIdAndUpdate(req.user._id, { $set: newData }, { new: true })
         res.status(200).json({
             "status": true,
             "message": "Record Updated Successfully",

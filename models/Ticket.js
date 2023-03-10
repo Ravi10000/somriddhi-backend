@@ -21,7 +21,7 @@ const TicketSchema = new Schema({
     },
     replies: [{
         text: String,
-        createdBy: mongoose.Schema.type.ObjectId
+        createdBy: mongoose.Schema.Types.ObjectId
     }],
     // replies: {
     //     type: Array, //[{'text':'Hey',createdBy:ObjectId}]

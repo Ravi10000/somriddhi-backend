@@ -1,24 +1,31 @@
-var jwt = require('jsonwebtoken');
-require('dotenv').config()
-
-const JWT_SECRET = process.env.JWT_SECRET;
-
-const fetchuser = (req, res, next) => {
-    // Get the user from the jwt token and add id to req object
-    const token = req.header('auth-token');
-    if (!token) {
-        res.status(401).send({ error: "Please authenticate using a valid token" })
+const jwt = require('jsonwebtoken');
+exports.fetchuser = (req, res, next) => {
+    if (req.headers.authorization) {
+        const token = req.headers.authorization.split(" ")[1];
+        // console.log(token);
+        //jwt.decode
+        const user = jwt.verify(token, process.env.JWT_SECRET); //user _id decode hojayegi // this is how we are going to manage user session
+        console.log(user)
+        req.user = user;
     }
-    try {
-        const data = jwt.verify(token, JWT_SECRET);
-        req.user = data.user;
-        next();
-
-    } catch (error) {
-        res.status(401).send({ error: "Please authenticate using a valid token" })
+    else {
+        res.status(400).json({ message: 'Authorization Required' });
     }
+
+    next();
 
 }
 
+exports.userMiddleware = (req, res, next) => {
+    if (req.user.role !== 'user') {
+        res.status(400).json({ message: "User Access Denied" });
+    }
+    next();
+}
 
-module.exports = fetchuser;
+exports.adminMiddleware = (req, res, next) => {
+    if (req.user.role !== 'admin') {
+        res.status(400).json({ message: "Admin Access Denied" });
+    }
+    next();
+}
