@@ -16,6 +16,8 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json())
 
+app.use(cors());
+app.use('/api', require('./route/otp'))
 app.use('/api', require('./route/banner'))
 app.use('/api', require('./route/category'))
 app.use('/api', require('./route/deal'))
@@ -23,7 +25,6 @@ app.use('/api', require('./route/faq'))
 app.use('/api', require('./route/feedback'))
 app.use('/api', require('./route/membership'))
 app.use('/api', require('./route/newsletter'))
-app.use('/api', require('./route/otp'))
 app.use('/api', require('./route/ticket'))
 
 mongoose.connect(process.env.MONGO_URL)

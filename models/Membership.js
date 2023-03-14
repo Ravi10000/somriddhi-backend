@@ -6,10 +6,10 @@ const MembershipSchema = new Schema({
         type: String,
         required: true
     },
-    // image: {
-    //     type: String,
-    //     required: false
-    // },
+    image: {
+        type: String,
+        required: false
+    },
     description: {
         type: String,
         required: false

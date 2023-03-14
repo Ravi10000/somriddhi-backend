@@ -53,15 +53,13 @@ exports.verifyOtp = async (req, res) => {
             else {
                 const newUser = {
                     phone: req.body.phone,
-                    fname: 'Guest',
-                    lname: "Guest",
-                    email: "guest@gmail.com",
                     isContactVerified: 'Yes',
                     usertype: 'customer'
                 }
                 const addedUser = await User.create(newUser);
                 const savedUser = await addedUser.save();
-                const token = jwt.sign({ _id: addedUser._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+                console.log(savedUser._id)
+                const token = jwt.sign({ _id: savedUser._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
                 if (savedUser) {
                     res.status(200).json({
                         status: 'success',
@@ -98,8 +96,8 @@ exports.newUser = async (req, res) => {
     try {
         const { fname, lname, email, phone, usertype } = req.body;
         const newUser = await User.create({ fname, lname, email, phone, usertype, isContactVerified: 'No' });
-        const token = jwt.sign({ _id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
         const createdUser = await newUser.save();
+        const token = jwt.sign({ _id: createdUser._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
         if (createdUser) {
             res.status(200).json({
                 status: 'success',
@@ -142,8 +140,8 @@ exports.updateUser = async (req, res) => {
         // Find the note to be updated and update it
         let record = await User.find({ _id: req.user._id });
         if (!record) { return res.status(404).json({ "status": false, "message": "Not Found" }) }
-
-        result = await User.findByIdAndUpdate(req.user._id, { $set: newData }, { new: true })
+        console.log(req.user._id)
+        result = await User.updateOne({ _id: req.user._id }, { $set: newData }, { new: true })
         res.status(200).json({
             "status": true,
             "message": "Record Updated Successfully",

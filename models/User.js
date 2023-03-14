@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const UserSchema = new Schema({
     fname: {
         type: String,
-        required: true
+        required: false
     },
     lname: {
         type: String,
@@ -12,21 +12,21 @@ const UserSchema = new Schema({
     },
     email: {
         type: String,
-        required: true,
-        unique: true
+        required: false,
+        unique: false
     },
     phone: {
         type: String,
         required: true,
         unique: true
     },
-    isContactVerified:{
-        type : String, 
-        required  : true,
-        enum: ['Yes','No']
+    isContactVerified: {
+        type: String,
+        required: true,
+        enum: ['Yes', 'No']
     },
-    referralCod:{
-        type:String,
+    referralCod: {
+        type: String,
         required: false
     },
     usertype: {
@@ -44,7 +44,7 @@ const User = mongoose.model('user', UserSchema);
 module.exports = User;
 
 
-//send otp 
+//send otp
 //req: phone number, countrycode
 //insert in otp
 

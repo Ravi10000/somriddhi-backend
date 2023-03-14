@@ -6,10 +6,10 @@ const CategorySchema = new Schema({
         type: String,
         required: true
     },
-    // icon: {
-    //     type: String,
-    //     required: false
-    // },
+    icon: {
+        type: String,
+        required: false
+    },
     description: {
         type: String,
         required: false

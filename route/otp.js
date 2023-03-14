@@ -7,6 +7,6 @@ router.post('/sendotp', sendOtp);
 router.post('/verifyotp', verifyOtp);
 router.post('/user', newUser);
 router.patch('/user', fetchuser, updateUser);
-router.get('/user', getAllUsers);
+router.get('/user', fetchuser, getAllUsers);
 
 module.exports = router;

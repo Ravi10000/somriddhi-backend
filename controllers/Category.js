@@ -4,6 +4,7 @@ exports.createCategory = async (req, res) => {
     try {
         const category = {};
         if (req.body.name) category.name = req.body.name;
+        if (req.file.filename) category.icon = req.file.filename;
         if (req.body.description) category.description = req.body.description;
         category.createdBy = req.user._id;
         const newCategory = await Category.create(category);
@@ -61,6 +62,7 @@ exports.updateCategory = async (req, res) => {
         const categoryId = req.body._id;
         const category = {};
         if (req.body.name) category.name = req.body.name;
+        if (req.file.filename) category.icon = req.file.filename;
         if (req.body.description) category.description = req.body.description;
         banner.createdBy = req.user._id;
         const record = await Category.findByIdAndUpdate(categoryId, { $set: category }, { new: true });

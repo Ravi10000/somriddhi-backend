@@ -4,6 +4,7 @@ exports.createMembership = async (req, res) => {
     try {
         const membership = {};
         if (req.body.name) membership.name = req.body.name;
+        if (req.file.filename) membership.image = req.file.filename;
         if (req.body.description) membership.description = req.body.description;
         if (req.body.url) membership.url = req.body.url;
         if (req.body.status) membership.status = req.body.status;
@@ -65,6 +66,7 @@ exports.updateMembership = async (req, res) => {
     try {
         const membershipId = req.body._id;
         const membership = {};
+        if (req.file.filename) membership.image = req.file.filename;
         if (req.body.name) membership.name = req.body.name;
         if (req.body.description) membership.description = req.body.description;
         if (req.body.url) membership.url = req.body.url;
