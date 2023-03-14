@@ -78,7 +78,7 @@ exports.verifyOtp = async (req, res) => {
         }
         else {
             res.status(200).json({
-                status: 'success',
+                status: 'failed',
                 message: 'Invalid otp'
             })
         }
@@ -93,31 +93,30 @@ exports.verifyOtp = async (req, res) => {
 }
 
 exports.newUser = async (req, res) => {
+    const { fname, lname, email, phone, usertype } = req.body;
+
     try {
-        const { fname, lname, email, phone, usertype } = req.body;
-        const newUser = await User.create({ fname, lname, email, phone, usertype, isContactVerified: 'No' });
-        const createdUser = await newUser.save();
-        const token = jwt.sign({ _id: createdUser._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-        if (createdUser) {
-            res.status(200).json({
-                status: 'success',
-                message: "New user created Successfully!",
-                data: createdUser,
-                token: token
-            })
-        }
-        else {
-            res.status(400).json({
-                status: 'fail',
-                message: "User not created !"
-            })
-        }
-    }
-    catch (err) {
-        res.status(400).json({
-            status: "Fail",
-            message: err.message
-        })
+        // Create a newNote object
+        const newData = {};
+        if (fname) { newData.fname = fname };
+        if (lname) { newData.lname = lname };
+        if (email) { newData.email = email };
+        if (phone) { newData.phone = phone };
+        if (usertype) { newData.usertype = usertype };
+        newData.isContactVerified = "Yes";
+        // Find the note to be updated and update it
+        let record = await User.find({ phone: phone });
+        if (!record) { return res.status(404).json({ "status": false, "message": "Not Found" }) }
+
+        result = await User.updateOne({ phone: phone }, { $set: newData }, { new: true })
+        res.status(200).json({
+            "status": true,
+            "message": "Record Updated Successfully",
+            "data": result
+        });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Internal Server Error");
     }
 }
 
@@ -138,10 +137,10 @@ exports.updateUser = async (req, res) => {
         if (referralCode) { newData.referralCode = referralCode };
 
         // Find the note to be updated and update it
-        let record = await User.find({ _id: req.user._id });
+        let record = await User.find({ phone: phone });
         if (!record) { return res.status(404).json({ "status": false, "message": "Not Found" }) }
         console.log(req.user._id)
-        result = await User.updateOne({ _id: req.user._id }, { $set: newData }, { new: true })
+        result = await User.updateOne({ phone: phone }, { $set: newData }, { new: true })
         res.status(200).json({
             "status": true,
             "message": "Record Updated Successfully",

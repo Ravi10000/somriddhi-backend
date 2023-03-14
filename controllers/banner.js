@@ -4,6 +4,7 @@ exports.createBanner = async (req, res) => {
     try {
         const banner = {};
         if (req.body.name) banner.name = req.body.name;
+        console.log(req.file)
         if (req.file.filename) banner.image = req.file.filename;
         if (req.body.description) banner.description = req.body.description;
         if (req.body.url) banner.url = req.body.url;

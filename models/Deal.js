@@ -24,7 +24,7 @@ const DealSchema = new Schema({
     },
     categoryId: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true
+        required: false
     },
     liveDate: {
         type: String,
