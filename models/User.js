@@ -20,9 +20,8 @@ const UserSchema = new Schema({
         unique: true
     },
     isContactVerified: {
-        type: String,
-        required: true,
-        enum: ['Yes', 'No']
+        type: Boolean,
+        required: true
     },
     referralCod: {
         type: String,

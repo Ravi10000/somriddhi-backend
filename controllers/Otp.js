@@ -40,20 +40,20 @@ exports.verifyOtp = async (req, res) => {
     try {
         const userRecord = await Otp.findOne({ phone: req.body.phone });
         if (userRecord.otp == req.body.otp) {
-            const userFound = await User.find({ phone: req.body.phone });
-            if (userFound.length > 0) {
+            const userFound = await User.findOne({ phone: req.body.phone });
+            if (userFound) {
                 const token = jwt.sign({ _id: userFound._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
                 res.status(200).json({
                     status: 'success',
                     message: "User details fetched Successfully!",
-                    data: userFound,
+                    user: userFound,
                     token: token
                 })
             }
             else {
                 const newUser = {
                     phone: req.body.phone,
-                    isContactVerified: 'Yes',
+                    isContactVerified: true,
                     usertype: 'customer'
                 }
                 const addedUser = await User.create(newUser);
@@ -64,7 +64,7 @@ exports.verifyOtp = async (req, res) => {
                     res.status(200).json({
                         status: 'success',
                         message: "New user created and details fetched Successfully!",
-                        data: savedUser,
+                        user: savedUser,
                         token: token
                     })
                 }
@@ -103,7 +103,7 @@ exports.newUser = async (req, res) => {
         if (email) { newData.email = email };
         if (phone) { newData.phone = phone };
         if (usertype) { newData.usertype = usertype };
-        newData.isContactVerified = "Yes";
+        newData.isContactVerified = true;
         // Find the note to be updated and update it
         let record = await User.find({ phone: phone });
         if (!record) { return res.status(404).json({ "status": false, "message": "Not Found" }) }
@@ -112,7 +112,7 @@ exports.newUser = async (req, res) => {
         res.status(200).json({
             "status": true,
             "message": "Record Updated Successfully",
-            "data": result
+            "user": result
         });
     } catch (error) {
         console.error(error.message);
@@ -144,7 +144,7 @@ exports.updateUser = async (req, res) => {
         res.status(200).json({
             "status": true,
             "message": "Record Updated Successfully",
-            "data": result
+            "user": result
         });
     } catch (error) {
         console.error(error.message);
@@ -160,7 +160,7 @@ exports.getAllUsers = async (req, res) => {
         res.status(200).json({
             "status": 'success',
             "message": "Record fetched Successfully",
-            "data": allUsers
+            "user": allUsers
         });
     }
     else {
