@@ -1,13 +1,16 @@
 const Feedback = require("../models/Feedback");
 
 exports.createFeedback = async (req, res) => {
+  console.log("create feedback");
+  console.log("body", req.body);
   try {
     const feedback = {};
-    if (req.body.userid) feedback.userid = req.body.userid;
     if (req.body.username) feedback.username = req.body.username;
     if (req.body.starRating) feedback.starRating = req.body.starRating;
     if (req.body.feedbackText) feedback.feedbackText = req.body.feedbackText;
     if (req.body.status) feedback.status = req.body.status;
+    // if (req.body.userid) feedback.userid = req.body.userid;
+    feedback.userid = req.user._id;
     feedback.createdBy = req.user._id;
     const newFeedback = await Feedback.create(feedback);
     const record = await newFeedback.save();
@@ -57,6 +60,8 @@ exports.getAllFeedbacks = async (req, res) => {
 };
 
 exports.deleteFeedback = async (req, res) => {
+  console.log("delete feedback");
+  console.log("body", req.body);
   try {
     const feedbackId = req.body._id;
     console.log(feedbackId);

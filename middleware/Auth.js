@@ -15,6 +15,7 @@ exports.fetchuser = (req, res, next) => {
     console.log("end of fetchuser");
     next();
   } else {
+    console.log("else block");
     res.status(400).json({ message: "Authorization Required" });
   }
 };
