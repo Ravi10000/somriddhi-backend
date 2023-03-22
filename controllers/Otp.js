@@ -89,47 +89,53 @@ exports.verifyOtp = async (req, res) => {
 };
 
 exports.newUser = async (req, res) => {
+  console.log("newuser");
+  console.log(req.headers.authorization);
+  console.log("body", req.body);
+  console.log("user", req.user);
   const { fname, lname, email, phone, usertype } = req.body;
 
-  try {
-    // Create a newNote object
-    const newData = {};
-    if (fname) {
-      newData.fname = fname;
-    }
-    if (lname) {
-      newData.lname = lname;
-    }
-    if (email) {
-      newData.email = email;
-    }
-    if (phone) {
-      newData.phone = phone;
-    }
-    if (usertype) {
-      newData.usertype = usertype;
-    }
-    newData.isContactVerified = true;
-    // Find the note to be updated and update it
-    let record = await User.find({ phone: phone });
-    if (!record) {
-      return res.status(404).json({ status: false, message: "Not Found" });
-    }
-
-    result = await User.updateOne(
-      { phone: phone },
-      { $set: newData },
-      { new: true }
-    );
-    res.status(200).json({
-      status: true,
-      message: "Record Updated Successfully",
-      user: result,
-    });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send("Internal Server Error");
+  // try {
+  // Create a newNote object
+  const newData = {};
+  if (fname) {
+    newData.fname = fname;
   }
+  if (lname) {
+    newData.lname = lname;
+  }
+  if (email) {
+    newData.email = email;
+  }
+  if (phone) {
+    newData.phone = phone;
+  }
+  if (usertype) {
+    newData.usertype = usertype;
+  }
+  newData.isContactVerified = true;
+  // console.log("body", req.body);
+  console.log({ newData });
+  // Find the note to be updated and update it
+  const record = await User.findById(req.user._id);
+  console.log({ record });
+  if (!record) {
+    return res.status(404).json({ status: false, message: "Not Found" });
+  }
+  const result = await User.findByIdAndUpdate(req.user._id, newData, {
+    new: true,
+  });
+  console.log({ result });
+  console.log("end of newuser");
+  res.status(200).json({
+    status: "success",
+    message: "Record Updated Successfully",
+    user: result,
+  });
+  // } catch (error) {
+  //   console.error(error);
+  //   res.status(500).send("Internal Server Error");
+  // }
 };
 
 exports.updateUser = async (req, res) => {

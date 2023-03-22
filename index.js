@@ -11,13 +11,13 @@ mongoose.Promise = global.Promise;
 env.config();
 
 app.use(express.static("uploads"));
-app.use(express.json());
+// app.use(express.json());
+app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
     extended: true,
   })
 );
-app.use(bodyParser.json());
 
 app.use(cors());
 app.use("/api", require("./route/auth"));

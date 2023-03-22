@@ -11,7 +11,7 @@ const { fetchuser } = require("../middleware/Auth");
 
 router.post("/sendotp", sendOtp);
 router.post("/verifyotp", verifyOtp);
-router.post("/user", newUser);
+router.post("/user", fetchuser, newUser);
 router.patch("/user", fetchuser, updateUser);
 router.get("/user", fetchuser, getAllUsers);
 

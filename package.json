@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "push": "git push origin master",
+    "pull": "git pull origin master"
   },
   "repository": {
     "type": "git",

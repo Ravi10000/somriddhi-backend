@@ -37,7 +37,8 @@ exports.getUser = async (req, res) => {
     let userId = req.user._id;
     if (!userId) throw new Error("Not logged in or Session expired.");
 
-    const user = await UserModel.findById(userId).select("-password");
+    const user = await UserModel.findById(userId);
+    // .select("-password");
     console.log({ user });
     res.json({
       status: "success",
@@ -143,9 +144,12 @@ exports.signup = async (req, res) => {
   }
 };
 exports.logout = async (req, res) => {
+  console.log("logout");
   try {
     const token = req.headers.authorization.split(" ")[1];
-    console.log(token);
+    console.log({ token });
+    await jwt.destroy(token);
+    res.send({ staus: "success" });
   } catch (error) {
     res.send(error.message);
   }
@@ -185,6 +189,7 @@ exports.login = async (req, res) => {
 };
 
 exports.updateUser = async (req, res) => {
+  console.log("body", req.body);
   const { fname, lname, email, phone, usertype } = req.body;
 
   try {
@@ -215,11 +220,13 @@ exports.updateUser = async (req, res) => {
     // if (record.createdBy.toString() !== req.user.id) {
     //   return res.status(401).json({ "status": false, "message": "Not Allowed" });
     // }
-    result = await UserModel.findByIdAndUpdate(
-      req.params.id,
-      { $set: newData },
-      { new: true }
-    );
+    const result = await UserModel.findByIdAndUpdate(req.params.id, newData, {
+      new: true,
+    });
+    // await result.save();
+
+    req.user = result;
+    console.log({ result });
     res.json({
       status: true,
       message: "Record Updated Successfully",
