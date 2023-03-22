@@ -20,6 +20,7 @@ app.use(
 app.use(bodyParser.json());
 
 app.use(cors());
+app.use("/api", require("./route/auth"));
 app.use("/api", require("./route/otp"));
 app.use("/api", require("./route/banner"));
 app.use("/api", require("./route/category"));
