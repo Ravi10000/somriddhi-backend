@@ -37,6 +37,7 @@ exports.createDeal = async (req, res) => {
 }
 
 exports.getAllDeals = async (req, res) => {
+    console.log('body', req.body);
     try {
         const find = {};
         if (req.body.categoryId) find.categoryId = req.body.categoryId;
