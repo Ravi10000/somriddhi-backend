@@ -38,12 +38,15 @@ exports.addTicketReplies = async (req, res) => {
   try {
     const find = {};
     if (req.body.replies) find.replies = req.body.replies;
-    const ticketId = req.body._id;
-    const record = await Ticket.findByIdAndUpdate(
-      ticketId,
-      { $set: find },
-      { new: true }
-    );
+    const ticketId = req.body.id;
+    const record = await Ticket.findById(ticketId);
+    record.replies.push(req.body.replies);
+    await record.save();
+    // const record = await Ticket.findByIdAndUpdate(
+    //   ticketId,
+    //   { $set: find },
+    //   { new: true }
+    // );
     if (record) {
       res.status(200).json({
         status: "success",
@@ -61,6 +64,28 @@ exports.addTicketReplies = async (req, res) => {
       status: "fail",
       message: err.message,
     });
+  }
+};
+
+exports.updateTicketStatus = async (req, res) => {
+  console.log("update ticket status");
+  console.log("body", req.body);
+  try {
+    const { status, id } = req.body;
+    const record = await Ticket.findByIdAndUpdate(id, { status });
+    if (record) {
+      return res.status(200).json({
+        status: "success",
+        message: "Records updated Successfully!",
+        data: record,
+      });
+    }
+    res.status(400).json({
+      status: "fail",
+      message: "Records not updated successfully!",
+    });
+  } catch (error) {
+    console.log(error);
   }
 };
 
@@ -90,7 +115,7 @@ exports.getMyTickets = async (req, res) => {
 exports.getAllTickets = async (req, res) => {
   try {
     const find = {};
-    if (req.body.status) find.status = req.body.status;
+    if (req.query.status) find.status = req.query.status;
     const allTickets = await Ticket.find(find);
     if (allTickets) {
       res.status(200).json({
