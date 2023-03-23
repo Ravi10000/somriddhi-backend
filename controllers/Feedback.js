@@ -35,9 +35,11 @@ exports.createFeedback = async (req, res) => {
 };
 
 exports.getAllFeedbacks = async (req, res) => {
+  console.log("get all feedbacks");
+  console.log("query", req.query);
   try {
     const find = {};
-    if (req.body.status) find.status = req.body.status;
+    if (req.query.status) find.status = req.query.status;
     const allFeedback = await Feedback.find(find);
     if (allFeedback) {
       res.status(200).json({
@@ -61,9 +63,9 @@ exports.getAllFeedbacks = async (req, res) => {
 
 exports.deleteFeedback = async (req, res) => {
   console.log("delete feedback");
-  console.log("body", req.body);
+  console.log("params", req.params);
   try {
-    const feedbackId = req.body._id;
+    const feedbackId = req.params.id;
     console.log(feedbackId);
     const record = await Feedback.deleteOne({ _id: feedbackId });
     if (record) {

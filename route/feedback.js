@@ -8,7 +8,7 @@ const {
 } = require("../controllers/Feedback");
 const { fetchuser } = require("../middleware/Auth");
 
-router.delete("/feedback", fetchuser, deleteFeedback);
+router.delete("/feedback/:id", fetchuser, deleteFeedback);
 router.post("/feedback", fetchuser, createFeedback);
 router.get("/feedback", fetchuser, getAllFeedbacks);
 
