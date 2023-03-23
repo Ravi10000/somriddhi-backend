@@ -92,7 +92,7 @@ exports.newUser = async (req, res) => {
   console.log("newuser");
   console.log(req.headers.authorization);
   console.log("body", req.body);
-  console.log("user", req.user);
+  // console.log("user", req.user);
   const { fname, lname, email, phone, usertype } = req.body;
 
   // try {
@@ -213,3 +213,8 @@ exports.getAllUsers = async (req, res) => {
     });
   }
 };
+
+// exports.createUserByAdmin = async (req, res) => {
+//   console.log("createUserByAdmin");
+//   // console.log(req.body);
+// };

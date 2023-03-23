@@ -30,6 +30,7 @@ const upload = multer({ storage });
 router.post("/deal", upload.single("dealPhoto"), fetchuser, createDeal);
 router.patch("/deal", upload.single("dealPhoto"), fetchuser, updateDeal);
 router.delete("/deal/:id", fetchuser, deleteDeal);
-router.post("/getdeal", getAllDeals);
+router.get("/deal/:categoryId", getAllDeals);
+router.get("/deal", getAllDeals);
 
 module.exports = router;

@@ -87,3 +87,29 @@ exports.deleteFeedback = async (req, res) => {
     });
   }
 };
+
+exports.updateFeedbackStatus = async (req, res) => {
+  console.log("update feedback status");
+  console.log("body", req.body);
+  const { id, status } = req.body;
+
+  try {
+    const feedback = await Feedback.findByIdAndUpdate(
+      id,
+      { status },
+      { new: true }
+    );
+    if (feedback) {
+      res.status(200).json({
+        status: "success",
+        message: "Record updated Successfully!",
+        data: feedback,
+      });
+    }
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err.message,
+    });
+  }
+};

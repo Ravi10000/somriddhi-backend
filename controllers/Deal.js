@@ -36,10 +36,10 @@ exports.createDeal = async (req, res) => {
 };
 
 exports.getAllDeals = async (req, res) => {
-  console.log("body", req.body);
+  console.log("body", req.params);
   try {
     const find = {};
-    if (req.body.categoryId) find.categoryId = req.body.categoryId;
+    if (req.params.categoryId) find.categoryId = req.params.categoryId;
     const allDeals = await Deal.find(find);
     if (allDeals) {
       res.status(200).json({
