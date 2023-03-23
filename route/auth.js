@@ -10,6 +10,7 @@ const {
   getUser,
   logout,
   checkAuthentication,
+  createUserByAdmin,
 } = require("../controllers/User");
 const otpController = require("../controllers/Otp");
 
@@ -36,6 +37,8 @@ router.post("/getAllUser", fetchuser, getAllUser);
 router.put("/updateUser/:id", fetchuser, updateUser);
 
 router.delete("/deleteUser/:id", fetchuser, deleteUser);
+
+router.post("/newuser", fetchuser, createUserByAdmin);
 
 router.post("/logout", fetchuser, logout);
 // router.delete("/deleteUser/:id", fetchuser, deleteUser);

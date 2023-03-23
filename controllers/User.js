@@ -348,6 +348,28 @@ exports.deleteUser = async (req, res) => {
   }
 };
 
+exports.createUserByAdmin = async (req, res) => {
+  const { fname, lname, phone, email, usertype, isContactVerified } = req.body;
+  console.log("body", req.body);
+  try {
+    const newUser = await UserModel.create(req.body);
+    console.log({ newUser });
+    if (newUser) {
+      res.status(200).json({
+        status: "success",
+        message: "User Created Successfully",
+        data: newUser,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      status: "fail",
+      message: "Internal Server Error",
+    });
+  }
+};
+
 // exports.studentAppliedSchools = async (req, res) => {
 //   try {
 //     // const docs = await FormResponseModel.find({
