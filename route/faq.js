@@ -6,6 +6,6 @@ const { fetchuser } = require('../middleware/Auth');
 router.post('/faq', fetchuser, createFaq);
 router.get('/faq', fetchuser, getFaqs);
 router.patch('/faq', fetchuser, updateFaq);
-router.delete('/faq', fetchuser, deleteFaq);
+router.delete('/faq/:id', fetchuser, deleteFaq);
 
 module.exports = router;
