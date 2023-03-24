@@ -34,6 +34,7 @@ exports.sendOtp = async (req, res) => {
 };
 
 exports.verifyOtp = async (req, res) => {
+  console.log("verifyotp ", req.body);
   try {
     const userRecord = await Otp.findOne({ phone: req.body.phone });
     if (userRecord.otp == req.body.otp) {
@@ -92,6 +93,7 @@ exports.newUser = async (req, res) => {
   console.log("newuser");
   console.log(req.headers.authorization);
   console.log("body", req.body);
+  console.log("user", req.user);
   // console.log("user", req.user);
   const { fname, lname, email, phone, usertype } = req.body;
 
@@ -117,11 +119,11 @@ exports.newUser = async (req, res) => {
   // console.log("body", req.body);
   console.log({ newData });
   // Find the note to be updated and update it
-  const record = await User.findById(req.user._id);
-  console.log({ record });
-  if (!record) {
-    return res.status(404).json({ status: false, message: "Not Found" });
-  }
+  // const record = await User.findById(req.user._id);
+  // console.log({ record });
+  // if (!record) {
+  //   return res.status(404).json({ status: false, message: "Not Found" });
+  // }
   const result = await User.findByIdAndUpdate(req.user._id, newData, {
     new: true,
   });

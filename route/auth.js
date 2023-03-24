@@ -40,7 +40,7 @@ router.delete("/deleteUser/:id", fetchuser, deleteUser);
 
 router.post("/newuser", fetchuser, createUserByAdmin);
 
-router.post("/logout", fetchuser, logout);
+router.delete("/logout", fetchuser, logout);
 // router.delete("/deleteUser/:id", fetchuser, deleteUser);
 // router.put("/updatePassword/:id", [
 //   body('password', 'Password must be atleast 5 characters').isLength({ min: 5 }),], fetchuser, resetPassword);

@@ -34,8 +34,14 @@ exports.checkAuthentication = async (req, res) => {
 exports.getUser = async (req, res) => {
   try {
     console.log(req.user);
-    let userId = req.user._id;
-    if (!userId) throw new Error("Not logged in or Session expired.");
+    let userId = req?.user?._id || null;
+    if (!userId) {
+      return res.status(200).json({
+        status: "success",
+        user: null,
+      });
+    }
+    // throw new Error("Not logged in or Session expired.");
 
     const user = await UserModel.findById(userId);
     // .select("-password");
@@ -149,9 +155,11 @@ exports.logout = async (req, res) => {
     const token = req.headers.authorization.split(" ")[1];
     console.log({ token });
     await jwt.destroy(token);
-    res.send({ staus: "success" });
+    console.log("destroyed");
+    res.status(200).json({ status: "success" });
   } catch (error) {
-    res.send(error.message);
+    console.log(error.message);
+    res.status(400).json({ error: error.message });
   }
 };
 
@@ -228,9 +236,9 @@ exports.updateUser = async (req, res) => {
     req.user = result;
     console.log({ result });
     res.json({
-      status: true,
+      status: "success",
       message: "Record Updated Successfully",
-      data: result,
+      user: result,
     });
   } catch (error) {
     console.error(error.message);
