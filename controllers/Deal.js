@@ -60,6 +60,22 @@ exports.getAllDeals = async (req, res) => {
     });
   }
 };
+exports.getDealById = async (req, res) => {
+  console.log('fetch deal by id');
+  const dealId = req.params.id;
+  console.log("dealId", req.params);
+  if (dealId) {
+    const deal = await Deal.findById(dealId);
+    if (deal) {
+      return res.status(200).json({
+        status: "success",
+        message: "Record fetched Successfully!",
+        deal: deal,
+      });
+    }
+  }
+  return res.status(400);
+};
 
 exports.updateDeal = async (req, res) => {
   try {

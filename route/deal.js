@@ -5,6 +5,7 @@ const {
   getAllDeals,
   updateDeal,
   deleteDeal,
+  getDealById,
 } = require("../controllers/Deal");
 const { fetchuser } = require("../middleware/Auth");
 const multer = require("multer");
@@ -30,6 +31,7 @@ const upload = multer({ storage });
 router.post("/deal", upload.single("dealPhoto"), fetchuser, createDeal);
 router.patch("/deal", upload.single("dealPhoto"), fetchuser, updateDeal);
 router.delete("/deal/:id", fetchuser, deleteDeal);
+router.get("/deal/single/:id", getDealById);
 router.get("/deal/:categoryId", getAllDeals);
 router.get("/deal", getAllDeals);
 
