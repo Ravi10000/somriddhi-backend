@@ -53,7 +53,7 @@ exports.getCategories = async (req, res) => {
 };
 
 exports.updateCategory = async (req, res) => {
-  console.log("body", req.body, req.file);
+//   console.log("body", req.body, req.file);
   console.log("edit category");
   try {
     const categoryId = req.body._id;
@@ -62,7 +62,6 @@ exports.updateCategory = async (req, res) => {
     if (req.file.filename) category.icon = req.file.filename;
     if (req.body.description) category.description = req.body.description;
     category.createdBy = req.user._id;
-    console.log("category", category);
     const record = await Category.findByIdAndUpdate(
       categoryId,
       { $set: category },
