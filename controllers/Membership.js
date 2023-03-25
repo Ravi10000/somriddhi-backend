@@ -59,6 +59,10 @@ exports.getMemberships = async (req, res) => {
 };
 
 exports.updateMembership = async (req, res) => {
+  console.log("update membership");
+  console.log("body", req.body);
+  console.log("file", req.file);
+
   try {
     const membershipId = req.body._id;
     const membership = {};
