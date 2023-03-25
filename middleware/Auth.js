@@ -5,7 +5,6 @@ exports.fetchuser = (req, res, next) => {
   console.log("body on fetch user ", req.body);
   console.log("params on fetch user ", req.params);
   console.log("query on fetch user ", req.query);
-  //   console.log(req.headers.authorization);
   if (req.headers.authorization) {
     const token = req.headers.authorization.split(" ")[1];
     console.log({ token });
@@ -24,7 +23,6 @@ exports.fetchuser = (req, res, next) => {
     // next();
   } else {
     console.log("no user found");
-    // res.status(401).json({ message: "Authorization Required" });
   }
   next();
 };

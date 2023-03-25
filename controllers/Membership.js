@@ -92,6 +92,7 @@ exports.updateMembership = async (req, res) => {
       });
     }
   } catch (err) {
+    console.log("error: ", err.message);
     res.status(400).json({
       status: "fail",
       message: err.message,
