@@ -30,7 +30,7 @@ const upload = multer({ storage });
 
 router.post("/banner", upload.single("bannerPhoto"), fetchuser, createBanner);
 router.get("/banner", getBanners);
-router.patch("/banner", upload.single("bannerPhoto"), updateBanner);
+router.patch("/banner", upload.single("bannerPhoto"), fetchuser, updateBanner);
 router.delete("/banner/:id", deleteBanner);
 
 module.exports = router;

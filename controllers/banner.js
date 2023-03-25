@@ -56,6 +56,9 @@ exports.getBanners = async (req, res) => {
 };
 
 exports.updateBanner = async (req, res) => {
+  console.log("update banner");
+  console.log("body", req.body);
+  console.log("user", req.user);
   try {
     const bannerId = req.body._id;
     const banner = {};
@@ -84,6 +87,7 @@ exports.updateBanner = async (req, res) => {
       });
     }
   } catch (err) {
+    console.log({ err });
     res.status(400).json({
       status: "fail",
       message: err.message,
