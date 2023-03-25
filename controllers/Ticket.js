@@ -96,7 +96,7 @@ exports.getMyTickets = async (req, res) => {
       res.status(200).json({
         status: "success",
         message: "Records fetched Successfully!",
-        data: allTickets,
+        tickets: allTickets,
       });
     } else {
       res.status(400).json({

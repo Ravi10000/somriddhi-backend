@@ -61,7 +61,7 @@ exports.getAllDeals = async (req, res) => {
   }
 };
 exports.getDealById = async (req, res) => {
-  console.log('fetch deal by id');
+  console.log("fetch deal by id");
   const dealId = req.params.id;
   console.log("dealId", req.params);
   if (dealId) {
@@ -78,6 +78,8 @@ exports.getDealById = async (req, res) => {
 };
 
 exports.updateDeal = async (req, res) => {
+  console.log("updating deal");
+  console.log("body", req.body);
   try {
     const dealId = req.body._id;
     const deal = {};

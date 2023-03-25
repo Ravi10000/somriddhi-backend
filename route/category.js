@@ -40,6 +40,6 @@ router.patch(
   fetchuser,
   updateCategory
 );
-router.delete("/category", fetchuser, deleteCategory);
+router.delete("/category/:id", fetchuser, deleteCategory);
 
 module.exports = router;
