@@ -31,6 +31,7 @@ app.use("/api", require("./route/feedback"));
 app.use("/api", require("./route/membership"));
 app.use("/api", require("./route/newsletter"));
 app.use("/api", require("./route/ticket"));
+app.use("/api", require("./route/analytic"));
 
 mongoose.connect(process.env.MONGO_URL);
 
