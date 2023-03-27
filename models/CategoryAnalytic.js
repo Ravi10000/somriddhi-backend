@@ -17,7 +17,7 @@ const CategoryAnalyticSchema = new Schema({
   },
   visitedOn: {
     type: Date,
-    default: Date.now,
+    // default: Date.now,
   },
   deviceType: {
     type: String,

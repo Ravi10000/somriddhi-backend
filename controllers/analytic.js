@@ -7,7 +7,7 @@ exports.addCategoryAnalytic = async (req, res) => {
   console.log("user", req.user);
 
   const analytic = {};
-  analytic.userId = req?.body?.userId || null;
+  analytic.userId = req?.user?._id || null;
   analytic.categoryId = req?.body?.categoryId || null;
   analytic.deviceType = req?.body?.deviceType || null;
   analytic.ipAddress = req.ip || null;
@@ -70,7 +70,7 @@ exports.addCouponAnalytic = async (req, res) => {
   console.log("add coupon analytic");
   console.log("body", req.body);
   const analytic = {};
-  analytic.userId = req?.body?.userId || null;
+  analytic.userId = req?.user?._id || null;
   analytic.couponId = req?.body?.couponId || null;
   analytic.deviceType = req?.body?.deviceType || null;
   analytic.ipAddress = req?.socket?.remoteAddress || null;

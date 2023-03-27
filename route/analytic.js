@@ -8,9 +8,9 @@ const {
 } = require("../controllers/analytic");
 const router = express.Router();
 
-router.post("/analytic/category", addCategoryAnalytic);
+router.post("/analytic/category", fetchuser, addCategoryAnalytic);
+router.post("/analytic/coupon", fetchuser, addCouponAnalytic);
 router.patch("/analytic/category", updateCategoryAnalytic);
-router.post("/analytic/coupon", addCouponAnalytic);
 router.patch("/analytic/coupon", updateCouponAnalytic);
 
 module.exports = router;
