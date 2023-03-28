@@ -25,19 +25,24 @@ exports.createContent = async (req, res) => {
 
 exports.updateContent = async (req, res) => {
   console.log("update content");
+  console.log("body", req.body);
+  console.log("file", req?.file);
+  console.log("no image", !req?.file?.filename);
   const obj = {};
-  if (req.params.id) obj.id = req.params.id;
-  if (req.body.title) obj.title = req.body.title;
-  if (req.body.description) obj.description = req.body.description;
-  if (req.file.filename) obj.image = req.file.filename;
+  if (req.body._id) obj.id = req.body._id;
+  if (req.body?.title) obj.title = req.body.title;
+  if (req.body?.description) obj.description = req.body.description;
+  if (req?.file?.filename) obj.image = req.file.filename;
 
-  const contentToUpdate = await Content.findById(obj.id);
+  const contentToUpdate = await Content.findByIdAndUpdate(
+    obj.id,
+    {
+      $set: obj,
+    },
+    { new: true }
+  );
 
   if (contentToUpdate) {
-    contentToUpdate.title = obj.title;
-    contentToUpdate.description = obj.description;
-    contentToUpdate.image = obj.image;
-    await contentToUpdate.save();
     return res
       .status(200)
       .json({ status: "success", content: contentToUpdate });

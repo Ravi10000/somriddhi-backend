@@ -63,7 +63,7 @@ exports.updateBanner = async (req, res) => {
     const bannerId = req.body._id;
     const banner = {};
     if (req.body.name) banner.name = req.body.name;
-    if (req.file.filename) banner.image = req.file.filename;
+    if (req?.file?.filename) banner.image = req.file.filename;
     if (req.body.bannerPhoto) banner.image = req.body.bannerPhoto;
     if (req.body.description) banner.description = req.body.description;
     if (req.body.url) banner.url = req.body.url;

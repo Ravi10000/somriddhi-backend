@@ -85,7 +85,7 @@ exports.updateDeal = async (req, res) => {
     const deal = {};
     if (req.body.name) deal.name = req.body.name;
     if (req.body.description) deal.description = req.body.description;
-    if (req.file.filename) deal.image = req.file.filename;
+    if (req?.file?.filename) deal.image = req.file.filename;
     if (req.body.url) deal.url = req.body.url;
     if (req.body.categoryId) deal.categoryId = req.body.categoryId;
     if (req.body.cashbackPercent)

@@ -5,10 +5,11 @@ exports.fetchuser = (req, res, next) => {
   console.log("body on fetch user ", req.body);
   console.log("params on fetch user ", req.params);
   console.log("query on fetch user ", req.query);
+  console.log("files on fetch user ", req?.file);
   if (req.headers.authorization) {
     const token = req.headers.authorization.split(" ")[1];
     console.log({ token });
-    console.log(!token);
+    // console.log(!token);
     //jwt.decode
     if (token == "null") {
       req.user = null;
@@ -20,7 +21,7 @@ exports.fetchuser = (req, res, next) => {
     console.log({ user });
     req.user = user;
     console.log("user fetched and sent successfully");
-    // next();
+    return next();
   } else {
     console.log("no user found");
   }

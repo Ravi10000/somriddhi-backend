@@ -61,12 +61,12 @@ exports.getMemberships = async (req, res) => {
 exports.updateMembership = async (req, res) => {
   console.log("update membership");
   console.log("body", req.body);
-  console.log("file", req.file);
+  console.log("file", req?.file);
 
   try {
-    const membershipId = req.body._id;
+    const membershipId = req?.body?._id;
     const membership = {};
-    if (req.file.filename) membership.image = req.file.filename;
+    if (req?.file?.filename) membership.image = req.file.filename;
     if (req.body.name) membership.name = req.body.name;
     if (req.body.description) membership.description = req.body.description;
     if (req.body.url) membership.url = req.body.url;
