@@ -162,16 +162,74 @@ exports.getCategoryAnalytic = async (req, res) => {
 };
 exports.getCouponAnalytic = async (req, res) => {
   console.log("get coupon analytic");
-  try {
-    const analyticData = await CouponAnalytic.find().distinct("categoryId");
+  // try {
+  //   const analyticData = await CouponAnalytic.find().distinct("categoryId");
 
-    const finalAnalytics = analyticData.map(async (couponId) => {
-      const coupon = await Deal.findById(couponId).select("name");
-      const count = await CategoryAnalytic.find({
-        couponId,
-      }).countDocuments();
-      return Array(coupon?.name, count);
+  //   const finalAnalytics = analyticData.map(async (couponId) => {
+  //     const coupon = await Deal.findById(couponId).select("name");
+  //     const count = await CategoryAnalytic.find({
+  //       couponId,
+  //     }).countDocuments();
+  //     return Array(coupon?.name, count);
+  //   });
+  //   Promise.all(finalAnalytics).then((data) => {
+  //     console.log({ data });
+  //     res.status(200).json({
+  //       status: "success",
+  //       message: "Analytic data fetched Successfully!",
+  //       analyticData: data,
+  //     });
+  //   });
+  // } catch (error) {
+  //   console.log(error);
+  //   res.status(400).json({
+  //     status: "fail",
+  //     message: error.message,
+  //   });
+  // }
+
+  // const analyticData = await CouponAnalytic.find().distinct("couponId");
+  // const finalAnalytics = analyticData.map(async (couponId) => {
+  // const month = await CouponAnalytic.aggregate([
+  //   {
+  //     $group: {
+  //       _id: { $month: "$startDateTime" },
+  //       // month: { $month: "$startDateTime" },
+  //       count: { $sum: 1 },
+  //     },
+  //   },
+  // ]);
+
+  // console.log({ month });
+  // const distinctCouponIds = await CouponAnalytic.find().distinct("couponId");
+  // const distinctCoupons = await CouponAnalytic.find({
+  //   _id: { $in: distinctCouponIds },
+  // });
+  // console.log({ distinctCouponIds });
+  // console.log({ distinctCoupons });
+
+  try {
+    const distinctCoupons = await CouponAnalytic.aggregate([
+      {
+        $group: {
+          _id: "$couponId",
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: { count: -1 },
+      },
+      {
+        $limit: 10,
+      },
+    ]);
+
+    // const finalAnalytics = [];
+    const finalAnalytics = distinctCoupons.map(async (item) => {
+      const coupon = await Deal.findById(item._id).select("name");
+      return [coupon?.name, item.count];
     });
+
     Promise.all(finalAnalytics).then((data) => {
       console.log({ data });
       res.status(200).json({
