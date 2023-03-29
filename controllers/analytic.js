@@ -1,5 +1,7 @@
 const CategoryAnalytic = require("../models/CategoryAnalytic");
 const CouponAnalytic = require("../models/CouponAnalytic");
+const Category = require("../models/Category");
+const Deal = require("../models/Deal");
 
 exports.addCategoryAnalytic = async (req, res) => {
   console.log("add category analytic");
@@ -127,5 +129,62 @@ exports.updateCouponAnalytic = async (req, res) => {
       message: error.message,
     });
     console.log(error);
+  }
+};
+
+exports.getCategoryAnalytic = async (req, res) => {
+  console.log("get category analytic");
+  try {
+    const analyticData = await CategoryAnalytic.find().distinct("categoryId");
+
+    const finalAnalytics = analyticData.map(async (categoryId) => {
+      const category = await Category.findById(categoryId).select("name");
+      const count = await CategoryAnalytic.find({
+        categoryId,
+      }).countDocuments();
+      return Array(category?.name, count);
+    });
+    Promise.all(finalAnalytics).then((data) => {
+      console.log({ data });
+      res.status(200).json({
+        status: "success",
+        message: "Analytic data fetched Successfully!",
+        analyticData: data,
+      });
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      status: "fail",
+      message: error.message,
+    });
+  }
+};
+exports.getCouponAnalytic = async (req, res) => {
+  console.log("get coupon analytic");
+  try {
+    const analyticData = await CouponAnalytic.find().distinct("categoryId");
+
+    const finalAnalytics = analyticData.map(async (couponId) => {
+      const coupon = await Deal.findById(couponId).select("name");
+      const count = await CategoryAnalytic.find({
+        couponId,
+      }).countDocuments();
+      return Array(coupon?.name, count);
+    });
+    Promise.all(finalAnalytics).then((data) => {
+      console.log({ data });
+      res.status(200).json({
+        status: "success",
+        message: "Analytic data fetched Successfully!",
+        analyticData: data,
+      });
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      status: "fail",
+      message: error.message,
+    });
   }
 };
