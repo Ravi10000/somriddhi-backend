@@ -1,0 +1,7 @@
+//intechanging button text
+            int n = Random.Range(0, buttonsText.Length);
+            int j = Random.Range(0,buttonsText.Length);
+            string text;
+            text = buttonsText[n].text;
+            buttonsText[n].text = buttonsText[j].text;
+            buttonsText[j].text = text;

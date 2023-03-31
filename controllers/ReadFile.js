@@ -15,7 +15,7 @@ exports.getExcelData = async (req, res) => {
             const temp = reader.utils.sheet_to_json(
                 file.Sheets[file.SheetNames[0]])
             temp.forEach((res) => {
-                data.push(res)
+                data.push(res);
             })
         }
         let result = [];
