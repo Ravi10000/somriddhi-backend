@@ -5,7 +5,8 @@ require("dotenv").config();
 
 exports.sendOtp = async (req, res) => {
   console.log("sendotp ", req.body);
-  const OTP = "1111";
+  const OTP = "1111"; // generate random otp 4  digit
+  //integrate sendotp msg91
   // generate
   try {
     const newOtp = {
@@ -39,6 +40,7 @@ exports.verifyOtp = async (req, res) => {
   try {
     const userRecord = await Otp.findOne({ phone: req.body.phone });
     if (userRecord.otp == req.body.otp) {
+      //integrate verifyotp 
       const userFound = await User.findOne({ phone: req.body.phone });
       if (userFound) {
         const token = jwt.sign({ _id: userFound._id }, process.env.JWT_SECRET, {
