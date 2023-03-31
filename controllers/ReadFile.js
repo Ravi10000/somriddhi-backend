@@ -1,5 +1,6 @@
 const readexcelfile = require("read-excel-file/node");
 const fs = require("fs");
+// const this = require('../uploads/sample2.xlsx')
 
 exports.getExcelData = async (req, res) => {
   try {
@@ -8,14 +9,14 @@ exports.getExcelData = async (req, res) => {
 
     console.log("file", req.file);
 
-    readexcelfile(fs.createReadStream("sample.xlsx")).then((rows) => {
-      // this is giving errors
-      console.log(rows);
-      res.json({
-        status: true,
-        data: rows,
-      });
-    });
+    // this is giving errors
+    // readexcelfile(fs.createReadStream("uploads/sample2.xls")).then((rows) => {
+    //   console.log(rows);
+      //   res.json({
+      //     status: true,
+      //     data: rows,
+      //   });
+    // });
 
     res.status(200).json({
       status: "success",
