@@ -1,28 +1,69 @@
-const readexcelfile = require("read-excel-file/node");
-const fs = require("fs");
-// const this = require('../uploads/sample2.xlsx')
+const readexcelfile = require('read-excel-file/node');
+let fs = require('fs');
+const reader = require('xlsx')
 
 exports.getExcelData = async (req, res) => {
-  try {
-    // let userId = req.user.id;
-    // if (!userId) throw new Error("Not logged in or Session expired.");
+    try {
 
-    console.log("file", req.file);
+        const file = reader.readFile('sample.xlsx')
 
-    // this is giving errors
-    // readexcelfile(fs.createReadStream("uploads/sample2.xls")).then((rows) => {
-    //   console.log(rows);
-      //   res.json({
-      //     status: true,
-      //     data: rows,
-      //   });
-    // });
+        let data = []
 
-    res.status(200).json({
-      status: "success",
+        const sheets = file.SheetNames
+
+        for (let i = 0; i < 1; i++) {
+            const temp = reader.utils.sheet_to_json(
+                file.Sheets[file.SheetNames[0]])
+            temp.forEach((res) => {
+                data.push(res);
+            })
+        }
+        let result = [];
+        for (let i = 1; i < data.length; i++) {
+            result.push(data[i]);
+        }
+
+        // Printing data
+        console.log(data)
+        res.json({
+            "status": true,
+            "data": result
+        });
+
+        // reader = fs.createReadStream('sample.xlsx');
+
+        // // Read and display the file data on console
+        // reader.on('data', function (chunk) {
+        //     // console.log(chunk);
+        //     res.json({
+        //         "status": true,
+        //         "data": chunk
+        //     });
+        // });
+
+        // let userId = req.user.id;
+        // if (!userId) throw new Error("Not logged in or Session expired.");
+
+        // readexcelfile(fs.createReadStream('sample.xlsx')).then((rows) => {
+        //     console.log(rows);
+        //     res.json({
+        //         "status": true,
+        //         "data": rows
+        //     });
+        // })
+
+
+    readexcelfile(fs.createReadStream("sample.xlsx")).then((rows) => {
+      // this is giving errors
+      console.log(rows);
+      res.json({
+        status: true,
+        data: rows,
+      });
     });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send("Internal Server Error");
-  }
-};
+
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Internal Server Error");
+    }
+}
