@@ -1,46 +1,49 @@
-// const readexcelfile = require("read-excel-file/node");
-// let fs = require("fs");
-const reader = require("xlsx");
+const readexcelfile = require('read-excel-file/node');
+let fs = require('fs');
+const reader = require('xlsx')
+const Payment = require('../models/Payment');
 
 exports.getExcelData = async (req, res) => {
-  console.log("file", req.file);
-  try {
-    const file = reader.readFile(`uploads/${req.file.filename}`);
+    try {
+        // console.log(req.file.originalname)
+        const file = reader.readFile(`./uploads/${req.file.originalname}`)
 
-    const data = [];
+        let data = []
+        let result = [];
+        let ans = [];
+        const sheets = file.SheetNames
 
-    const sheetNames = file.SheetNames;
+        for (let i = 0; i < 1; i++) {
+            const temp = reader.utils.sheet_to_json(
+                file.Sheets[file.SheetNames[0]])
+            temp.forEach((res) => {
+                data.push(res);
+            })
+        }
+        for (let i = 1; i < data.length; i++) {
+            result.push(data[i]);
+        }
 
-    for (let i = 0; i < 1; i++) {
-      const temp = reader.utils.sheet_to_json(file.Sheets[sheetNames[i]]);
-      temp.forEach((res) => {
-        data.push(res);
-      });
+        for (let i = 0; i < result.length; i++) {
+            const record = Object.values(result[i]);
+            const Data = {
+                'trackingId': record[0],
+                'clicks': record[1],
+                'itemsOrdered': record[2],
+                'itemsShipped': record[3],
+                'revenue': record[4],
+                'addFees': record[5],
+            }
+            ans.push(Data);
+            const newData = await Payment.create(Data);
+            console.log(newData);
+        }
+        res.json({
+            "status": true,
+            "data": ans
+        });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Internal Server Error");
     }
-    let result = [];
-    for (let i = 1; i < data.length; i++) {
-      result.push(data[i]);
-    }
-
-    // Printing data
-    console.log(data);
-    res.json({
-      status: true,
-      data: result,
-    });
-
-    // reader = fs.createReadStream('sample.xlsx');
-
-    // // Read and display the file data on console
-    // reader.on('data', function (chunk) {
-    //     // console.log(chunk);
-    //     res.json({
-    //         "status": true,
-    //         "data": chunk
-    //     });
-    // });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send("Internal Server Error");
-  }
-};
+}
