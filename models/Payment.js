@@ -30,10 +30,10 @@ const PaymentSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    createdBy: {
-        type: mongoose.Schema.type.ObjectId,
-        default: Date.now
-    }
+    // createdBy: {
+    //     type: mongoose.Schema.type.ObjectId,
+    //     default: Date.now
+    // }
 });
 const Payment = mongoose.model('payment', PaymentSchema);
 module.exports = Payment;

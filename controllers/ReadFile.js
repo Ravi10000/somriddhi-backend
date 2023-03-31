@@ -1,14 +1,16 @@
 const readexcelfile = require('read-excel-file/node');
 let fs = require('fs');
 const reader = require('xlsx')
+const Payment = require('../models/Payment');
 
 exports.getExcelData = async (req, res) => {
     try {
-
-        const file = reader.readFile('sample.xlsx')
+        // console.log(req.file.originalname)
+        const file = reader.readFile(`./uploads/${req.file.originalname}`)
 
         let data = []
-
+        let result = [];
+        let ans = [];
         const sheets = file.SheetNames
 
         for (let i = 0; i < 1; i++) {
@@ -18,42 +20,28 @@ exports.getExcelData = async (req, res) => {
                 data.push(res);
             })
         }
-        let result = [];
         for (let i = 1; i < data.length; i++) {
             result.push(data[i]);
         }
 
-        // Printing data
-        console.log(data)
+        for (let i = 0; i < result.length; i++) {
+            const record = Object.values(result[i]);
+            const Data = {
+                'trackingId': record[0],
+                'clicks': record[1],
+                'itemsOrdered': record[2],
+                'itemsShipped': record[3],
+                'revenue': record[4],
+                'addFees': record[5],
+            }
+            ans.push(Data);
+            const newData = await Payment.create(Data);
+            console.log(newData);
+        }
         res.json({
             "status": true,
-            "data": result
+            "data": ans
         });
-
-        // reader = fs.createReadStream('sample.xlsx');
-
-        // // Read and display the file data on console
-        // reader.on('data', function (chunk) {
-        //     // console.log(chunk);
-        //     res.json({
-        //         "status": true,
-        //         "data": chunk
-        //     });
-        // });
-
-        // let userId = req.user.id;
-        // if (!userId) throw new Error("Not logged in or Session expired.");
-
-        // readexcelfile(fs.createReadStream('sample.xlsx')).then((rows) => {
-        //     console.log(rows);
-        //     res.json({
-        //         "status": true,
-        //         "data": rows
-        //     });
-        // })
-
-
-
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Internal Server Error");
