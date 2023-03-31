@@ -5,6 +5,7 @@ const {
   getCategories,
   updateCategory,
   deleteCategory,
+  getCategoryById
 } = require("../controllers/Category");
 const { fetchuser } = require("../middleware/Auth");
 
@@ -41,5 +42,5 @@ router.patch(
   updateCategory
 );
 router.delete("/category/:id", fetchuser, deleteCategory);
-
+router.get("/category/single/:id", getCategoryById);
 module.exports = router;
