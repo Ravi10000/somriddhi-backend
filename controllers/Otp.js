@@ -6,6 +6,7 @@ require("dotenv").config();
 exports.sendOtp = async (req, res) => {
   console.log("sendotp ", req.body);
   const OTP = "1111";
+  // generate
   try {
     const newOtp = {
       phone: req.body.phone,

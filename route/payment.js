@@ -29,7 +29,6 @@ const upload = multer({ storage });
 router.post(
     "/getexceldata",
     upload.single("fileExcel"),
-    fetchuser,
     getExcelData
 );
 
