@@ -53,14 +53,6 @@ exports.getExcelData = async (req, res) => {
         // })
 
 
-    readexcelfile(fs.createReadStream("sample.xlsx")).then((rows) => {
-      // this is giving errors
-      console.log(rows);
-      res.json({
-        status: true,
-        data: rows,
-      });
-    });
 
     } catch (error) {
         console.error(error.message);
