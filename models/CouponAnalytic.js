@@ -31,3 +31,7 @@ const CouponAnalyticSchema = new Schema({
 const CouponAnalytic = mongoose.model("couponanalytic", CouponAnalyticSchema);
 
 module.exports = CouponAnalytic;
+
+
+
+//http://localhost:30002/coupon/641be48a1d22769da9c1f8c5&ascsubtag=<_id>

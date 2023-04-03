@@ -111,3 +111,20 @@ exports.deleteCategory = async (req, res) => {
     });
   }
 };
+// getCategoryById
+exports.getCategoryById = async (req, res) => {
+  console.log("fetch category by id");
+  const categoryId = req.params.id;
+  console.log("categoryId", req.params);
+  if (categoryId) {
+    const category = await Category.findById(categoryId);
+    if (category) {
+      return res.status(200).json({
+        status: "success",
+        message: "Record fetched Successfully!",
+        category: category,
+      });
+    }
+  }
+  return res.status(400);
+};

@@ -2,18 +2,57 @@ const Otp = require("../models/Otp");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+const axios = require('axios');
+// const sdk = require('api')('@msg91api/v5.0#171eja12lf0xqafw');
 
 exports.sendOtp = async (req, res) => {
   console.log("sendotp ", req.body);
-  const OTP = "1111"; // generate random otp 4  digit
+  // const OTP = "1111";
+
+  // generate random otp 4  digit
+  const OTP = Math.floor(1000 + Math.random() * 9000);
   //integrate sendotp msg91
   // generate
+  console.log(OTP);
   try {
     const newOtp = {
-      phone: req.body.phone,
+      phone: '91' + req.body.phone,
       countryCode: req.body.countryCode,
       otp: OTP,
     };
+    console.log(newOtp)
+
+
+    const options = {
+      method: 'POST',
+      url: 'https://control.msg91.com/api/v5/otp?mobile=&template_id=',
+      headers: {
+        accept: 'application/json',
+        'content-type': 'application/json',
+        authkey: '165254AJVmMEYMU60657de6P1'
+      },
+      data: { mobile: req.body.phone, template_id: '64269770d6fc051f1b7e40c5' }
+    };
+
+    axios
+      .request(options)
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+
+    // integration start with msg91
+    // sdk.auth('165254AJVmMEYMU60657de6P1');
+    // sdk.sendotp({
+    //   countryCode: req.body.countryCode,
+    //   otp: OTP
+    // }, { mobile: req.body.phone, template_id: '64269770d6fc051f1b7e40c5' })
+    //   .then(({ data }) => console.log(data))
+    //   .catch(err => console.error(err));
+    // integration end with msg91
+
     const otp = await Otp.create(newOtp);
     const savedOtp = await otp.save();
     if (!savedOtp) {
@@ -37,59 +76,76 @@ exports.sendOtp = async (req, res) => {
 
 exports.verifyOtp = async (req, res) => {
   console.log("verifyotp ", req.body);
-  try {
-    const userRecord = await Otp.findOne({ phone: req.body.phone });
-    if (userRecord.otp == req.body.otp) {
-      //integrate verifyotp 
-      const userFound = await User.findOne({ phone: req.body.phone });
-      if (userFound) {
-        const token = jwt.sign({ _id: userFound._id }, process.env.JWT_SECRET, {
-          expiresIn: "7d",
-        });
+  // try {
+  const userRecord = await Otp.findOne({ phone: '91' + req.body.phone });
+  if (userRecord.otp == req.body.otp) {
+    // msg91 integration start
+    const options = {
+      method: 'GET',
+      url: `https://control.msg91.com/api/v5/otp/verify?otp=${req.body.otp}&mobile=${req.body.phone}`,
+      headers: { accept: 'application/json', authkey: '165254AJVmMEYMU60657de6P1' }
+    };
+
+    axios
+      .request(options)
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+    // msg91 integration end
+    //integrate verifyotp 
+    const userFound = await User.findOne({ phone: req.body.phone });
+    if (userFound) {
+      const token = jwt.sign({ _id: userFound._id }, process.env.JWT_SECRET, {
+        expiresIn: "7d",
+      });
+      res.status(200).json({
+        status: "success",
+        message: "User details fetched Successfully!",
+        user: userFound,
+        token: token,
+      });
+    } else {
+      const newUser = {
+        phone: req.body.phone,
+        isContactVerified: true,
+        usertype: "customer",
+      };
+      const addedUser = await User.create(newUser);
+      const savedUser = await addedUser.save();
+      console.log(savedUser._id);
+      const token = jwt.sign({ _id: savedUser._id }, process.env.JWT_SECRET, {
+        expiresIn: "7d",
+      });
+      if (savedUser) {
         res.status(200).json({
           status: "success",
-          message: "User details fetched Successfully!",
-          user: userFound,
+          message: "New user created and details fetched Successfully!",
+          user: savedUser,
           token: token,
         });
       } else {
-        const newUser = {
-          phone: req.body.phone,
-          isContactVerified: true,
-          usertype: "customer",
-        };
-        const addedUser = await User.create(newUser);
-        const savedUser = await addedUser.save();
-        console.log(savedUser._id);
-        const token = jwt.sign({ _id: savedUser._id }, process.env.JWT_SECRET, {
-          expiresIn: "7d",
+        res.status(200).json({
+          status: "success",
+          message: "New user is not created Successfully!",
         });
-        if (savedUser) {
-          res.status(200).json({
-            status: "success",
-            message: "New user created and details fetched Successfully!",
-            user: savedUser,
-            token: token,
-          });
-        } else {
-          res.status(200).json({
-            status: "success",
-            message: "New user is not created Successfully!",
-          });
-        }
       }
-    } else {
-      res.status(200).json({
-        status: "failed",
-        message: "Invalid otp",
-      });
     }
-  } catch (err) {
-    res.status(400).json({
-      status: "Fail",
-      message: err.message,
+  } else {
+    res.status(200).json({
+      status: "failed",
+      message: "Invalid otp",
     });
   }
+  // }
+  //  catch (err) {
+  //   res.status(400).json({
+  //     status: "Fail",
+  //     message: err.message,
+  //   });
+  // }
 };
 
 exports.newUser = async (req, res) => {
