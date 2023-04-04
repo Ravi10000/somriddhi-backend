@@ -23,27 +23,27 @@ exports.sendOtp = async (req, res) => {
     console.log(newOtp);
 
     const options = {
-      method: 'POST',
-      url: 'https://control.msg91.com/api/v5/flow/',
+      method: "POST",
+      url: "https://control.msg91.com/api/v5/flow/",
       headers: {
         accept: "application/json",
         "content-type": "application/json",
         authkey: "165254AJVmMEYMU60657de6P1",
       },
-      data: JSON.stringify({ 
-        'template_id' : "640049b6d6fc050d3e0772d3",
-        'mobiles': '91' + req.body.phone, 
-        'sender': 'SMRDHI',
-        'short_url' : "1",
-        'var1' : OTP
-      })
+      data: JSON.stringify({
+        template_id: "640049b6d6fc050d3e0772d3",
+        mobiles: "91" + req.body.phone,
+        sender: "SMRDHI",
+        short_url: "1",
+        var1: OTP,
+      }),
     };
 
     axios
       .request(options)
       .then(async function (response) {
         console.log(response.data);
-        await Otp.deleteMany({phone : req.body.phone});
+        await Otp.deleteMany({ phone: req.body.phone });
         const otp = await Otp.create(newOtp);
         const savedOtp = await otp.save();
         if (!savedOtp) {
@@ -71,8 +71,6 @@ exports.sendOtp = async (req, res) => {
     //   .then(({ data }) => console.log(data))
     //   .catch(err => console.error(err));
     // integration end with msg91
-
-    
   } catch (err) {
     res.status(400).json({
       status: "Fail",

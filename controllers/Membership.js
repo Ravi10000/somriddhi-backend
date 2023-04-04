@@ -57,6 +57,22 @@ exports.getMemberships = async (req, res) => {
     });
   }
 };
+exports.getMembershipById = async (req, res) => {
+  console.log("fetch membership by id");
+  const membershipId = req?.params?.id;
+  console.log("membershipId", req.params);
+  if (membershipId) {
+    const membership = await Membership.findById(membershipId);
+    if (membership) {
+      return res.status(200).json({
+        status: "success",
+        message: "Record fetched Successfully!",
+        membership,
+      });
+    }
+  }
+  return res.status(400);
+};
 
 exports.updateMembership = async (req, res) => {
   console.log("update membership");

@@ -77,6 +77,7 @@ exports.addCouponAnalytic = async (req, res) => {
   analytic.deviceType = req?.body?.deviceType || null;
   analytic.ipAddress = req?.socket?.remoteAddress || null;
   analytic.startDateTime = req?.body?.startDateTime || null;
+  analytic.couponType = req?.body?.couponType || null;
   analytic.endDateTime = req?.body?.endDateTime || null;
   try {
     const newAnalytic = await CouponAnalytic.create(analytic);
@@ -122,6 +123,7 @@ exports.updateCouponAnalytic = async (req, res) => {
     res.status(200).json({
       status: "success",
       message: "Analytic updated Successfully!",
+      analyticId: updatedAnalytic._id,
     });
   } catch (error) {
     res.status(400).json({

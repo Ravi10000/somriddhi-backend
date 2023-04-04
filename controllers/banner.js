@@ -55,6 +55,23 @@ exports.getBanners = async (req, res) => {
   }
 };
 
+exports.getBannerById = async (req, res) => {
+  console.log("fetch banner by id");
+  const bannerId = req?.params?.id;
+  console.log("bannerId", req.params);
+  if (bannerId) {
+    const banner = await Banner.findById(bannerId);
+    if (banner) {
+      return res.status(200).json({
+        status: "success",
+        message: "Record fetched Successfully!",
+        banner,
+      });
+    }
+  }
+  return res.status(400);
+};
+
 exports.updateBanner = async (req, res) => {
   console.log("update banner");
   // console.log("body", req.body);

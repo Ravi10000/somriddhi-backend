@@ -5,6 +5,7 @@ const {
   getMemberships,
   updateMembership,
   deleteMembership,
+  getMembershipById,
 } = require("../controllers/Membership");
 const { fetchuser } = require("../middleware/Auth");
 
@@ -35,7 +36,8 @@ router.post(
   fetchuser,
   createMembership
 );
-router.get("/membership", fetchuser, getMemberships);
+router.get("/membership/:id", getMembershipById);
+router.get("/membership", getMemberships);
 router.patch(
   "/membership",
   upload.single("membershipPhoto"),
