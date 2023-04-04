@@ -2,7 +2,7 @@ const Otp = require("../models/Otp");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const axios = require('axios');
+const axios = require("axios");
 // const sdk = require('api')('@msg91api/v5.0#171eja12lf0xqafw');
 
 exports.sendOtp = async (req, res) => {
@@ -16,22 +16,21 @@ exports.sendOtp = async (req, res) => {
   console.log(OTP);
   try {
     const newOtp = {
-      phone: '91' + req.body.phone,
+      phone: "91" + req.body.phone,
       countryCode: req.body.countryCode,
       otp: OTP,
     };
-    console.log(newOtp)
-
+    console.log(newOtp);
 
     const options = {
-      method: 'POST',
-      url: 'https://control.msg91.com/api/v5/otp?mobile=&template_id=',
+      method: "POST",
+      url: "https://control.msg91.com/api/v5/otp?mobile=&template_id=",
       headers: {
-        accept: 'application/json',
-        'content-type': 'application/json',
-        authkey: '165254AJVmMEYMU60657de6P1'
+        accept: "application/json",
+        "content-type": "application/json",
+        authkey: "165254AJVmMEYMU60657de6P1",
       },
-      data: { mobile: req.body.phone, template_id: '64269770d6fc051f1b7e40c5' }
+      data: { mobile: req.body.phone, template_id: "64269770d6fc051f1b7e40c5" },
     };
 
     axios
@@ -77,13 +76,16 @@ exports.sendOtp = async (req, res) => {
 exports.verifyOtp = async (req, res) => {
   console.log("verifyotp ", req.body);
   // try {
-  const userRecord = await Otp.findOne({ phone: '91' + req.body.phone });
+  const userRecord = await Otp.findOne({ phone: "91" + req.body.phone });
   if (userRecord.otp == req.body.otp) {
     // msg91 integration start
     const options = {
-      method: 'GET',
+      method: "GET",
       url: `https://control.msg91.com/api/v5/otp/verify?otp=${req.body.otp}&mobile=${req.body.phone}`,
-      headers: { accept: 'application/json', authkey: '165254AJVmMEYMU60657de6P1' }
+      headers: {
+        accept: "application/json",
+        authkey: "165254AJVmMEYMU60657de6P1",
+      },
     };
 
     axios
@@ -95,7 +97,7 @@ exports.verifyOtp = async (req, res) => {
         console.error(error);
       });
     // msg91 integration end
-    //integrate verifyotp 
+    //integrate verifyotp
     const userFound = await User.findOne({ phone: req.body.phone });
     if (userFound) {
       const token = jwt.sign({ _id: userFound._id }, process.env.JWT_SECRET, {
