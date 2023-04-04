@@ -137,6 +137,7 @@ exports.updateCouponAnalytic = async (req, res) => {
 exports.getCategoryAnalytic = async (req, res) => {
   console.log("get category analytic");
   try {
+    const CategoryAnalyticCount = await CategoryAnalytic.countDocuments();
     const analyticData = await CategoryAnalytic.find().distinct("categoryId");
 
     const finalAnalytics = analyticData.map(async (categoryId) => {
@@ -152,6 +153,7 @@ exports.getCategoryAnalytic = async (req, res) => {
         status: "success",
         message: "Analytic data fetched Successfully!",
         analyticData: data,
+        totalCount: CategoryAnalyticCount,
       });
     });
   } catch (error) {
@@ -164,53 +166,9 @@ exports.getCategoryAnalytic = async (req, res) => {
 };
 exports.getCouponAnalytic = async (req, res) => {
   console.log("get coupon analytic");
-  // try {
-  //   const analyticData = await CouponAnalytic.find().distinct("categoryId");
-
-  //   const finalAnalytics = analyticData.map(async (couponId) => {
-  //     const coupon = await Deal.findById(couponId).select("name");
-  //     const count = await CategoryAnalytic.find({
-  //       couponId,
-  //     }).countDocuments();
-  //     return Array(coupon?.name, count);
-  //   });
-  //   Promise.all(finalAnalytics).then((data) => {
-  //     console.log({ data });
-  //     res.status(200).json({
-  //       status: "success",
-  //       message: "Analytic data fetched Successfully!",
-  //       analyticData: data,
-  //     });
-  //   });
-  // } catch (error) {
-  //   console.log(error);
-  //   res.status(400).json({
-  //     status: "fail",
-  //     message: error.message,
-  //   });
-  // }
-
-  // const analyticData = await CouponAnalytic.find().distinct("couponId");
-  // const finalAnalytics = analyticData.map(async (couponId) => {
-  // const month = await CouponAnalytic.aggregate([
-  //   {
-  //     $group: {
-  //       _id: { $month: "$startDateTime" },
-  //       // month: { $month: "$startDateTime" },
-  //       count: { $sum: 1 },
-  //     },
-  //   },
-  // ]);
-
-  // console.log({ month });
-  // const distinctCouponIds = await CouponAnalytic.find().distinct("couponId");
-  // const distinctCoupons = await CouponAnalytic.find({
-  //   _id: { $in: distinctCouponIds },
-  // });
-  // console.log({ distinctCouponIds });
-  // console.log({ distinctCoupons });
 
   try {
+    const couponAnalyticCount = await CouponAnalytic.countDocuments();
     const distinctCoupons = await CouponAnalytic.aggregate([
       {
         $group: {
@@ -238,6 +196,7 @@ exports.getCouponAnalytic = async (req, res) => {
         status: "success",
         message: "Analytic data fetched Successfully!",
         analyticData: data,
+        totalCount: couponAnalyticCount,
       });
     });
   } catch (error) {

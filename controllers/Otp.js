@@ -85,7 +85,7 @@ exports.verifyOtp = async (req, res) => {
   const userRecord = await Otp.findOne({ phone: req.body.phone });
   console.log(userRecord);
 
-  if (userRecord.otp == req.body.otp) {
+  if (userRecord?.otp == req?.body?.otp) {
     // msg91 integration start
     // const options = {
     //   method: 'GET',
