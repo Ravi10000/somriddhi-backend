@@ -109,7 +109,7 @@ exports.verifyOtp = async (req, res) => {
     const userFound = await User.findOne({ phone: req.body.phone });
     if (userFound) {
       const token = jwt.sign({ _id: userFound._id }, process.env.JWT_SECRET, {
-        expiresIn: "7d",
+        expiresIn: "1y",
       });
       res.status(200).json({
         status: "success",
@@ -127,7 +127,7 @@ exports.verifyOtp = async (req, res) => {
       const savedUser = await addedUser.save();
       console.log(savedUser._id);
       const token = jwt.sign({ _id: savedUser._id }, process.env.JWT_SECRET, {
-        expiresIn: "7d",
+        expiresIn: "1y",
       });
       if (savedUser) {
         res.status(200).json({
