@@ -16,27 +16,47 @@ exports.sendOtp = async (req, res) => {
   console.log(OTP);
   try {
     const newOtp = {
-      phone: "91" + req.body.phone,
+      phone: req.body.phone,
       countryCode: req.body.countryCode,
       otp: OTP,
     };
     console.log(newOtp);
 
     const options = {
-      method: "POST",
-      url: "https://control.msg91.com/api/v5/otp?mobile=&template_id=",
+      method: 'POST',
+      url: 'https://control.msg91.com/api/v5/flow/',
       headers: {
         accept: "application/json",
         "content-type": "application/json",
         authkey: "165254AJVmMEYMU60657de6P1",
       },
-      data: { mobile: req.body.phone, template_id: "64269770d6fc051f1b7e40c5" },
+      data: JSON.stringify({ 
+        'template_id' : "640049b6d6fc050d3e0772d3",
+        'mobiles': '91' + req.body.phone, 
+        'sender': 'SMRDHI',
+        'short_url' : "1",
+        'var1' : OTP
+      })
     };
 
     axios
       .request(options)
-      .then(function (response) {
+      .then(async function (response) {
         console.log(response.data);
+        await Otp.deleteMany({phone : req.body.phone});
+        const otp = await Otp.create(newOtp);
+        const savedOtp = await otp.save();
+        if (!savedOtp) {
+          res.status(400).json({
+            status: "Fail",
+            message: "Otp does not saved into the database !",
+          });
+        }
+        res.status(200).json({
+          status: "success",
+          message: "OTP sent Successfully!",
+          data: OTP,
+        });
       })
       .catch(function (error) {
         console.error(error);
@@ -52,19 +72,7 @@ exports.sendOtp = async (req, res) => {
     //   .catch(err => console.error(err));
     // integration end with msg91
 
-    const otp = await Otp.create(newOtp);
-    const savedOtp = await otp.save();
-    if (!savedOtp) {
-      res.status(400).json({
-        status: "Fail",
-        message: "Otp does not saved into the database !",
-      });
-    }
-    res.status(200).json({
-      status: "success",
-      message: "OTP sent Successfully!",
-      data: OTP,
-    });
+    
   } catch (err) {
     res.status(400).json({
       status: "Fail",
@@ -76,32 +84,31 @@ exports.sendOtp = async (req, res) => {
 exports.verifyOtp = async (req, res) => {
   console.log("verifyotp ", req.body);
   // try {
-  const userRecord = await Otp.findOne({ phone: "91" + req.body.phone });
+  const userRecord = await Otp.findOne({ phone: req.body.phone });
+  console.log(userRecord);
+
   if (userRecord.otp == req.body.otp) {
     // msg91 integration start
-    const options = {
-      method: "GET",
-      url: `https://control.msg91.com/api/v5/otp/verify?otp=${req.body.otp}&mobile=${req.body.phone}`,
-      headers: {
-        accept: "application/json",
-        authkey: "165254AJVmMEYMU60657de6P1",
-      },
-    };
+    // const options = {
+    //   method: 'GET',
+    //   url: `https://control.msg91.com/api/v5/otp/verify?otp=${req.body.otp}&mobile=${req.body.phone}`,
+    //   headers: { accept: 'application/json', authkey: '165254AJVmMEYMU60657de6P1' }
+    // };
 
-    axios
-      .request(options)
-      .then(function (response) {
-        console.log(response.data);
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
+    // axios
+    //   .request(options)
+    //   .then(function (response) {
+    //     console.log(response.data);
+    //   })
+    //   .catch(function (error) {
+    //     console.error(error);
+    //   });
     // msg91 integration end
     //integrate verifyotp
     const userFound = await User.findOne({ phone: req.body.phone });
     if (userFound) {
       const token = jwt.sign({ _id: userFound._id }, process.env.JWT_SECRET, {
-        expiresIn: "7d",
+        expiresIn: "1y",
       });
       res.status(200).json({
         status: "success",
@@ -119,7 +126,7 @@ exports.verifyOtp = async (req, res) => {
       const savedUser = await addedUser.save();
       console.log(savedUser._id);
       const token = jwt.sign({ _id: savedUser._id }, process.env.JWT_SECRET, {
-        expiresIn: "7d",
+        expiresIn: "1y",
       });
       if (savedUser) {
         res.status(200).json({
