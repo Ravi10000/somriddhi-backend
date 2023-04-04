@@ -7,6 +7,10 @@ const CouponAnalyticSchema = new Schema({
     ref: "deal",
     required: true,
   },
+  couponType:{
+    type:String,
+    enum : ['Coupon','Banner','Membership']
+  },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
