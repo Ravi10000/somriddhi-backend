@@ -5,6 +5,9 @@ exports.createMembership = async (req, res) => {
     const membership = {};
     if (req.body.name) membership.name = req.body.name;
     if (req.file.filename) membership.image = req.file.filename;
+    if (req.body.cashbackPercent)
+      membership.cashbackPercent = req.body.cashbackPercent;
+    if (req.body.maxCashback) membership.maxCashback = req.body.maxCashback;
     if (req.body.description) membership.description = req.body.description;
     if (req.body.url) membership.url = req.body.url;
     if (req.body.status) membership.status = req.body.status;
@@ -84,6 +87,9 @@ exports.updateMembership = async (req, res) => {
     const membership = {};
     if (req?.file?.filename) membership.image = req.file.filename;
     if (req.body.name) membership.name = req.body.name;
+    if (req.body.cashbackPercent)
+      membership.cashbackPercent = req.body.cashbackPercent;
+    if (req.body.maxCashback) membership.maxCashback = req.body.maxCashback;
     if (req.body.description) membership.description = req.body.description;
     if (req.body.url) membership.url = req.body.url;
     if (req.body.status) membership.status = req.body.status;

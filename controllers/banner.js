@@ -6,6 +6,9 @@ exports.createBanner = async (req, res) => {
     if (req.body.name) banner.name = req.body.name;
     console.log(req.file);
     if (req.file.filename) banner.image = req.file.filename;
+    if (req.body.cashbackPercent)
+      banner.cashbackPercent = req.body.cashbackPercent;
+    if (req.body.maxCashback) banner.maxCashback = req.body.maxCashback;
     if (req.body.description) banner.description = req.body.description;
     if (req.body.url) banner.url = req.body.url;
     if (req.body.status) banner.status = req.body.status;
@@ -82,6 +85,9 @@ exports.updateBanner = async (req, res) => {
     if (req.body.name) banner.name = req.body.name;
     if (req?.file?.filename) banner.image = req.file.filename;
     if (req.body.bannerPhoto) banner.image = req.body.bannerPhoto;
+    if (req.body.cashbackPercent)
+      banner.cashbackPercent = req.body.cashbackPercent;
+    if (req.body.maxCashback) banner.maxCashback = req.body.maxCashback;
     if (req.body.description) banner.description = req.body.description;
     if (req.body.url) banner.url = req.body.url;
     if (req.body.status) banner.status = req.body.status;

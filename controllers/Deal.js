@@ -10,6 +10,7 @@ exports.createDeal = async (req, res) => {
     if (req.body.categoryId) deal.categoryId = req.body.categoryId;
     if (req.body.cashbackPercent)
       deal.cashbackPercent = req.body.cashbackPercent;
+    if (req.body.maxCashback) deal.maxCashback = req.body.maxCashback;
     if (req.body.liveDate) deal.liveDate = req.body.liveDate;
     if (req.body.expiryDate) deal.expiryDate = req.body.expiryDate;
     deal.createdBy = req.user._id;
@@ -90,6 +91,7 @@ exports.updateDeal = async (req, res) => {
     if (req.body.categoryId) deal.categoryId = req.body.categoryId;
     if (req.body.cashbackPercent)
       deal.cashbackPercent = req.body.cashbackPercent;
+    if (req.body.maxCashback) deal.maxCashback = req.body.maxCashback;
     if (req.body.liveDate) deal.liveDate = req.body.liveDate;
     if (req.body.expiryDate) deal.expiryDate = req.body.expiryDate;
     deal.createdBy = req.user._id;
