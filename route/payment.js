@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { generateCashback: getExcelData } = require("../controllers/ReadFile");
+const { generateCashback, savePayouts } = require("../controllers/ReadFile");
 const { fetchuser } = require("../middleware/auth");
 
 const multer = require("multer");
@@ -14,12 +14,14 @@ const storage = multer.diskStorage({
 
   filename: function (req, file, cb) {
     console.log({ file });
-    cb(null, file.originalname);
+    const [fileName, extention] = file.originalname.split(".");
+    cb(null, fileName + "-" + Date.now() + "." + extention);
   },
 });
 
 const upload = multer({ storage });
 
-router.post("/getexceldata", upload.single("fileExcel"), getExcelData);
+router.post("/payment", upload.single("fileExcel"), generateCashback);
+router.post("/payout", upload.single("fileExcel"), savePayouts);
 
 module.exports = router;

@@ -47,8 +47,7 @@ exports.getCashbackDetails = async (req, res) => {
 
     const redemableCashback = cashbackList.reduce((acc, cashback) => {
       // redemable after 14 days
-      const diff =
-        new Date(2023, 5, 4).valueOf() - cashback.createdAt.valueOf();
+      const diff = new Date().valueOf() - cashback.createdAt.valueOf();
       const days = diff / (1000 * 60 * 60 * 24);
       return days > 14 && !cashback.isRedemeed ? acc + cashback.amount : acc;
     }, 0);
