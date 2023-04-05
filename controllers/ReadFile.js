@@ -8,7 +8,7 @@ const Banner = require("../models/Banner");
 const Membership = require("../models/Membership");
 const Deal = require("../models/Deal");
 
-exports.getExcelData = async (req, res) => {
+exports.generateCashback = async (req, res) => {
   try {
     console.log("Files", req?.file);
     const file = reader.readFile(`./uploads/${req?.file?.filename}`);
