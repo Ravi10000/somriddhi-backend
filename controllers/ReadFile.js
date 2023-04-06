@@ -1,18 +1,19 @@
 const readexcelfile = require("read-excel-file/node");
 const reader = require("xlsx");
 const Payment = require("../models/Payment");
-const Cashback = require("../models/cashback.model");
+const Cashback = require("../models/Cashback.model");
 const CouponAnalytic = require("../models/CouponAnalytic");
 const Banner = require("../models/Banner");
 const Membership = require("../models/Membership");
 const Deal = require("../models/Deal");
 const Payout = require("../models/payout");
+const PaymentRequest = require("../models/PaymentRequest");
+const User = require("../models/User");
 
 exports.generateCashback = async (req, res) => {
   console.log("generate cashback");
   try {
     const paymentInfo = excelToJson(req?.file);
-
     const newPayments = paymentInfo.map(async (row) => {
       const payment = await Payment.create(row);
       console.log({ payment });
@@ -57,29 +58,67 @@ exports.generateCashback = async (req, res) => {
 exports.updatePayouts = async (req, res) => {
   try {
     const payoutData = excelToJson(req?.file);
+
     payoutData.forEach(async (row) => {
       const payout = await Payout.create(row);
       console.log({ payout });
-      const cashback = await Cashback.findById(row?.cashbackId);
+      const user = await User.findOne({ walletId: row?.walletId }).select(
+        "_id"
+      );
+      const paymentRequestList = await PaymentRequest.find({
+        userId: user?._id,
+      }).select("redeemedList");
 
-      if (cashback) {
-        payout.userId = cashback?.userId;
-        await payout.save();
-        console.log({ cashback });
-        cashback.isRedemeed = true;
-        await cashback.save();
-      } else {
-        return res.status(400).json({
-          status: "fail",
-          message: "Cashback not found",
+      paymentRequestList?.forEach(async (paymentRequest) => {
+        paymentRequest.status = "Paid";
+        await paymentRequest.save();
+        console.log({ paymentRequest });
+
+        const singleRequest = await PaymentRequest.findById(
+          paymentRequest?._id
+        ).populate("redeemedList");
+
+        singleRequest?.redeemedList?.forEach(async (cashback) => {
+          cashback.status = "Paid";
+          await cashback.save();
         });
-      }
+
+        console.log({ singleRequest });
+        console.log({ array: singleRequest?.redeemedList });
+      });
     });
     res.status(200).json({
       status: "success",
     });
   } catch (error) {
     console.log(error);
+  }
+};
+
+exports.generateRequest = async (req, res) => {
+  if (!req?.user) {
+    res.status(401).json({
+      status: "fail",
+      message: "Invalid request",
+    });
+  }
+  try {
+    const paymentRequest = {};
+    if (req?.body?.redeemRequestList) {
+      const { redeemedList } = req?.body;
+      paymentRequest.redeemRequestList = redeemedList;
+      let totalAmount = 0;
+      redeemedList.forEach(async (cashbackId) => {
+        const cashback = await Cashback.findById(cashbackId).select("amount");
+        totalAmount += cashback?.amount;
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      status: "fail",
+      message: "Invalid request",
+    });
   }
 };
 

@@ -6,17 +6,22 @@ const cashbackSchema = new Schema({
     type: Schema.Types.ObjectId,
     required: true,
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
+  status: {
+    type: String,
+    enum: ["Paid", "Unpaid", "Requested"],
+    default: "Unpaid",
   },
-  isRedemeed: {
-    type: Boolean,
-    default: false,
-  },
+  // isRedemeed: {
+  //   type: Boolean,
+  //   default: false,
+  // },
   amount: {
     type: Number,
     required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
   },
 });
 

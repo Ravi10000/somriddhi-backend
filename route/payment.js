@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { generateCashback, updatePayouts } = require("../controllers/ReadFile");
+const { generateCashback, updatePayouts, generateRequest } = require("../controllers/ReadFile");
 const { fetchuser } = require("../middleware/auth");
 
 const multer = require("multer");
@@ -23,5 +23,6 @@ const upload = multer({ storage });
 
 router.post("/payment", upload.single("fileExcel"), generateCashback);
 router.post("/payout", upload.single("fileExcel"), updatePayouts);
+router.post("/paymentrequest", fetchuser, generateRequest);
 
 module.exports = router;
