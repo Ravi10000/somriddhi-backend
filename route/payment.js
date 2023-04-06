@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { generateCashback, updatePayouts, generateRequest } = require("../controllers/ReadFile");
-const { fetchuser } = require("../middleware/auth");
+const { fetchuser } = require("../middleware/Auth");
 
 const multer = require("multer");
 // const upload = multer({ dest: 'uploads/' });

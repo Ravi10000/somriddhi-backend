@@ -9,7 +9,7 @@ const {
   addTicketReplies,
   updateTicketStatus,
 } = require("../controllers/Ticket");
-const { fetchuser } = require("../middleware/auth");
+const { fetchuser } = require("../middleware/Auth");
 
 router.post("/ticket", fetchuser, createTicket);
 router.get("/mytickets", fetchuser, getMyTickets);
