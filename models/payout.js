@@ -2,9 +2,13 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const payoutSchema = new Schema({
+  cashbackId: {
+    type: String,
+    required: true,
+  },
   userId: {
     type: Schema.Types.ObjectId,
-    required: true,
+    // required: true,
   },
   createdAt: {
     type: Date,

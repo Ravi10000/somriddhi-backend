@@ -11,27 +11,14 @@ const Payout = require("../models/payout");
 exports.generateCashback = async (req, res) => {
   console.log("generate cashback");
   try {
-    // console.log("Files", req?.file);
-    const excelFile = reader.readFile(`./uploads/${req?.file?.filename}`);
-
-    const paymentInfo = [];
-    const firstSheet = excelFile.SheetNames[0];
-
-    const excelDataInJson = reader.utils.sheet_to_json(
-      excelFile.Sheets[firstSheet]
-    );
-
-    excelDataInJson.forEach((row) => {
-      paymentInfo.push(row);
-      // console.log({ row });
-    });
+    const paymentInfo = excelToJson(req?.file);
 
     const newPayments = paymentInfo.map(async (row) => {
       const payment = await Payment.create(row);
       console.log({ payment });
 
       const analytic = await CouponAnalytic.findById(row?.trackingId);
-      console.log({ analytic });
+      // console.log({ analytic });
       if (!analytic) return null;
       let coupon = {};
       if (analytic?.couponType === "Coupon") {
@@ -41,14 +28,14 @@ exports.generateCashback = async (req, res) => {
       } else if (analytic.couponType === "Membership") {
         coupon = await Membership.findById(analytic.couponId);
       }
-      console.log({ coupon });
+      // console.log({ coupon });
 
-      const percentageBasedCashback =
+      const percentageCashback =
         payment?.revenue * (coupon?.cashbackPercent / 100);
       const actualCashback =
-        percentageBasedCashback > coupon?.maxCashback
+        percentageCashback > coupon?.maxCashback
           ? coupon?.maxCashback
-          : percentageBasedCashback;
+          : percentageCashback;
 
       const cashback = await Cashback.create({
         amount: actualCashback,
@@ -58,23 +45,6 @@ exports.generateCashback = async (req, res) => {
       return payment;
     });
 
-    // Promise.all(newPayments).then((data) => {
-    //  return res.status(200).json({
-    //     status: "success",
-    //   });
-    // });
-    // .catch((err) => {
-    //   console.log(err);
-    //   res.status(500).send("Internal Server Error");
-    // });
-
-    // Promise.all(newPayments).then((data) => {
-    //   data.forEach(async (payment) => {
-    //     const analytic = await CouponAnalytic.findById(payment?.trackingId);
-    //     console.log({ analytic, userSpend: data.revenue });
-    //   });
-    //   // console.log({ data });
-    // });
     res.status(200).json({
       status: "success",
     });
@@ -84,27 +54,38 @@ exports.generateCashback = async (req, res) => {
   }
 };
 
-exports.savePayouts = async (req, res) => {
-  console.log("save payouts");
+exports.updatePayouts = async (req, res) => {
   try {
-    const excelFile = reader.readFile(`./uploads/${req?.file?.filename}`);
-    const paymentInfo = [];
-    const firstSheet = excelFile.SheetNames[0];
-
-    const excelDataInJson = reader.utils.sheet_to_json(
-      excelFile.Sheets[firstSheet]
-    );
-
-    excelDataInJson.forEach(async (row) => {
-      paymentInfo.push(row);
+    const payoutData = excelToJson(req?.file);
+    payoutData.forEach(async (row) => {
       const payout = await Payout.create(row);
       console.log({ payout });
+      const cashback = await Cashback.findById(row?.cashbackId);
+
+      if (cashback) {
+        payout.userId = cashback?.userId;
+        await payout.save();
+        console.log({ cashback });
+        cashback.isRedemeed = true;
+        await cashback.save();
+      } else {
+        return res.status(400).json({
+          status: "fail",
+          message: "Cashback not found",
+        });
+      }
     });
     res.status(200).json({
       status: "success",
     });
   } catch (error) {
     console.log(error);
-    res.status(500).send("Internal Server Error");
   }
 };
+
+function excelToJson(file) {
+  const excelFile = reader.readFile(`./uploads/${file?.filename}`);
+  const firstSheetName = excelFile?.SheetNames[0];
+  const firstSheet = excelFile?.Sheets[firstSheetName];
+  return reader?.utils?.sheet_to_json(firstSheet); // json data
+}
