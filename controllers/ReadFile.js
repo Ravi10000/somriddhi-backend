@@ -33,16 +33,22 @@ exports.generateCashback = async (req, res) => {
 
       const percentageCashback =
         payment?.revenue * (coupon?.cashbackPercent / 100);
-      const actualCashback =
+      var actualCashback =
         percentageCashback > coupon?.maxCashback
           ? coupon?.maxCashback
           : percentageCashback;
 
+          console.log(actualCashback);
+
+          if(!actualCashback)  actualCashback = 0;
+
+          if(actualCashback != 0){
       const cashback = await Cashback.create({
         amount: actualCashback,
         userId: analytic?.userId,
       });
       console.log({ cashback });
+    }
       return payment;
     });
 
