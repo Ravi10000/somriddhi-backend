@@ -2,6 +2,40 @@ const CategoryAnalytic = require("../models/CategoryAnalytic");
 const CouponAnalytic = require("../models/CouponAnalytic");
 const Category = require("../models/Category");
 const Deal = require("../models/Deal");
+const Banner = require("../models/Banner");
+const Membership = require("../models/Membership");
+
+exports.fetchAllAnalytic = async (req, res) => {
+  console.log("fetch all analytic");
+  try {
+    const analytics = await CouponAnalytic.find()
+      .select("_id userId couponId couponType")
+      .populate("userId", "name email phone fname lname -_id")
+      .populate("couponId", "name -_id");
+    // const categoryAnalytics = await CategoryAnalytic.find().select("_id categoryId userId ").populate(
+    //   "userId",
+    //   "name email phone"
+    // );
+
+    if (!analytics) {
+      return res.status(400).json({
+        status: "fail",
+        message: "No analytic found !",
+      });
+    }
+    res.status(200).json({
+      status: "success",
+      message: "Analytic fetched Successfully!",
+      analytics,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      status: "fail",
+      message: error.message,
+    });
+  }
+};
 
 exports.addCategoryAnalytic = async (req, res) => {
   console.log("add category analytic");
@@ -36,6 +70,7 @@ exports.addCategoryAnalytic = async (req, res) => {
     console.log(error);
   }
 };
+
 exports.updateCategoryAnalytic = async (req, res) => {
   // analytic.visitedOn = req?.body?.visitedOn || null;
   const visitedOn = req?.body?.visitedOn || null;
@@ -148,7 +183,6 @@ exports.getCategoryAnalytic = async (req, res) => {
       return Array(category?.name, count);
     });
     Promise.all(finalAnalytics).then((data) => {
-      console.log({ data });
       res.status(200).json({
         status: "success",
         message: "Analytic data fetched Successfully!",
@@ -166,12 +200,17 @@ exports.getCategoryAnalytic = async (req, res) => {
 };
 exports.getCouponAnalytic = async (req, res) => {
   console.log("get coupon analytic");
+  let couponType = req?.params?.couponType || null;
+
+  if (!couponType) return res.status(400).json({ status: "fail" });
 
   try {
     const couponAnalyticCount = await CouponAnalytic.find({
-      couponType: "Coupon",
-    }).countDocuments();
+      couponType,
+    }).count();
+
     const distinctCoupons = await CouponAnalytic.aggregate([
+      { $match: { couponType } },
       {
         $group: {
           _id: "$couponId",
@@ -188,12 +227,18 @@ exports.getCouponAnalytic = async (req, res) => {
 
     // const finalAnalytics = [];
     const finalAnalytics = distinctCoupons.map(async (item) => {
-      const coupon = await Deal.findById(item._id).select("name");
+      let coupon = {};
+      if (couponType === "Coupon")
+        coupon = await Deal.findById(item._id).select("name");
+      else if (couponType === "Banner")
+        coupon = await Banner.findById(item._id).select("name");
+      else if (couponType === "Membership")
+        coupon = await Membership.findById(item._id).select("name");
+
       return [coupon?.name, item.count];
     });
 
     Promise.all(finalAnalytics).then((data) => {
-      console.log({ data });
       res.status(200).json({
         status: "success",
         message: "Analytic data fetched Successfully!",

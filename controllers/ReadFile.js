@@ -10,6 +10,39 @@ const Payout = require("../models/payout");
 const PaymentRequest = require("../models/PaymentRequest");
 const User = require("../models/User");
 
+exports.fetchAllPayments = async (req, res) => {
+  try {
+    const payments = await Payment.find();
+    res.status(200).json({
+      status: "success",
+      message: "Payments fetched Successfully!",
+      payments,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      status: "fail",
+      message: error.message,
+    });
+  }
+};
+exports.fetchAllPayouts = async (req, res) => {
+  try {
+    const payouts = await Payout.find();
+    res.status(200).json({
+      status: "success",
+      message: "Payments fetched Successfully!",
+      payouts,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      status: "fail",
+      message: error.message,
+    });
+  }
+};
+
 exports.generateCashback = async (req, res) => {
   console.log("generate cashback");
   try {
@@ -38,17 +71,17 @@ exports.generateCashback = async (req, res) => {
           ? coupon?.maxCashback
           : percentageCashback;
 
-          console.log(actualCashback);
+      console.log(actualCashback);
 
-          if(!actualCashback)  actualCashback = 0;
+      if (!actualCashback) actualCashback = 0;
 
-          if(actualCashback != 0){
-      const cashback = await Cashback.create({
-        amount: actualCashback,
-        userId: analytic?.userId,
-      });
-      console.log({ cashback });
-    }
+      if (actualCashback != 0) {
+        const cashback = await Cashback.create({
+          amount: actualCashback,
+          userId: analytic?.userId,
+        });
+        console.log({ cashback });
+      }
       return payment;
     });
 
