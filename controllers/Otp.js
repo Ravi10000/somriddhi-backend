@@ -307,9 +307,6 @@ exports.getAllUsers = async (req, res) => {
               redeemedEarnings,
               redeemableEarnings,
             });
-            // allUsers[index].totalCashback = totalCashback;
-            // allUsers[index].redemeedCashback = redemeedCashback;
-            // allUsers[index].redemableCashback = redemableCashback;
           })
       );
       Promise.all(earnings).then((earningsList) => {
@@ -335,8 +332,3 @@ exports.getAllUsers = async (req, res) => {
     });
   }
 };
-
-// exports.createUserByAdmin = async (req, res) => {
-//   console.log("createUserByAdmin");
-//   // console.log(req.body);
-// };

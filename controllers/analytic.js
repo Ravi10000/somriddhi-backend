@@ -168,7 +168,9 @@ exports.getCouponAnalytic = async (req, res) => {
   console.log("get coupon analytic");
 
   try {
-    const couponAnalyticCount = await CouponAnalytic.countDocuments();
+    const couponAnalyticCount = await CouponAnalytic.find({
+      couponType: "Coupon",
+    }).countDocuments();
     const distinctCoupons = await CouponAnalytic.aggregate([
       {
         $group: {

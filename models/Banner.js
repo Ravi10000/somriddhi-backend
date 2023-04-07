@@ -31,6 +31,9 @@ const BannerSchema = new Schema({
     enum: ["Active", "Inactive"],
     required: false,
   },
+  priorityOrder: {
+    type: Number,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
