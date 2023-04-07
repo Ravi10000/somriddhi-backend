@@ -6,6 +6,8 @@ const {
   updateBanner,
   deleteBanner,
   getBannerById,
+  getActiveBanners,
+  changeStatus,
 } = require("../controllers/banner");
 const { fetchuser } = require("../middleware/Auth");
 
@@ -29,7 +31,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+router.post("/banner/changestatus", fetchuser, changeStatus);
 router.post("/banner", upload.single("bannerPhoto"), fetchuser, createBanner);
+router.get("/banner/active", getActiveBanners);
 router.get("/banner/:id", getBannerById);
 router.get("/banner", getBanners);
 router.patch("/banner", upload.single("bannerPhoto"), fetchuser, updateBanner);
