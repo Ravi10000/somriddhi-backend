@@ -266,74 +266,68 @@ exports.updateUser = async (req, res) => {
 };
 
 exports.getAllUsers = async (req, res) => {
-  // if (req?.user?.usertype !== "admin") {
-  //   res.status(400).json({
-  //     status: "fail",
-  //     message: "You are not authorized to view this page!",
-  //   });
-  // }
   try {
     const allUsers = await User.find();
 
-    // const users = new Promise((resolve, reject) => {
-    //   const userList = [];
-    //   allUsers.forEach(async (user) => {
-    //     const cashbackList = await Cashback.find({ userId: user?._id });
-
-    //     const totalCashback = cashbackList.reduce((acc, cashback) => {
-    //       return acc + cashback.amount;
-    //     }, 0);
-
-    //     const redemeedCashback = cashbackList.reduce((acc, cashback) => {
-    //       return cashback?.status === "Paid" ? acc + cashback?.amount : acc;
-    //     }, 0);
-    //     const currentDateValue = new Date(2023, 5, 2).valueOf(); // have to change this to above line
-    //     const redemableCashback = cashbackList.reduce((acc, cashback) => {
-    //       const diff = currentDateValue - cashback.createdAt.valueOf();
-    //       const days = diff / (1000 * 60 * 60 * 24);
-    //       return days > 14 && cashback?.status === "Unpaid"
-    //         ? acc + cashback.amount
-    //         : acc;
-    //     }, 0);
-    //     console.log({
-    //       user,
-    //       totalCashback,
-    //       redemeedCashback,
-    //       redemableCashback,
-    //     });
-
-    //     userList.push({
-    //       user,
-    //       totalCashback,
-    //       redemeedCashback,
-    //       redemableCashback,
-    //     });
-    //     // return [user, totalCashback, redemeedCashback, redemableCashback];
-    //   });
-    //   resolve(userList);
-    // });
-
-    // Promise.all([users]).then((usersList) => {
-    //   console.log({ usersList });
-    //   res.status(200).json({
-    //     status: "success",
-    //     message: "Record fetched Successfully",
-    //     users: usersList,
-    //   });
-    // });
-
-    if (allUsers) {
-      res.status(200).json({
-        status: "success",
-        message: "Record fetched Successfully",
-        user: allUsers,
+    const usersCashbacks = allUsers.map(async (user) => {
+      const cashback = await Cashback.find({ userId: user?._id });
+      if (!cashback) {
+        return null;
+      }
+      return cashback;
+    });
+    Promise.all(usersCashbacks).then((usersCashbackList) => {
+      const earnings = usersCashbackList.map(
+        (cashbackList, index) =>
+          new Promise((resolve, reject) => {
+            // console.log(allUsers[index], cashbackList);
+            const totalEarnings = cashbackList.reduce((acc, cashback) => {
+              return acc + cashback.amount;
+            }, 0);
+            const redeemedEarnings = cashbackList.reduce((acc, cashback) => {
+              return cashback?.status === "Paid" ? acc + cashback?.amount : acc;
+            }, 0);
+            const currentDateValue = new Date(2023, 5, 2).valueOf(); // have to change this to new Date()
+            const redeemableEarnings = cashbackList.reduce((acc, cashback) => {
+              const diff = currentDateValue - cashback.createdAt.valueOf();
+              const days = diff / (1000 * 60 * 60 * 24);
+              return days > 14 && cashback?.status === "Unpaid"
+                ? acc + cashback.amount
+                : acc;
+            }, 0);
+            if (totalEarnings !== 0) {
+              console.log({
+                totalEarnings,
+                redeemedEarnings,
+                redeemableEarnings,
+              });
+            }
+            resolve({
+              totalEarnings,
+              redemeedEarnings: redeemedEarnings,
+              redemableEarnings: redeemableEarnings,
+            });
+            // allUsers[index].totalCashback = totalCashback;
+            // allUsers[index].redemeedCashback = redemeedCashback;
+            // allUsers[index].redemableCashback = redemableCashback;
+          })
+      );
+      Promise.all(earnings).then((earningsList) => {
+        const finalUsersList = [];
+        earningsList?.map((earnings, index) => {
+          finalUsersList.push({
+            user: allUsers[index],
+            earnings,
+          });
+        });
+        res.status(200).json({
+          status: "success",
+          message: "Record fetched Successfully",
+          users: finalUsersList,
+        });
       });
-    } else {
-      res.status(400).json({
-        status: "fail",
-        message: "Something Wrong!",
-      });
-    }
+    });
+    // console.log({ allUsers });
   } catch (error) {
     console.log(error);
     res.status(400).json({
