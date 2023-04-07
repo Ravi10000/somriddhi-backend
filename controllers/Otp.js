@@ -304,8 +304,8 @@ exports.getAllUsers = async (req, res) => {
             }
             resolve({
               totalEarnings,
-              redemeedEarnings: redeemedEarnings,
-              redemableEarnings: redeemableEarnings,
+              redeemedEarnings,
+              redeemableEarnings,
             });
             // allUsers[index].totalCashback = totalCashback;
             // allUsers[index].redemeedCashback = redemeedCashback;
