@@ -5,7 +5,7 @@ const {
   fetchRedeemableCashbacks,
   redeemCashback,
 } = require("../controllers/cashback.controller");
-const { fetchuser } = require("../middleware/auth");
+const { fetchuser } = require("../middleware/Auth");
 
 const router = express.Router();
 
