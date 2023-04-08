@@ -7,12 +7,12 @@ const {
   updateUser,
   getAllUsers,
 } = require("../controllers/Otp");
-const { fetchuser } = require("../middleware/Auth");
+const { fetchuser, isAdmin } = require("../middleware/Auth");
 
 router.post("/sendotp", sendOtp);
 router.post("/verifyotp", verifyOtp);
 router.post("/user", fetchuser, newUser);
 router.patch("/user", fetchuser, updateUser);
-router.get("/user", fetchuser, getAllUsers);
+router.get("/user", fetchuser, isAdmin, getAllUsers);
 
 module.exports = router;

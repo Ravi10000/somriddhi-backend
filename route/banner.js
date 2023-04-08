@@ -6,8 +6,11 @@ const {
   updateBanner,
   deleteBanner,
   getBannerById,
+  getActiveBanners,
+  changeStatus,
+  changePriorityOrder,
 } = require("../controllers/banner");
-const { fetchuser } = require("../middleware/Auth");
+const { fetchuser, isAdmin } = require("../middleware/Auth");
 
 const multer = require("multer");
 // const upload = multer({ dest: 'uploads/' });
@@ -24,15 +27,31 @@ const storage = multer.diskStorage({
   // }
   filename: function (req, file, cb) {
     cb(null, Date.now() + "-" + file.originalname);
+    // const [fileName, extention] = file.originalname.split(".");
+    // cb(null, fileName + "-" + Date.now() + "." + extention);
   },
 });
 
 const upload = multer({ storage });
 
-router.post("/banner", upload.single("bannerPhoto"), fetchuser, createBanner);
-router.get("/banner/:id", getBannerById);
+router.post("/banner/changestatus", fetchuser, isAdmin, changeStatus);
+router.post(
+  "/banner",
+  upload.single("bannerPhoto"),
+  fetchuser,
+  isAdmin,
+  createBanner
+);
+router.get("/banner/active", getActiveBanners);
+router.get("/banner/:id", getBannerById); // ????
 router.get("/banner", getBanners);
-router.patch("/banner", upload.single("bannerPhoto"), fetchuser, updateBanner);
-router.delete("/banner/:id", deleteBanner);
+router.patch(
+  "/banner",
+  upload.single("bannerPhoto"),
+  fetchuser,
+  isAdmin,
+  updateBanner
+);
+router.delete("/banner/:id", fetchuser, isAdmin, deleteBanner);
 
 module.exports = router;

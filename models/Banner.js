@@ -31,13 +31,17 @@ const BannerSchema = new Schema({
     enum: ["Active", "Inactive"],
     required: false,
   },
+  priorityOrder: {
+    type: Number,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
   },
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
-    default: Date.now,
+    // default: Date.now,
+    ref: "user",
   },
 });
 const Banner = mongoose.model("banner", BannerSchema);
