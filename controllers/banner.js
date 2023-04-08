@@ -114,39 +114,34 @@ exports.getActiveBanners = async (req, res) => {
 
 exports.changePriorityOrder = async (req, res) => {
   try {
-    const { bannerId, NewPriorityOrder } = req.body;
+    const { bannerId, NewPriorityOrder } = req?.body;
 
     const banners = await Banner.find({}).sort({ priorityOrder: "asc" });
     const targetBanner = await Banner.findById(bannerId);
-
-    const finalList = banners.map(async (banner, index) => {
-      return new Promise(async (resolve, reject) => {
-        if (targetBanner.priorityOrder < NewPriorityOrder) {
-          for (
-            let i = targetBanner.priorityOrder + 1;
-            i <= NewPriorityOrder;
-            i++
-          ) {
-            if (banner.priorityOrder === i) {
-              banner.priorityOrder = i - 1;
-              await banner.save();
-            }
-          }
+    const tp = targetBanner?.priorityOrder;
+    let updatedBannerList = [];
+    if (tp < NewPriorityOrder) {
+      updatedBannerList = banners?.map(async (banner, index) => {
+        let bp = banner?.priorityOrder;
+        if (!(bp > tp) && !(bp < NewPriorityOrder)) {
+          return banner;
         }
-        if (targetBanner.priorityOrder > NewPriorityOrder) {
-          for (
-            let i = targetBanner.priorityOrder - 1;
-            i <= NewPriorityOrder;
-            i--
-          ) {
-            if (banner.priorityOrder === i) {
-              banner.priorityOrder = i + 1;
-              await banner.save();
-            }
-          }
-        }
+        banner?.priorityOrder = index + 2;
+        await banner.save();
+        return banner;
       });
-    });
+    }else
+    if (tp > NewPriorityOrder) {
+      updatedBannerList = banners?.map(async (banner, index) => {
+        let bp = banner?.priorityOrder;
+        if (!(bp < tp) && !(bp > NewPriorityOrder)) {
+          return banner;
+        }
+        banner?.priorityOrder = index - 2;
+        await banner.save();
+        return banner;
+      });
+    }
   } catch (error) {
     console.log(error.message);
     res.status(400).json({
