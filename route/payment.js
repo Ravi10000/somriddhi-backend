@@ -7,7 +7,7 @@ const {
   fetchAllPayments,
   fetchAllPayouts,
 } = require("../controllers/ReadFile");
-const { fetchuser } = require("../middleware/Auth");
+const { fetchuser, isAdmin } = require("../middleware/Auth");
 
 const multer = require("multer");
 // const upload = multer({ dest: 'uploads/' });
@@ -27,10 +27,22 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-router.post("/payment", upload.single("fileExcel"), generateCashback);
-router.post("/payout", upload.single("fileExcel"), updatePayouts);
+router.post(
+  "/payment",
+  upload.single("fileExcel"),
+  fetchuser,
+  isAdmin,
+  generateCashback
+);
+router.post(
+  "/payout",
+  upload.single("fileExcel"),
+  fetchuser,
+  isAdmin,
+  updatePayouts
+);
 router.post("/paymentrequest", fetchuser, generateRequest);
-router.get("/payment", fetchAllPayments);
-router.get("/payout", fetchAllPayouts);
+router.get("/payment", fetchuser, isAdmin, fetchAllPayments);
+router.get("/payout", fetchuser, isAdmin, fetchAllPayouts);
 
 module.exports = router;

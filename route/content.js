@@ -7,7 +7,7 @@ const {
   deleteContent,
   getContent,
 } = require("../controllers/content");
-const { fetchuser } = require("../middleware/Auth");
+const { fetchuser, isAdmin } = require("../middleware/Auth");
 
 const multer = require("multer");
 // const upload = multer({ dest: 'uploads/' });
@@ -29,9 +29,21 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-router.post("/content", upload.single("image"), fetchuser, createContent);
-router.patch("/content", upload.single("image"), fetchuser, updateContent);
-router.delete("/content/:id", fetchuser, deleteContent);
+router.post(
+  "/content",
+  upload.single("image"),
+  fetchuser,
+  isAdmin,
+  createContent
+);
+router.patch(
+  "/content",
+  upload.single("image"),
+  fetchuser,
+  isAdmin,
+  updateContent
+);
+router.delete("/content/:id", fetchuser, isAdmin, deleteContent);
 router.get("/content", getContent);
 
 module.exports = router;

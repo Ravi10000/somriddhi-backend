@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 
 exports.fetchuser = (req, res, next) => {
   console.log("fetching user");
@@ -35,9 +36,10 @@ exports.userMiddleware = (req, res, next) => {
   next();
 };
 
-exports.adminMiddleware = (req, res, next) => {
-  if (req.user.role !== "admin") {
-    res.status(400).json({ message: "Admin Access Denied" });
+exports.isAdmin = async (req, res, next) => {
+  const user = await User.findById(req?.user?._id);
+  if (user?.usertype !== "admin") {
+    return res.status(401).json({ message: "Admin Access Denied" });
   }
   next();
 };

@@ -7,7 +7,7 @@ const {
   deleteMembership,
   getMembershipById,
 } = require("../controllers/Membership");
-const { fetchuser } = require("../middleware/Auth");
+const { fetchuser, isAdmin } = require("../middleware/Auth");
 
 const multer = require("multer");
 // const upload = multer({ dest: 'uploads/' });
@@ -34,16 +34,18 @@ router.post(
   "/membership",
   upload.single("membershipPhoto"),
   fetchuser,
+  isAdmin,
   createMembership
 );
-router.get("/membership/:id", getMembershipById);
-router.get("/membership", getMemberships);
 router.patch(
   "/membership",
   upload.single("membershipPhoto"),
   fetchuser,
+  isAdmin,
   updateMembership
 );
-router.delete("/membership/:id", fetchuser, deleteMembership);
+router.delete("/membership/:id", fetchuser, isAdmin, deleteMembership);
+router.get("/membership/:id", getMembershipById);
+router.get("/membership", getMemberships);
 
 module.exports = router;

@@ -10,7 +10,7 @@ const {
   changeStatus,
   changePriorityOrder,
 } = require("../controllers/banner");
-const { fetchuser } = require("../middleware/Auth");
+const { fetchuser, isAdmin } = require("../middleware/Auth");
 
 const multer = require("multer");
 // const upload = multer({ dest: 'uploads/' });
@@ -34,13 +34,24 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-router.post("/banner/changestatus", fetchuser, changeStatus);
-// router.post("/banner/changepriority", fetchuser, changePriorityOrder);
-router.post("/banner", upload.single("bannerPhoto"), fetchuser, createBanner);
+router.post("/banner/changestatus", fetchuser, isAdmin, changeStatus);
+router.post(
+  "/banner",
+  upload.single("bannerPhoto"),
+  fetchuser,
+  isAdmin,
+  createBanner
+);
 router.get("/banner/active", getActiveBanners);
-router.get("/banner/:id", getBannerById);
+router.get("/banner/:id", getBannerById); // ????
 router.get("/banner", getBanners);
-router.patch("/banner", upload.single("bannerPhoto"), fetchuser, updateBanner);
-router.delete("/banner/:id", deleteBanner);
+router.patch(
+  "/banner",
+  upload.single("bannerPhoto"),
+  fetchuser,
+  isAdmin,
+  updateBanner
+);
+router.delete("/banner/:id", fetchuser, isAdmin, deleteBanner);
 
 module.exports = router;

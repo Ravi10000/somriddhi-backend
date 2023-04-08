@@ -5,9 +5,9 @@ const {
   getCategories,
   updateCategory,
   deleteCategory,
-  getCategoryById
+  getCategoryById,
 } = require("../controllers/Category");
-const { fetchuser } = require("../middleware/Auth");
+const { fetchuser, isAdmin } = require("../middleware/Auth");
 
 const multer = require("multer");
 // const upload = multer({ dest: 'uploads/' });
@@ -32,15 +32,17 @@ router.post(
   "/category",
   upload.single("categoryPhoto"),
   fetchuser,
+  isAdmin,
   createCategory
 );
-router.get("/category", getCategories);
 router.patch(
   "/category",
   upload.single("categoryPhoto"),
   fetchuser,
+  isAdmin,
   updateCategory
 );
-router.delete("/category/:id", fetchuser, deleteCategory);
+router.delete("/category/:id", fetchuser, isAdmin, deleteCategory);
 router.get("/category/single/:id", getCategoryById);
+router.get("/category", getCategories);
 module.exports = router;
