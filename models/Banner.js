@@ -40,7 +40,8 @@ const BannerSchema = new Schema({
   },
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
-    default: Date.now,
+    // default: Date.now,
+    ref: "user",
   },
 });
 const Banner = mongoose.model("banner", BannerSchema);

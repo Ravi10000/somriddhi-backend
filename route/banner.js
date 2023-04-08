@@ -8,6 +8,7 @@ const {
   getBannerById,
   getActiveBanners,
   changeStatus,
+  changePriorityOrder,
 } = require("../controllers/banner");
 const { fetchuser } = require("../middleware/Auth");
 
@@ -25,13 +26,16 @@ const storage = multer.diskStorage({
   //     req.body.imageUrl = url;
   // }
   filename: function (req, file, cb) {
-    cb(null, Date.now() + "-" + file.originalname);
+    // cb(null, Date.now().toString() + "-" + file.originalname);
+    const [fileName, extention] = file.originalname.split(".");
+    cb(null, fileName + "-" + Date.now() + "." + extention);
   },
 });
 
 const upload = multer({ storage });
 
 router.post("/banner/changestatus", fetchuser, changeStatus);
+// router.post("/banner/changepriority", fetchuser, changePriorityOrder);
 router.post("/banner", upload.single("bannerPhoto"), fetchuser, createBanner);
 router.get("/banner/active", getActiveBanners);
 router.get("/banner/:id", getBannerById);

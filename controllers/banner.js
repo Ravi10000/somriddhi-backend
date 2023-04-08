@@ -1,29 +1,28 @@
 const Banner = require("../models/Banner");
 
 exports.createBanner = async (req, res) => {
+  console.log("createBanner");
   try {
+    console.log({ user: req?.user });
+    console.log({ body: req?.body });
+    console.log({ file: req?.file });
     const banner = {};
     if (req.body.name) banner.name = req.body.name;
-    console.log(req.file);
     if (req.file.filename) banner.image = req.file.filename;
     if (req.body.cashbackPercent)
       banner.cashbackPercent = req.body.cashbackPercent;
     if (req.body.maxCashback) banner.maxCashback = req.body.maxCashback;
+    if (req.body.priorityOrder) banner.priorityOrder = req.body.priorityOrder;
     if (req.body.description) banner.description = req.body.description;
     if (req.body.url) banner.url = req.body.url;
     if (req.body.status) banner.status = req.body.status;
     banner.createdBy = req.user._id;
-    const bannersCount = await Banner.countDocuments({});
-    const newBanner = await Banner.create({
-      banner,
-      priorityOrder: bannersCount + 1,
-    });
-    const record = await newBanner.save();
-    if (record) {
+    console.log({ banner });
+    const newBanner = await Banner.create(banner);
+    if (newBanner) {
       res.status(200).json({
         status: "success",
         message: "Record created Successfully!",
-        data: record,
       });
     } else {
       res.status(400).json({
@@ -32,6 +31,7 @@ exports.createBanner = async (req, res) => {
       });
     }
   } catch (err) {
+    console.log(err);
     res.status(400).json({
       status: "fail",
       message: err.message,
@@ -40,13 +40,19 @@ exports.createBanner = async (req, res) => {
 };
 
 exports.getBanners = async (req, res) => {
+  console.log("getBanners");
   try {
-    const allBanners = await Banner.find({}).sort({ priorityOrder: "asc" });
-    if (allBanners) {
+    const allActiveBanners = await Banner.find({ status: "Active" }).sort({
+      priorityOrder: "asc",
+    });
+    const allInactiveBanners = await Banner.find({ status: "Inactive" }).sort({
+      priorityOrder: "asc",
+    });
+    if (allActiveBanners || allInactiveBanners) {
       res.status(200).json({
         status: "success",
         message: "Records fetched Successfully!",
-        data: allBanners,
+        banners: [...allActiveBanners, ...allInactiveBanners],
       });
     } else {
       res.status(400).json({
@@ -113,33 +119,71 @@ exports.getActiveBanners = async (req, res) => {
 };
 
 exports.changePriorityOrder = async (req, res) => {
+  console.log("change priority order");
   try {
-    const { bannerId, NewPriorityOrder } = req?.body;
+    const { bannerId, newPriorityOrder } = req?.body;
+
+    if (!bannerId || !newPriorityOrder) {
+      return res.status(400).json({
+        status: "fail",
+        message: "Invalid request",
+      });
+    }
 
     const banners = await Banner.find({}).sort({ priorityOrder: "asc" });
     const targetBanner = await Banner.findById(bannerId);
     const tp = targetBanner?.priorityOrder;
-    let updatedBannerList = [];
-    if (tp < NewPriorityOrder) {
-      updatedBannerList = banners?.map(async (banner, index) => {
+
+    if (tp === newPriorityOrder) {
+      return res.status(200).json({
+        status: "success",
+        message: "Priority order unchanged",
+        banners,
+      });
+    } else if (tp < newPriorityOrder) {
+      const updatedBannerList = banners?.map(async (banner, index) => {
         let bp = banner?.priorityOrder;
-        if (!(bp > tp) && !(bp < NewPriorityOrder)) {
+        if (!(bp >= tp) || !(bp <= newPriorityOrder)) {
           return banner;
         }
-        banner?.priorityOrder = index + 2;
+        if (bp === tp) {
+          banner.priorityOrder = newPriorityOrder;
+          await banner.save();
+          return banner;
+        }
+        banner.priorityOrder = index;
         await banner.save();
         return banner;
       });
-    }else
-    if (tp > NewPriorityOrder) {
-      updatedBannerList = banners?.map(async (banner, index) => {
+
+      Promise.all(updatedBannerList).then((bannerList) => {
+        console.log("bannerList", bannerList);
+        res.status(200).json({
+          status: "success",
+          bannerList,
+        });
+      });
+    } else if (tp > newPriorityOrder) {
+      const updatedBannerList = banners?.map(async (banner, index) => {
         let bp = banner?.priorityOrder;
-        if (!(bp < tp) && !(bp > NewPriorityOrder)) {
+        if (!(bp >= newPriorityOrder) || !(bp <= tp)) {
           return banner;
         }
-        banner?.priorityOrder = index - 2;
+        if (bp === tp) {
+          banner.priorityOrder = newPriorityOrder;
+          await banner.save();
+          return banner;
+        }
+        banner.priorityOrder = index + 2;
         await banner.save();
         return banner;
+      });
+
+      Promise.all(updatedBannerList).then((bannerList) => {
+        res.status(200).json({
+          status: "success",
+          bannerList,
+        });
       });
     }
   } catch (error) {
@@ -176,6 +220,7 @@ exports.updateBanner = async (req, res) => {
     const bannerId = req.body._id;
     const banner = {};
     if (req.body.name) banner.name = req.body.name;
+    if (req.body.priorityOrder) banner.priorityOrder = req.body.priorityOrder;
     if (req?.file?.filename) banner.image = req.file.filename;
     if (req.body.bannerPhoto) banner.image = req.body.bannerPhoto;
     if (req.body.cashbackPercent)
