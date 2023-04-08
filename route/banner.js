@@ -26,9 +26,9 @@ const storage = multer.diskStorage({
   //     req.body.imageUrl = url;
   // }
   filename: function (req, file, cb) {
-    // cb(null, Date.now().toString() + "-" + file.originalname);
-    const [fileName, extention] = file.originalname.split(".");
-    cb(null, fileName + "-" + Date.now() + "." + extention);
+    cb(null, Date.now() + "-" + file.originalname);
+    // const [fileName, extention] = file.originalname.split(".");
+    // cb(null, fileName + "-" + Date.now() + "." + extention);
   },
 });
 
