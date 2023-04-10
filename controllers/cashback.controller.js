@@ -164,3 +164,20 @@ exports.redeemCashback = async (req, res) => {
     });
   }
 };
+
+exports.fetchMyCashbacks = async (req, res) => {
+  console.log("fetch my cashbacks");
+  if (!req?.user) {
+    res.status(401).json({
+      status: "fail",
+      message: "Invalid request",
+    });
+  }
+  const cashbacks = await Cashback.find({ userId: req?.user?._id });
+
+  res.status(200).json({
+    status: "success",
+    message: "Cashbacks fetched successfully",
+    cashbacks,
+  });
+};
