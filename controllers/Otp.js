@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const axios = require("axios");
 const Cashback = require("../models/Cashback.model");
+const referralCodeGenerator = require("referral-code-generator");
+
 // const sdk = require('api')('@msg91api/v5.0#171eja12lf0xqafw');
 
 exports.sendOtp = async (req, res) => {
@@ -46,8 +48,7 @@ exports.sendOtp = async (req, res) => {
         console.log(response.data);
         await Otp.deleteMany({ phone: req.body.phone });
         const otp = await Otp.create(newOtp);
-        const savedOtp = await otp.save();
-        if (!savedOtp) {
+        if (!otp) {
           res.status(400).json({
             status: "Fail",
             message: "Otp does not saved into the database !",
@@ -56,7 +57,7 @@ exports.sendOtp = async (req, res) => {
         res.status(200).json({
           status: "success",
           message: "OTP sent Successfully!",
-          data: OTP,
+          data: OTP, // delete this in production
         });
       })
       .catch(function (error) {
@@ -82,129 +83,131 @@ exports.sendOtp = async (req, res) => {
 
 exports.verifyOtp = async (req, res) => {
   console.log("verifyotp ", req.body);
-  // try {
-  const userRecord = await Otp.findOne({ phone: req.body.phone });
-  console.log(userRecord);
+  try {
+    const userRecord = await Otp.findOne({ phone: req.body.phone });
+    console.log(userRecord);
 
-  if (userRecord?.otp == req?.body?.otp) {
-    // msg91 integration start
-    // const options = {
-    //   method: 'GET',
-    //   url: `https://control.msg91.com/api/v5/otp/verify?otp=${req.body.otp}&mobile=${req.body.phone}`,
-    //   headers: { accept: 'application/json', authkey: '165254AJVmMEYMU60657de6P1' }
-    // };
+    if (userRecord?.otp == req?.body?.otp) {
+      // msg91 integration start
+      // const options = {
+      //   method: 'GET',
+      //   url: `https://control.msg91.com/api/v5/otp/verify?otp=${req.body.otp}&mobile=${req.body.phone}`,
+      //   headers: { accept: 'application/json', authkey: '165254AJVmMEYMU60657de6P1' }
+      // };
 
-    // axios
-    //   .request(options)
-    //   .then(function (response) {
-    //     console.log(response.data);
-    //   })
-    //   .catch(function (error) {
-    //     console.error(error);
-    //   });
-    // msg91 integration end
-    //integrate verifyotp
-    const userFound = await User.findOne({ phone: req.body.phone });
-    if (userFound) {
-      const token = jwt.sign({ _id: userFound._id }, process.env.JWT_SECRET, {
-        expiresIn: "1y",
-      });
-      res.status(200).json({
-        status: "success",
-        message: "User details fetched Successfully!",
-        user: userFound,
-        token: token,
-      });
-    } else {
-      const newUser = {
+      // axios
+      //   .request(options)
+      //   .then(function (response) {
+      //     console.log(response.data);
+      //   })
+      //   .catch(function (error) {
+      //     console.error(error);
+      //   });
+      // msg91 integration end
+      //integrate verifyotp
+      const userFound = await User.findOne({
         phone: req.body.phone,
-        isContactVerified: true,
-        usertype: "customer",
-      };
-      const addedUser = await User.create(newUser);
-      const savedUser = await addedUser.save();
-      console.log(savedUser._id);
-      const token = jwt.sign({ _id: savedUser._id }, process.env.JWT_SECRET, {
-        expiresIn: "1y",
       });
-      if (savedUser) {
+      if (userFound) {
+        const token = jwt.sign({ _id: userFound._id }, process.env.JWT_SECRET, {
+          expiresIn: "1y",
+        });
         res.status(200).json({
           status: "success",
-          message: "New user created and details fetched Successfully!",
-          user: savedUser,
+          message: "User details fetched Successfully!",
+          user: userFound,
           token: token,
         });
       } else {
-        res.status(200).json({
-          status: "success",
-          message: "New user is not created Successfully!",
+        const newUser = {
+          phone: req.body.phone,
+          isContactVerified: true,
+          usertype: "customer",
+          referralCode: referralCodeGenerator.alpha("uppercase", 12),
+        };
+        const addedUser = await User.create(newUser);
+        // const savedUser = await addedUser.save();
+        console.log(addedUser._id);
+        const token = jwt.sign({ _id: addedUser._id }, process.env.JWT_SECRET, {
+          expiresIn: "1y",
         });
+        if (addedUser) {
+          res.status(200).json({
+            status: "success",
+            message: "New user created and details fetched Successfully!",
+            user: addedUser,
+            token: token,
+          });
+        } else {
+          res.status(200).json({
+            status: "success",
+            message: "New user is not created Successfully!",
+          });
+        }
       }
+    } else {
+      res.status(400).json({
+        status: "failed",
+        message: "Invalid otp",
+      });
     }
-  } else {
-    res.status(200).json({
-      status: "failed",
-      message: "Invalid otp",
+  } catch (err) {
+    res.status(400).json({
+      status: "Fail",
+      message: err.message,
     });
   }
-  // }
-  //  catch (err) {
-  //   res.status(400).json({
-  //     status: "Fail",
-  //     message: err.message,
-  //   });
-  // }
 };
 
 exports.newUser = async (req, res) => {
   console.log("newuser");
   console.log(req.headers.authorization);
-  console.log("body", req.body);
-  console.log("user", req.user);
+  console.log("body", req?.body);
+  console.log("user", req?.user);
   // console.log("user", req.user);
-  const { fname, lname, email, phone, usertype } = req.body;
+  const { fname, lname, email, phone, referredBy } = req?.body;
 
-  // try {
-  // Create a newNote object
-  const newData = {};
-  if (fname) {
-    newData.fname = fname;
+  try {
+    // Create a newNote object
+    const newData = {};
+    if (fname) {
+      newData.fname = fname;
+    }
+    if (lname) {
+      newData.lname = lname;
+    }
+    if (email) {
+      newData.email = email;
+    }
+    if (phone) {
+      newData.phone = phone;
+    }
+    if (referredBy) {
+      newData.referredBy = referredBy;
+    }
+    newData.isContactVerified = true;
+    // console.log("body", req.body);
+    console.log({ newData });
+    // Find the note to be updated and update it
+    // const record = await User.findById(req.user._id);
+    // console.log({ record });
+    // if (!record) {
+    //   return res.status(404).json({ status: false, message: "Not Found" });
+    // }
+    const result = await User.findByIdAndUpdate(req.user._id, newData, {
+      new: true,
+    });
+    console.log({ result });
+    console.log("end of newuser");
+    res.status(200).json({
+      status: "success",
+      message: "Record Updated Successfully",
+      user: result,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
   }
-  if (lname) {
-    newData.lname = lname;
-  }
-  if (email) {
-    newData.email = email;
-  }
-  if (phone) {
-    newData.phone = phone;
-  }
-  if (usertype) {
-    newData.usertype = usertype;
-  }
-  newData.isContactVerified = true;
-  // console.log("body", req.body);
-  console.log({ newData });
-  // Find the note to be updated and update it
-  // const record = await User.findById(req.user._id);
-  // console.log({ record });
-  // if (!record) {
-  //   return res.status(404).json({ status: false, message: "Not Found" });
-  // }
-  const result = await User.findByIdAndUpdate(req.user._id, newData, {
-    new: true,
-  });
-  console.log({ result });
-  console.log("end of newuser");
-  res.status(200).json({
-    status: "success",
-    message: "Record Updated Successfully",
-    user: result,
-  });
-  // } catch (error) {
-  //   console.error(error);
-  //   res.status(500).send("Internal Server Error");
-  // }
 };
 
 exports.updateUser = async (req, res) => {
@@ -325,6 +328,28 @@ exports.getAllUsers = async (req, res) => {
       });
     });
     // console.log({ allUsers });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      status: "fail",
+    });
+  }
+};
+
+exports.getRefferedUsers = async (req, res) => {
+  try {
+    if (!req?.user) {
+      return res.status(400).json({
+        status: "fail",
+      });
+    }
+    const user = await User.findById(req.user._id).select("referralCode -_id");
+    const allUsers = await User.find({ referredBy: user.referralCode });
+    res.status(200).json({
+      status: "success",
+      message: "Record fetched Successfully",
+      users: allUsers,
+    });
   } catch (error) {
     console.log(error);
     res.status(400).json({

@@ -27,6 +27,10 @@ const UserSchema = new Schema({
     type: String,
     required: false,
   },
+  referredBy: {
+    type: String,
+    required: false,
+  },
   usertype: {
     type: String,
     enum: ["customer", "admin"],
