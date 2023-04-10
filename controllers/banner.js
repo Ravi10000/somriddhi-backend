@@ -42,17 +42,21 @@ exports.createBanner = async (req, res) => {
 exports.getBanners = async (req, res) => {
   console.log("getBanners");
   try {
-    const allActiveBanners = await Banner.find({ status: "Active" }).sort({
+    const allBanners = await Banner.find().sort({
       priorityOrder: "asc",
     });
-    const allInactiveBanners = await Banner.find({ status: "Inactive" }).sort({
-      priorityOrder: "asc",
-    });
-    if (allActiveBanners || allInactiveBanners) {
+    // const allActiveBanners = await Banner.find({ status: "Active" }).sort({
+    //   priorityOrder: "asc",
+    // });
+    // const allInactiveBanners = await Banner.find({ status: "Inactive" }).sort({
+    //   priorityOrder: "asc",
+    // });
+    if (allBanners) {
       res.status(200).json({
         status: "success",
         message: "Records fetched Successfully!",
-        banners: [...allActiveBanners, ...allInactiveBanners],
+        banners: allBanners,
+        // banners: [...allActiveBanners, ...allInactiveBanners],
       });
     } else {
       res.status(400).json({
