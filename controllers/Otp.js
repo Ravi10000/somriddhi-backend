@@ -183,7 +183,10 @@ exports.newUser = async (req, res) => {
       newData.phone = phone;
     }
     if (referredBy) {
-      newData.referredBy = referredBy;
+      const referredByUser = await User.find({
+        referralCode: referredBy.toUpperCase(),
+      });
+      if (referredByUser) newData.referredBy = referredBy.toUpperCase();
     }
     newData.isContactVerified = true;
     // console.log("body", req.body);
