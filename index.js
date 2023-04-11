@@ -30,6 +30,7 @@ app.use(
 app.use(cors());
 app.use("/api", require("./route/cashback.route"));
 app.use("/api", require("./route/auth"));
+app.use("/api", require("./route/search"));
 app.use("/api", require("./route/content"));
 app.use("/api", require("./route/otp"));
 app.use("/api", require("./route/banner"));
@@ -64,4 +65,3 @@ httpServer.listen(process.env.HTTP_PORT, () => {
 httpsServer.listen(process.env.HTTPS_PORT, () => {
   console.log(`HTTPS Server is listening on port ${process.env.HTTPS_PORT} `);
 });
-  
