@@ -7,9 +7,11 @@ const {
   updateUser,
   getAllUsers,
   getRefferedUsers,
+  changeWalletId,
 } = require("../controllers/Otp");
 const { fetchuser, isAdmin } = require("../middleware/Auth");
 
+router.post("/user/walletId", fetchuser, changeWalletId);
 router.post("/sendotp", sendOtp);
 router.post("/verifyotp", verifyOtp);
 router.post("/user", fetchuser, newUser);

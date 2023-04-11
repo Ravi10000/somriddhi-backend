@@ -360,3 +360,44 @@ exports.getRefferedUsers = async (req, res) => {
     });
   }
 };
+
+exports.changeWalletId = async (req, res) => {
+  if (!req?.user)
+    return res.status(404).json({
+      status: "fail",
+      message: "User Not Found",
+    });
+
+  const { walletId } = req?.body;
+  if (!walletId) {
+    return res.status(400).json({
+      status: "fail",
+      message: "Wallet Id is required",
+    });
+  }
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      req?.user,
+      { walletId },
+      { new: true }
+    );
+    if (!updatedUser) {
+      return res.status(404).json({
+        status: "fail",
+        message: "User Not Found",
+      });
+    }
+    return res.status(200).json({
+      status: "success",
+      message: "Wallet Id Updated Successfully",
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({
+      status: "fail",
+      message: "Internal Server Error",
+    });
+  }
+};
