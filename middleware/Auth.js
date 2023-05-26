@@ -2,11 +2,11 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 exports.fetchuser = (req, res, next) => {
-  console.log("fetching user");
-  console.log("body on fetch user ", req.body);
-  console.log("params on fetch user ", req.params);
-  console.log("query on fetch user ", req.query);
-  console.log("files on fetch user ", req?.file);
+  // console.log("fetching user");
+  // console.log("body on fetch user ", req.body);
+  // console.log("params on fetch user ", req.params);
+  // console.log("query on fetch user ", req.query);
+  // console.log("files on fetch user ", req?.file);
   if (req.headers.authorization) {
     const token = req.headers.authorization.split(" ")[1];
     console.log({ token });
@@ -21,7 +21,7 @@ exports.fetchuser = (req, res, next) => {
     // this is how we are going to manage user session
     console.log({ user });
     req.user = user;
-    console.log("user fetched and sent successfully");
+    // console.log("user fetched and sent successfully");
     return next();
   } else {
     console.log("no user found");
