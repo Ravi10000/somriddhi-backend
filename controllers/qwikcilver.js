@@ -40,6 +40,7 @@ exports.addGiftCardOrder = async (req, res) => {
         },
       ],
       refno: refno,
+      sync_only : true
     };
 
     console.log(createOrderBody);
@@ -189,6 +190,7 @@ exports.getAllGiftCards = async (req, res) => {
     console.log(err);
   }
 };
+
 
 let sortObject = (object) => {
   if (object instanceof Array) {
