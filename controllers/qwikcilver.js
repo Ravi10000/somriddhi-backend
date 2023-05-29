@@ -40,7 +40,7 @@ exports.addGiftCardOrder = async (req, res) => {
         },
       ],
       refno: refno,
-      sync_only : true
+      syncOnly : true
     };
 
     console.log(createOrderBody);
