@@ -12,65 +12,18 @@ const orderUrl = "https://sandbox.woohoo.in/rest/v3/orders";
 const activatedCardUrl = "https://sandbox.woohoo.in/rest/v3/order/";
 
 
-const tokenFilePath = "../token.txt";
 
 
 exports.addGiftCardOrder = async (req, res) => {
   // console.log("sendotp ", req.body);
 
-  const {address,billingAddress,totalAmount,unitPrice,qty} = req.body;
+  const {address,billingAddress,totalAmount,unitPrice,qty,paymentid} = req.body;
   
   try{
-
-    //calling category api once
-    // const categoryOptions = {
-    //   method: "GET",
-    //     url: categoryUrl,
-    //     headers: {
-    //         "Authorization" : "Bearer "+authToken,
-    //         "signature": cryptoJS.HmacSHA512(getConcatenateBaseString(categoryUrl,null,"GET"), process.env.QWIK_CLIENTSECRET).toString(),
-    //         "dateAtClient": moment().toISOString()
-    //     }
-    // }
-    // console.log(categoryOptions);
-
-    // var categoryResponse = await axios.request(categoryOptions);
-    // console.log(categoryResponse.data);
-    // const categoryId = "119"; //todo
-
-
-    //calling product api once
-    // const productListOptions = {
-    //   method: "GET",
-    //     url: categoryUrl+"/"+categoryId+"/products",
-    //     headers: {
-    //         "Authorization" : "Bearer "+authToken,
-    //         "signature": cryptoJS.HmacSHA512(getConcatenateBaseString(categoryUrl+"/"+categoryId+"/products",null,"GET"), process.env.QWIK_CLIENTSECRET).toString(),
-    //         "dateAtClient": moment().toISOString()
-    //     }
-    // }
-    // var productListResponse = await axios.request(productListOptions);
-    // console.log(productListResponse.data);
-    // const productId = "ABC"; //todo
-
-    //calling product api once
-    // const productOptions = {
-    //   method: "GET",
-    //     url: productUrl+process.env.QWIK_PRODID,
-    //     headers: {
-    //         "Authorization" : "Bearer "+authToken,
-    //         "signature": cryptoJS.HmacSHA512(getConcatenateBaseString(productUrl+process.env.QWIK_PRODID,null,"GET"), process.env.QWIK_CLIENTSECRET).toString(),
-    //         "dateAtClient": moment().toISOString()
-    //     }
-    // }
-    // var productResponse = await axios.request(productOptions);
-    // console.log(productResponse.data);
-    // const productId = "ABC"; //todo
-
-
     // //create a gift card model document
     var refno = "SOMRIDDHI" + Date.now();
     console.log(refno);
+
 
     var createOrderBody = {
       "address": address,
@@ -78,21 +31,19 @@ exports.addGiftCardOrder = async (req, res) => {
       "payments": [
         {
           "code": "svc",
-          "amount": totalAmount
+          "amount": totalAmount,
+          "poNumber" : paymentid
         }
       ],
-      "refno": refno,
-      "syncOnly": true,
-      "deliveryMode": "API",
       "products": [
         {
           "sku": process.env.QWIK_PRODID,
           "price": unitPrice,
           "qty": qty,
-          "currency": 356,
-          "theme": ""
+          "currency": 356
         }
-      ]
+      ],
+      "refno": refno
     }
 
     console.log(createOrderBody);
@@ -101,6 +52,7 @@ exports.addGiftCardOrder = async (req, res) => {
       method: "POST",
       url: orderUrl,
       headers: {
+          "content-type": "application/json", 
           "Authorization" : "Bearer "+ req.access_token,
           "signature": cryptoJS.HmacSHA512(getConcatenateBaseString(orderUrl,createOrderBody,"POST"), process.env.QWIK_CLIENTSECRET).toString(),
           "dateAtClient": moment().toISOString()
@@ -190,7 +142,8 @@ exports.getMyCards = async(req,res)=>{
 exports.getActivatedCards = async(req,res) => {
   try{
 
-    var _url = activatedCardUrl + req.orderid + "/card";
+    var _url = activatedCardUrl + req?.params?.orderid + "/cards";
+    console.log(_url);
     const activatedCardOptions = {
       method: "GET",
         url: _url,
