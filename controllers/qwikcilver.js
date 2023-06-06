@@ -35,8 +35,8 @@ exports.addGiftCardOrder = async (req, res) => {
       ],
       products: [
         {
-          // sku: process.env.QWIK_PRODID,
-          sku: "APITESTTIMFAIL",
+          sku: process.env.QWIK_PRODID,
+          // sku: "APITESTTIMFAIL",
           price: unitPrice,
           qty: qty,
           currency: 356,
