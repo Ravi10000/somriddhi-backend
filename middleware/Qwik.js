@@ -10,6 +10,7 @@ const codeUrl = "https://sandbox.woohoo.in/oauth2/token";
 exports.generateAccessToken = async (req, res, next) => {
   fs.readFile(tokenFilePath, 'utf8',async function (err, data) {
     console.log(tokenFilePath,data);
+    console.log("data ",data);
     if (err) return console.log(err);
     if (data) {
     //   const tokenData = JSON.parse(data);
@@ -35,7 +36,7 @@ exports.generateAccessToken = async (req, res, next) => {
         };
         var verifyResponse = await axios.request(verifyOptions);
         var authCode = verifyResponse.data['authorizationCode'];
-        console.log("AuthCode",authCode);
+        console.log("AuthCode",verifyResponse.data,verifyOptions);
 
         //then call token api
         const codeOptions = {
@@ -54,7 +55,7 @@ exports.generateAccessToken = async (req, res, next) => {
 
         var codeResponse = await axios.request(codeOptions);
         var authToken = codeResponse.data['token'];
-        console.log(authToken);
+        console.log("authToken",codeResponse.data,codeOptions);
         fs.writeFile(
             tokenFilePath,
             authToken,

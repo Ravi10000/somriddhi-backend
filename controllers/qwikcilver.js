@@ -4,11 +4,13 @@ const axios = require("axios");
 const cryptoJS = require("crypto-js");
 const moment = require("moment");
 const fs = require("fs");
+const Razorpay = require('razorpay');
 
-const categoryUrl = "https://sandbox.woohoo.in/rest/v3/catalog/categories";
+// const categoryUrl = "https://sandbox.woohoo.in/rest/v3/catalog/categories";
 const productUrl = "https://sandbox.woohoo.in/rest/v3/catalog/products/";
 const orderUrl = "https://sandbox.woohoo.in/rest/v3/orders";
 const activatedCardUrl = "https://sandbox.woohoo.in/rest/v3/order/";
+const statusUrl = "https://sandbox.woohoo.in/rest/v3/order/";
 
 exports.addGiftCardOrder = async (req, res) => {
   // console.log("sendotp ", req.body);
@@ -33,17 +35,57 @@ exports.addGiftCardOrder = async (req, res) => {
       ],
       products: [
         {
-          sku: process.env.QWIK_PRODID,
+          // sku: process.env.QWIK_PRODID,
+          sku: "APITESTTIMFAIL",
           price: unitPrice,
           qty: qty,
           currency: 356,
         },
-      ],
+      ], 
+      deliveryMode: "API",
       refno: refno,
-      syncOnly : true
+      syncOnly: true
     };
 
     console.log(createOrderBody);
+
+    const source = axios.CancelToken.source();
+    const timeout = setTimeout(async() => {
+      console.log("timeout errr");
+
+      var orderStatusOptions = {
+        method: "GET",
+        url: statusUrl + refno + "/status",
+        headers: {
+          "content-type": "application/json",
+          Authorization: "Bearer " + req.access_token,
+          signature: cryptoJS
+            .HmacSHA512(
+              getConcatenateBaseString(statusUrl + refno + "/status", null, "GET"),
+              process.env.QWIK_CLIENTSECRET
+            )
+            .toString(),
+          dateAtClient: moment().toISOString(),
+        }
+      };
+
+      var orderStatusResponse = await axios.request(orderStatusOptions);
+
+      console.log(orderStatusResponse);
+
+      if(orderStatusResponse.data['status'] != "COMPLETE"){
+
+        source.cancel();
+        var instance = new Razorpay({ key_id: process.env.RAZOR_PAY_KEY_ID, key_secret:  process.env.RAZOR_PAY_KEY_SECRET })
+        var refundResponse = await instance.payments.refund(paymentid,{
+          "amount": totalAmount,
+          "speed": "normal"
+        });
+
+        console.log(refundResponse);
+      }
+
+    }, 10000);
 
     var createOrderOptions = {
       method: "POST",
@@ -59,12 +101,15 @@ exports.addGiftCardOrder = async (req, res) => {
           .toString(),
         dateAtClient: moment().toISOString(),
       },
+      cancelToken: source.token,
       data: JSON.stringify(createOrderBody),
     };
 
     console.log(createOrderOptions);
 
+
     var createOrderResponse = await axios.request(createOrderOptions);
+    clearTimeout(timeout);
     console.log(createOrderResponse.data);
 
     //insert in db
@@ -87,10 +132,25 @@ exports.addGiftCardOrder = async (req, res) => {
       data: giftCardObj,
     });
   } catch (err) {
-    res.status(400).json({
-      status: "Fail",
-      message: err.message,
-    });
+    if(err.message == "canceled"){
+       res.status(400).json({
+        status: "Fail",
+        message: "An error occured while purchasing giftcard. Your amount will be refunded withing 5-10 business days",
+      });
+    }
+    else if(err.data['code'] == "401"){
+      //todo
+      res.status(400).json({
+        status: "Fail",
+        message: "err.message",
+      });
+    }
+    else{
+      res.status(400).json({
+        status: "Fail",
+        message: err.message,
+      });
+    }
   }
 };
 
@@ -115,7 +175,7 @@ exports.getGiftCards = async (req, res) => {
       },
     };
     var productResponse = await axios.request(productOptions);
-    // console.log(productResponse.data);
+    console.log(productResponse.data);
 
     res.status(200).json({
       status: "Success",
@@ -190,7 +250,6 @@ exports.getAllGiftCards = async (req, res) => {
     console.log(err);
   }
 };
-
 
 let sortObject = (object) => {
   if (object instanceof Array) {
