@@ -12,6 +12,8 @@ const orderUrl = "https://sandbox.woohoo.in/rest/v3/orders";
 const activatedCardUrl = "https://sandbox.woohoo.in/rest/v3/order/";
 const statusUrl = "https://sandbox.woohoo.in/rest/v3/order/";
 
+const productListFilePath = "./productList.txt";
+
 exports.addGiftCardOrder = async (req, res) => {
   // console.log("sendotp ", req.body);
 
@@ -112,37 +114,44 @@ exports.addGiftCardOrder = async (req, res) => {
     clearTimeout(timeout);
     console.log(createOrderResponse.data);
 
-    //insert in db
-    const giftCard = {
-      requestBody: JSON.stringify(createOrderBody),
-      totalAmount: totalAmount,
-      unitPrice: unitPrice,
-      qty: qty,
-      refno: refno,
-      orderId: createOrderResponse.data["orderId"],
-      status: createOrderResponse.data["status"],
-      createdBy: req.user._id,
-    };
-    console.log(giftCard);
-    const giftCardObj = await GiftCard.create(giftCard);
 
-    res.status(200).json({
-      status: "Success",
-      message: "Order Generared Successfully",
-      data: giftCardObj,
-    });
+    if(createOrderResponse.data["status"] == "COMPLETE"){
+      //insert in db
+      const giftCard = {
+        requestBody: JSON.stringify(createOrderBody),
+        totalAmount: totalAmount,
+        unitPrice: unitPrice,
+        qty: qty,
+        refno: refno,
+        orderId: createOrderResponse.data["orderId"],
+        status: createOrderResponse.data["status"],
+        createdBy: req.user._id,
+      };
+      console.log(giftCard);
+      const giftCardObj = await GiftCard.create(giftCard);
+
+      res.status(200).json({
+        status: "Success",
+        message: "Order Generared Successfully",
+        data: giftCardObj,
+      });
+    }
+    else{
+      var instance = new Razorpay({ key_id: process.env.RAZOR_PAY_KEY_ID, key_secret:  process.env.RAZOR_PAY_KEY_SECRET })
+      var refundResponse = await instance.payments.refund(paymentid,{
+        "amount": totalAmount,
+        "speed": "normal"
+      });
+      res.status(400).json({
+        status: "Fail",
+        message: "An error occured while purchasing giftcard. Your amount will be refunded withing 5-10 business days",
+      });
+    }
   } catch (err) {
     if(err.message == "canceled"){
        res.status(400).json({
         status: "Fail",
         message: "An error occured while purchasing giftcard. Your amount will be refunded withing 5-10 business days",
-      });
-    }
-    else if(err.data['code'] == "401"){
-      //todo
-      res.status(400).json({
-        status: "Fail",
-        message: "err.message",
       });
     }
     else{
@@ -155,38 +164,60 @@ exports.addGiftCardOrder = async (req, res) => {
 };
 
 exports.getGiftCards = async (req, res) => {
-  try {
-    const productOptions = {
-      method: "GET",
-      url: productUrl + process.env.QWIK_PRODID,
-      headers: {
-        Authorization: "Bearer " + req.access_token,
-        signature: cryptoJS
-          .HmacSHA512(
-            getConcatenateBaseString(
-              productUrl + process.env.QWIK_PRODID,
-              null,
-              "GET"
-            ),
-            process.env.QWIK_CLIENTSECRET
-          )
-          .toString(),
-        dateAtClient: moment().toISOString(),
-      },
-    };
-    var productResponse = await axios.request(productOptions);
-    console.log(productResponse.data);
 
-    res.status(200).json({
-      status: "Success",
-      data: productResponse.data,
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: "Fail",
-      message: err.message,
-    });
-  }
+  fs.readFile(productListFilePath, 'utf8',async function (err, data) {
+    console.log(productListFilePath,data);
+    console.log("data ",data);
+    if (err) return console.log(err);
+    if (data) {
+      res.status(200).json({
+        status: "Success",
+        data: JSON.parse(data),
+      });
+    }
+    try {
+      
+      const productOptions = {
+        method: "GET",
+        url: productUrl + process.env.QWIK_PRODID,
+        headers: {
+          Authorization: "Bearer " + req.access_token,
+          signature: cryptoJS
+            .HmacSHA512(
+              getConcatenateBaseString(
+                productUrl + process.env.QWIK_PRODID,
+                null,
+                "GET"
+              ),
+              process.env.QWIK_CLIENTSECRET
+            )
+            .toString(),
+          dateAtClient: moment().toISOString(),
+        },
+      };
+      var productResponse = await axios.request(productOptions);
+      console.log(productResponse.data);
+      fs.writeFile(
+          productListFilePath,
+          JSON.stringify(productResponse.data),
+          async function (err) {
+              console.log("Error while saving file: ", err);
+          }
+      );
+
+      res.status(200).json({
+        status: "Success",
+        data: productResponse.data,
+      });
+
+    } catch (err) {
+      res.status(400).json({
+        status: "Fail",
+        message: err.message,
+      });
+    }
+  });
+
 };
 
 exports.getMyCards = async (req, res) => {
