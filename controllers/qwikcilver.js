@@ -140,11 +140,7 @@ exports.addGiftCardOrder = async (req, res) => {
           else if(orderStatusResponse.data['status'] == "COMPLETE"){
             console.log("Completed after call 3");
             //todo
-<<<<<<< HEAD
             var _url = activatedCardUrl + orderStatusResponse.data['orderId'] + "/cards";
-=======
-            var _url = activatedCardUrl + req?.params?.orderid + "/cards";
->>>>>>> d201327ad08caf92ef5dd335771efde71c1b8d6b
             console.log(_url);
             const activatedCardOptions = {
               method: "GET",
@@ -185,11 +181,7 @@ exports.addGiftCardOrder = async (req, res) => {
         else if(orderStatusResponse.data['status'] == "COMPLETE"){
           console.log("Completed after call 2");
           //todo
-<<<<<<< HEAD
           var _url = activatedCardUrl + orderStatusResponse.data['orderId'] + "/cards";
-=======
-          var _url = activatedCardUrl + req?.params?.orderid + "/cards";
->>>>>>> d201327ad08caf92ef5dd335771efde71c1b8d6b
           console.log(_url);
           const activatedCardOptions = {
             method: "GET",
@@ -231,11 +223,7 @@ exports.addGiftCardOrder = async (req, res) => {
       else if(orderStatusResponse.data['status'] == "COMPLETE"){
         console.log("Completed after call 1");
         //todo
-<<<<<<< HEAD
         var _url = activatedCardUrl + orderStatusResponse.data['orderId'] + "/cards";
-=======
-        var _url = activatedCardUrl + req?.params?.orderid + "/cards";
->>>>>>> d201327ad08caf92ef5dd335771efde71c1b8d6b
         console.log(_url);
         const activatedCardOptions = {
           method: "GET",
@@ -303,11 +291,7 @@ exports.addGiftCardOrder = async (req, res) => {
     if(createOrderResponse.data["status"] == "COMPLETE"){
       //insert in db
       console.log("completed naturally")
-<<<<<<< HEAD
       var _url = activatedCardUrl + createOrderResponse.data['orderId'] + "/cards";
-=======
-      var _url = activatedCardUrl + req?.params?.orderid + "/cards";
->>>>>>> d201327ad08caf92ef5dd335771efde71c1b8d6b
       console.log(_url);
       const activatedCardOptions = {
         method: "GET",
