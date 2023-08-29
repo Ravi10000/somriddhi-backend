@@ -7,9 +7,12 @@ const tokenFilePath = "./token.txt";
 const verifyUrl = "https://sandbox.woohoo.in/oauth2/verify";
 const codeUrl = "https://sandbox.woohoo.in/oauth2/token";
 
+<<<<<<< HEAD
 function delay(time) {
   return new Promise(resolve => setTimeout(resolve, time));
 } 
+=======
+>>>>>>> d201327ad08caf92ef5dd335771efde71c1b8d6b
 
 exports.generateAccessToken = async (req, res, next) => {
   fs.readFile(tokenFilePath, 'utf8',async function (err, data) {
