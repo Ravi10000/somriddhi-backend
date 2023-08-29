@@ -10,7 +10,7 @@ const {
 const { fetchuser, isAdmin } = require("../middleware/Auth");
 
 router.delete("/feedback/:id", fetchuser, isAdmin, deleteFeedback);
-router.post("/feedback", fetchuser, isAdmin, createFeedback);
+router.post("/feedback", fetchuser, createFeedback);
 router.patch("/feedback", fetchuser, isAdmin, updateFeedbackStatus);
 router.get("/feedback", fetchuser, getAllFeedbacks);
 
