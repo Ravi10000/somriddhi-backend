@@ -26,10 +26,6 @@ const GiftCardSchema = new Schema({
         type: String,
         required: true
     },
-    activatedCardRes:{
-        type: String,
-        required: false
-    },
     status: {
         type: String,
         enum: ['PROCESSING', 'COMPLETE']
