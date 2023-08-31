@@ -36,7 +36,7 @@ exports.updateTransactionStatus = async (req, res) => {
     transaction.yesPayResponse = JSON.stringify(yesPayResponse);
     await transaction.save();
 
-    res.redirect("http://localhost:3002/payment-status/" + transaction._id);
+    res.redirect("http://somriddhi.store/payment-status/" + transaction._id);
   } catch (err) {
     console.log({ err });
     res.status(500).json({ status: "error", message: err.message });
