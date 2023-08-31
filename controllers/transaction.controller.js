@@ -21,17 +21,29 @@ exports.createTransaction = async (req, res) => {
 
 exports.updateTransactionStatus = async (req, res) => {
   try {
-    console.log(req.body);
-    const { response: yesPayResponse } = req.body;
+    console.log(
+      "==================== update Transaction Status ===================="
+    );
+    console.log({ body: req.body });
+    console.log({ query: req.query });
+    console.log({ params: req.params });
+    let { response: yesPayResponse } = req.body;
+    yesPayResponse = JSON.parse(JSON.parse(yesPayResponse));
+    console.log({ yesPayResponse });
     const transaction = await Transaction.findById(yesPayResponse.request_id);
     if (!transaction) {
       return res
         .status(404)
         .json({ status: "error", message: "Transaction not found" });
     }
-    transaction.status = yesPayResponse.transaction_status;
+    transaction.status =
+      yesPayResponse.transaction_details.transaction_status.toLowerCase();
     await transaction.save();
-    res.redirect("http://somriddhi.store");
+    // res.status(200).json({
+    //   status: "success",
+    //   message: "Transaction status updated successfully",
+    // });
+    res.redirect("http://localhost:3002/payment-status/" + transaction._id);
   } catch (err) {
     console.log({ err });
     res.status(500).json({ status: "error", message: err.message });
