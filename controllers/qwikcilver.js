@@ -218,7 +218,6 @@ exports.addGiftCardOrder = async (req, res) => {
             data: giftCardObj,
           });
         }
-              
       }
       else if(orderStatusResponse.data['status'] == "COMPLETE"){
         console.log("Completed after call 1");

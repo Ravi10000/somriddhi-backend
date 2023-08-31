@@ -28,6 +28,16 @@ router.post(
       .withMessage("invalid mobile number")
       .notEmpty()
       .withMessage("mobile is required"),
+    body("unityPrice")
+      .isNumeric()
+      .withMessage("unityPrice should be a number")
+      .notEmpty()
+      .withMessage("unityPrice is required"),
+    body("quantity")
+      .isNumeric()
+      .withMessage("quantity should be a number")
+      .notEmpty()
+      .withMessage("quantity is required"),
     body("firstname").notEmpty().withMessage("firstname is required"),
     body("line1").notEmpty().withMessage("line1 is required"),
     body("city").notEmpty().withMessage("city is required"),

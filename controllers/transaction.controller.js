@@ -2,6 +2,7 @@ const Transaction = require("../models/Transaction.model");
 
 exports.createTransaction = async (req, res) => {
   try {
+    console.log({ body: req.body });
     if (!req.user)
       return res.status(401).json({ status: "error", message: "Unauthorized" });
     const transaction = await Transaction.create({
@@ -21,12 +22,6 @@ exports.createTransaction = async (req, res) => {
 
 exports.updateTransactionStatus = async (req, res) => {
   try {
-    console.log(
-      "==================== update Transaction Status ===================="
-    );
-    console.log({ body: req.body });
-    console.log({ query: req.query });
-    console.log({ params: req.params });
     let { response: yesPayResponse } = req.body;
     yesPayResponse = JSON.parse(JSON.parse(yesPayResponse));
     console.log({ yesPayResponse });
@@ -38,11 +33,9 @@ exports.updateTransactionStatus = async (req, res) => {
     }
     transaction.status =
       yesPayResponse.transaction_details.transaction_status.toLowerCase();
+    transaction.yesPayResponse = JSON.stringify(yesPayResponse);
     await transaction.save();
-    // res.status(200).json({
-    //   status: "success",
-    //   message: "Transaction status updated successfully",
-    // });
+
     res.redirect("http://localhost:3002/payment-status/" + transaction._id);
   } catch (err) {
     console.log({ err });

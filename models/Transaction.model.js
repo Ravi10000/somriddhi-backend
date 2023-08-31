@@ -11,6 +11,14 @@ const transactionSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    unitPrice: {
+      type: Number,
+      required: true,
+    },
+    quantity: {
+      type: Number,
+      required: true,
+    },
     email: {
       type: String,
       required: true,
@@ -27,7 +35,7 @@ const transactionSchema = new mongoose.Schema(
     city: String,
     region: String,
     postcode: String,
-    transactionDetails: String,
+    yesPayResponse: String,
     status: {
       type: String,
       enum: ["initiated", "paid", "failed", "pending"],
