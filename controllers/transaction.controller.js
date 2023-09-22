@@ -21,7 +21,7 @@ exports.createTransaction = async (req, res) => {
 
 exports.updateTransactionStatus = async (req, res) => {
   try {
-    console.log(req.body);
+   // console.log(decodeURI(req.body));
     const { response: yesPayResponse } = req.body;
     const transaction = await Transaction.findById(yesPayResponse.request_id);
     if (!transaction) {
