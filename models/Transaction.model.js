@@ -41,6 +41,11 @@ const transactionSchema = new mongoose.Schema(
       enum: ["initiated", "paid", "failed", "pending"],
       default: "initiated",
     },
+    method: {
+      type: String,
+      enum: ["phonepe", "yespay"],
+      default: "yespay",
+    },
   },
   { timestamps: true }
 );
