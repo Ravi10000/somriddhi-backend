@@ -4,7 +4,7 @@ const axios = require("axios");
 const cryptoJS = require("crypto-js");
 const moment = require("moment");
 const fs = require("fs");
-const Razorpay = require('razorpay');
+const Razorpay = require("razorpay");
 
 // const categoryUrl = "https://sandbox.woohoo.in/rest/v3/catalog/categories";
 const productUrl = "https://sandbox.woohoo.in/rest/v3/catalog/products/";
@@ -15,8 +15,8 @@ const statusUrl = "https://sandbox.woohoo.in/rest/v3/order/";
 const productListFilePath = "./productList.txt";
 
 function delay(time) {
-  return new Promise(resolve => setTimeout(resolve, time));
-} 
+  return new Promise((resolve) => setTimeout(resolve, time));
+}
 
 exports.addGiftCardOrder = async (req, res) => {
   // console.log("sendotp ", req.body);
@@ -47,20 +47,19 @@ exports.addGiftCardOrder = async (req, res) => {
           qty: qty,
           currency: 356,
         },
-      ], 
+      ],
       deliveryMode: "API",
       refno: refno,
-      syncOnly: true
+      syncOnly: true,
     };
 
     console.log(createOrderBody);
 
     const source = axios.CancelToken.source();
-    const timeout = setTimeout(async() => {
+    const timeout = setTimeout(async () => {
       console.log("timeout errr");
 
-      
-      var orderStatusResponse; 
+      var orderStatusResponse;
 
       console.log("Status call 1");
       var orderStatusOptions = {
@@ -71,19 +70,22 @@ exports.addGiftCardOrder = async (req, res) => {
           Authorization: "Bearer " + req.access_token,
           signature: cryptoJS
             .HmacSHA512(
-              getConcatenateBaseString(statusUrl + refno + "/status", null, "GET"),
+              getConcatenateBaseString(
+                statusUrl + refno + "/status",
+                null,
+                "GET"
+              ),
               process.env.QWIK_CLIENTSECRET
             )
             .toString(),
           dateAtClient: moment().toISOString(),
-        }
+        },
       };
 
       orderStatusResponse = await axios.request(orderStatusOptions);
       console.log(orderStatusResponse.data);
 
-      if(orderStatusResponse.data['status'] != "COMPLETE"){
-
+      if (orderStatusResponse.data["status"] != "COMPLETE") {
         console.log("Status call 2");
         await delay(15000);
 
@@ -95,18 +97,22 @@ exports.addGiftCardOrder = async (req, res) => {
             Authorization: "Bearer " + req.access_token,
             signature: cryptoJS
               .HmacSHA512(
-                getConcatenateBaseString(statusUrl + refno + "/status", null, "GET"),
+                getConcatenateBaseString(
+                  statusUrl + refno + "/status",
+                  null,
+                  "GET"
+                ),
                 process.env.QWIK_CLIENTSECRET
               )
               .toString(),
             dateAtClient: moment().toISOString(),
-          }
+          },
         };
 
         orderStatusResponse = await axios.request(orderStatusOptions);
         console.log(orderStatusResponse.data);
 
-        if(orderStatusResponse.data['status'] != "COMPLETE"){
+        if (orderStatusResponse.data["status"] != "COMPLETE") {
           console.log("Status call 3");
           await delay(15000);
 
@@ -118,29 +124,36 @@ exports.addGiftCardOrder = async (req, res) => {
               Authorization: "Bearer " + req.access_token,
               signature: cryptoJS
                 .HmacSHA512(
-                  getConcatenateBaseString(statusUrl + refno + "/status", null, "GET"),
+                  getConcatenateBaseString(
+                    statusUrl + refno + "/status",
+                    null,
+                    "GET"
+                  ),
                   process.env.QWIK_CLIENTSECRET
                 )
                 .toString(),
               dateAtClient: moment().toISOString(),
-            }
+            },
           };
 
           orderStatusResponse = await axios.request(orderStatusOptions);
           console.log(orderStatusResponse.data);
-          if(orderStatusResponse.data['status'] != "COMPLETE"){
+          if (orderStatusResponse.data["status"] != "COMPLETE") {
             source.cancel();
-            var instance = new Razorpay({ key_id: process.env.RAZOR_PAY_KEY_ID, key_secret:  process.env.RAZOR_PAY_KEY_SECRET })
-            var refundResponse = await instance.payments.refund(paymentid,{
-              "amount": totalAmount,
-              "speed": "normal"
+            var instance = new Razorpay({
+              key_id: process.env.RAZOR_PAY_KEY_ID,
+              key_secret: process.env.RAZOR_PAY_KEY_SECRET,
+            });
+            var refundResponse = await instance.payments.refund(paymentid, {
+              amount: totalAmount,
+              speed: "normal",
             });
             console.log(refundResponse);
-          }
-          else if(orderStatusResponse.data['status'] == "COMPLETE"){
+          } else if (orderStatusResponse.data["status"] == "COMPLETE") {
             console.log("Completed after call 3");
             //todo
-            var _url = activatedCardUrl + orderStatusResponse.data['orderId'] + "/cards";
+            var _url =
+              activatedCardUrl + orderStatusResponse.data["orderId"] + "/cards";
             console.log(_url);
             const activatedCardOptions = {
               method: "GET",
@@ -156,7 +169,9 @@ exports.addGiftCardOrder = async (req, res) => {
                 dateAtClient: moment().toISOString(),
               },
             };
-            var activatedCardResponse = await axios.request(activatedCardOptions);
+            var activatedCardResponse = await axios.request(
+              activatedCardOptions
+            );
             const giftCard = {
               requestBody: JSON.stringify(createOrderBody),
               totalAmount: totalAmount,
@@ -177,11 +192,11 @@ exports.addGiftCardOrder = async (req, res) => {
               data: giftCardObj,
             });
           }
-        }
-        else if(orderStatusResponse.data['status'] == "COMPLETE"){
+        } else if (orderStatusResponse.data["status"] == "COMPLETE") {
           console.log("Completed after call 2");
           //todo
-          var _url = activatedCardUrl + orderStatusResponse.data['orderId'] + "/cards";
+          var _url =
+            activatedCardUrl + orderStatusResponse.data["orderId"] + "/cards";
           console.log(_url);
           const activatedCardOptions = {
             method: "GET",
@@ -218,11 +233,11 @@ exports.addGiftCardOrder = async (req, res) => {
             data: giftCardObj,
           });
         }
-      }
-      else if(orderStatusResponse.data['status'] == "COMPLETE"){
+      } else if (orderStatusResponse.data["status"] == "COMPLETE") {
         console.log("Completed after call 1");
         //todo
-        var _url = activatedCardUrl + orderStatusResponse.data['orderId'] + "/cards";
+        var _url =
+          activatedCardUrl + orderStatusResponse.data["orderId"] + "/cards";
         console.log(_url);
         const activatedCardOptions = {
           method: "GET",
@@ -281,16 +296,15 @@ exports.addGiftCardOrder = async (req, res) => {
 
     console.log(createOrderOptions);
 
-
     var createOrderResponse = await axios.request(createOrderOptions);
     clearTimeout(timeout);
     console.log(createOrderResponse.data);
 
-
-    if(createOrderResponse.data["status"] == "COMPLETE"){
+    if (createOrderResponse.data["status"] == "COMPLETE") {
       //insert in db
-      console.log("completed naturally")
-      var _url = activatedCardUrl + createOrderResponse.data['orderId'] + "/cards";
+      console.log("completed naturally");
+      var _url =
+        activatedCardUrl + createOrderResponse.data["orderId"] + "/cards";
       console.log(_url);
       const activatedCardOptions = {
         method: "GET",
@@ -326,26 +340,29 @@ exports.addGiftCardOrder = async (req, res) => {
         message: "Order Generared Successfully",
         data: giftCardObj,
       });
-    }
-    else{
-      var instance = new Razorpay({ key_id: process.env.RAZOR_PAY_KEY_ID, key_secret:  process.env.RAZOR_PAY_KEY_SECRET })
-      var refundResponse = await instance.payments.refund(paymentid,{
-        "amount": totalAmount,
-        "speed": "normal"
+    } else {
+      var instance = new Razorpay({
+        key_id: process.env.RAZOR_PAY_KEY_ID,
+        key_secret: process.env.RAZOR_PAY_KEY_SECRET,
+      });
+      var refundResponse = await instance.payments.refund(paymentid, {
+        amount: totalAmount,
+        speed: "normal",
       });
       res.status(400).json({
         status: "Fail",
-        message: "An error occured while purchasing giftcard. Your amount will be refunded withing 5-10 business days",
+        message:
+          "An error occured while purchasing giftcard. Your amount will be refunded withing 5-10 business days",
       });
     }
   } catch (err) {
-    if(err.message == "canceled"){
-       res.status(400).json({
+    if (err.message == "canceled") {
+      res.status(400).json({
         status: "Fail",
-        message: "An error occured while purchasing giftcard. Your amount will be refunded withing 5-10 business days",
+        message:
+          "An error occured while purchasing giftcard. Your amount will be refunded withing 5-10 business days",
       });
-    }
-    else{
+    } else {
       console.log(err);
       res.status(400).json({
         status: "Fail",
@@ -356,19 +373,17 @@ exports.addGiftCardOrder = async (req, res) => {
 };
 
 exports.getGiftCards = async (req, res) => {
-
-  fs.readFile(productListFilePath, 'utf8',async function (err, data) {
-    console.log(productListFilePath,data);
-    console.log("data ",data);
+  fs.readFile(productListFilePath, "utf8", async function (err, data) {
+    console.log(productListFilePath, data);
+    console.log("data ", data);
     if (err) return console.log(err);
-    if (data) {
-      res.status(200).json({
-        status: "Success",
-        data: JSON.parse(data),
-      });
-    }
+    // if (data) {
+    //   res.status(200).json({
+    //     status: "Success",
+    //     data: JSON.parse(data),
+    //   });
+    // }
     try {
-      
       const productOptions = {
         method: "GET",
         url: productUrl + process.env.QWIK_PRODID,
@@ -390,18 +405,17 @@ exports.getGiftCards = async (req, res) => {
       var productResponse = await axios.request(productOptions);
       console.log(productResponse.data);
       fs.writeFile(
-          productListFilePath,
-          JSON.stringify(productResponse.data),
-          async function (err) {
-              console.log("Error while saving file: ", err);
-          }
+        productListFilePath,
+        JSON.stringify(productResponse.data),
+        async function (err) {
+          console.log("Error while saving file: ", err);
+        }
       );
 
       res.status(200).json({
         status: "Success",
         data: productResponse.data,
       });
-
     } catch (err) {
       res.status(400).json({
         status: "Fail",
@@ -409,7 +423,6 @@ exports.getGiftCards = async (req, res) => {
       });
     }
   });
-
 };
 
 exports.getMyCards = async (req, res) => {
@@ -430,7 +443,6 @@ exports.getMyCards = async (req, res) => {
 
 exports.getActivatedCards = async (req, res) => {
   try {
-
     const myOrders = await GiftCard.findOne({ orderId: req?.params?.orderid });
 
     // var _url = activatedCardUrl + req?.params?.orderid + "/cards";
