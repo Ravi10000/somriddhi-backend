@@ -1,0 +1,63 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Amazon Voucher Email</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; } body { display: grid;
+      place-content: center; font-family: "Montserrat", sans-serif;
+      --mainBrandColor: #f01c21; --text-clr: #091431; color: var(--text-clr); }
+      main { margin-top: 50px; display: grid; place-items: center; max-width:
+      800px; padding-block: 50px; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 5px; } .header { display: flex; justify-content:
+      space-between; padding-block: 35px; padding-inline: 10px; } h1 {
+      max-width: 80%; } .header span { color: var(--mainBrandColor); } .header
+      .image { max-width: 150px; height: fit-content; } section.card { display:
+      flex; flex-direction: column; align-items: center; justify-content:
+      center; width: 100%; max-width: 400px; aspect-ratio: 1.66 / 1; background:
+      #fff; border-radius: 10px; padding: 20px; box-shadow: 2px 2px 10px rgba(0,
+      0, 0, 0.1); } section.card p { width: fit-content; } .amount { font-size:
+      2rem; font-weight: 600; color: var(--mainBrandColor); } .row { width:
+      100%; display: flex; max-width: 400px; padding-block: 10px;
+      justify-content: space-between; } @media (min-width: 768px) { main{
+      padding: 50px; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="header">
+        <div class="left">
+          <h1>
+            Hi
+            <span>{{name}}</span>,
+            <br />
+            You bought an
+            <br />
+            <span>Amazon Shopping Voucher</span>
+          </h1>
+          <p style="letter-spacing: 1px; font-size: 0.8rem; font-weight: 500">
+            SOMRIDDHI.STORE
+          </p>
+        </div>
+        <img class="image" src="{{assestsBaseUrl}}/giftbox.png" alt="giftbox" />
+      </div>
+      <section class="card">
+        <img
+          class="amazon-voucher"
+          src="{{assestsBaseUrl}}/amazon-voucher.png"
+          alt="amazon-voucher"
+        />
+        <h2>Amazon Shopping Voucher</h2>
+        <p class="amount">Rs. {{amount}}</p>
+        <p>{{cardNo}}</p>
+        {{! </div> }}
+      </section>
+    </main>
+  </body>
+</html>

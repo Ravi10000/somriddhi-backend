@@ -43,8 +43,8 @@ router.post(
       .withMessage("quantity is required"),
     body("firstname").notEmpty().withMessage("firstname is required"),
     body("line1").notEmpty().withMessage("line1 is required"),
-    body("city").notEmpty().withMessage("city is required"),
-    body("region").notEmpty().withMessage("region is required"),
+    body("district").notEmpty().withMessage("district is required"),
+    body("state").notEmpty().withMessage("state is required"),
     body("postcode").notEmpty().withMessage("postcode is required"),
     body("method")
       .optional()

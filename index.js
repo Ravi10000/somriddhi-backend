@@ -1,24 +1,30 @@
+require("dotenv").config();
 const express = require("express");
-const env = require("dotenv");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const app = express();
 const cors = require("cors");
 const https = require("https");
 const http = require("http");
-var fs = require("fs");
+const fs = require("fs");
+const { engine } = require("express-handlebars");
+const path = require("path");
+const sendVoucherEmail = require("./utils/send-voucher-email");
 
 mongoose.set("strictQuery", false);
 mongoose.Promise = global.Promise;
-
-env.config();
 
 var privateKey = fs.readFileSync("api_somriddhi_store.key", "utf8");
 var certificate = fs.readFileSync("api_somriddhi_store.crt", "utf8");
 
 var credentials = { key: privateKey, cert: certificate };
 
-app.use(express.static("uploads"));
+app.engine("handlebar", engine());
+app.set("view engine", "handlebar");
+app.set("views", path.join(__dirname, "views"));
+
+app.use("/public", express.static(__dirname + "/public"));
+app.use(express.static(__dirname + "/uploads"));
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(
@@ -26,6 +32,24 @@ app.use(
     extended: true,
   })
 );
+app.get("/", (req, res) => {
+  res.send("welcome to somriddhi store api");
+});
+
+app.get("/test-hbs", async (req, res) => {
+  await sendVoucherEmail("ravisince2k@gmail.com", {
+    name: "Ravi",
+    cardNo: "123456789",
+    amount: "100",
+  });
+  res.render("voucher-template", {
+    layout: false,
+    name: "Ravi",
+    cardNo: "123456789",
+    amount: "100",
+    assestsBaseUrl: process.env.ASSESTS_BASE_URL,
+  });
+});
 
 app.use(cors());
 app.use("/api", require("./route/cashback.route"));

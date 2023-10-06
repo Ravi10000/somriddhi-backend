@@ -1,7 +1,6 @@
 const Content = require("../models/content");
 
 exports.getContent = async (req, res) => {
-  console.log("get content");
   const content = await Content.find();
   if (content) {
     return res.status(200).json({ status: "success", content });

@@ -5,6 +5,9 @@ const cryptoJS = require("crypto-js");
 const moment = require("moment");
 const fs = require("fs");
 const Razorpay = require("razorpay");
+const { sendVoucherSms } = require("../utils/send-voucher-sms");
+const User = require("../models/User");
+const sendVoucherEmail = require("../utils/send-voucher-email");
 
 // const categoryUrl = "https://sandbox.woohoo.in/rest/v3/catalog/categories";
 const productUrl = "https://sandbox.woohoo.in/rest/v3/catalog/products/";
@@ -185,6 +188,15 @@ exports.addGiftCardOrder = async (req, res) => {
             };
             console.log(giftCard);
             const giftCardObj = await GiftCard.create(giftCard);
+            const user = await User.findById(req.user._id);
+
+            // TODO: extract voucher details from activatedCardResponse.data
+            // TODO: send sms
+            // await sendVoucherSms(user.phone, activatedCardResponse.data);
+
+            // TODO: send email
+            // TODO: extract voucher card no, amount and user name to send email
+            // await sendVoucherEmail(user.email /* voucher details */);
 
             res.status(200).json({
               status: "Success",
@@ -373,16 +385,21 @@ exports.addGiftCardOrder = async (req, res) => {
 };
 
 exports.getGiftCards = async (req, res) => {
+  console.log(
+    "getting gift cards==================================================================🎈"
+  );
   fs.readFile(productListFilePath, "utf8", async function (err, data) {
-    console.log(productListFilePath, data);
-    console.log("data ", data);
-    if (err) return console.log(err);
-    // if (data) {
-    //   res.status(200).json({
-    //     status: "Success",
-    //     data: JSON.parse(data),
-    //   });
-    // }
+    // console.log(productListFilePath, data);
+    // console.log("data ", data);
+    if (err) {
+      console.error(err);
+      // return res.status(500).json({ message: err.message });
+    } else if (data) {
+      return res.status(200).json({
+        status: "Success",
+        data: JSON.parse(data),
+      });
+    }
     try {
       const productOptions = {
         method: "GET",
@@ -403,7 +420,7 @@ exports.getGiftCards = async (req, res) => {
         },
       };
       var productResponse = await axios.request(productOptions);
-      console.log(productResponse.data);
+      console.log("🙂: ", productResponse.data);
       fs.writeFile(
         productListFilePath,
         JSON.stringify(productResponse.data),
