@@ -1,4 +1,5 @@
 const Transaction = require("../models/Transaction.model");
+var decode = require('urldecode');
 
 exports.createTransaction = async (req, res) => {
   try {
@@ -21,8 +22,8 @@ exports.createTransaction = async (req, res) => {
 
 exports.updateTransactionStatus = async (req, res) => {
   try {
-    console.log(req.body);
-    const { response: yesPayResponse } = req.body;
+    console.log(decode(req.body));
+    const { response: yesPayResponse } = decode(req.body);
     const transaction = await Transaction.findById(yesPayResponse.request_id);
     if (!transaction) {
       return res
