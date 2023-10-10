@@ -6,11 +6,12 @@ const moment = require("moment");
 const fs = require("fs");
 const Razorpay = require('razorpay');
 
-// const categoryUrl = "https://sandbox.woohoo.in/rest/v3/catalog/categories";
-const productUrl = "https://sandbox.woohoo.in/rest/v3/catalog/products/";
-const orderUrl = "https://sandbox.woohoo.in/rest/v3/orders";
-const activatedCardUrl = "https://sandbox.woohoo.in/rest/v3/order/";
-const statusUrl = "https://sandbox.woohoo.in/rest/v3/order/";
+const categoryUrl = "https://extapi12.woohoo.in/rest/v3/catalog/categories";
+//const productUrl = "https://extapi12.woohoo.in/rest/v3/catalog/categories/330/products/";
+const productUrl = "https://extapi12.woohoo.in/rest/v3/catalog/products/";
+const orderUrl = "https://extapi12.woohoo.in/rest/v3/orders";
+const activatedCardUrl = "https://extapi12.woohoo.in/rest/v3/order/";
+const statusUrl = "https://extapi12.woohoo.in/rest/v3/order/";
 
 const productListFilePath = "./productList.txt";
 
@@ -218,7 +219,6 @@ exports.addGiftCardOrder = async (req, res) => {
             data: giftCardObj,
           });
         }
-              
       }
       else if(orderStatusResponse.data['status'] == "COMPLETE"){
         console.log("Completed after call 1");
@@ -360,16 +360,41 @@ exports.getGiftCards = async (req, res) => {
 
   fs.readFile(productListFilePath, 'utf8',async function (err, data) {
     console.log(productListFilePath,data);
-    console.log("data ",data);
+    //console.log("data ",data);
     if (err) return console.log(err);
-    if (data) {
+/*    if (data) {
       res.status(200).json({
         status: "Success",
         data: JSON.parse(data),
       });
-    }
+    }*/
     try {
-      
+    /* 
+console.log(productUrl);
+      const categoryOptions = {
+        method: "GET",
+        url: productUrl,
+        headers: {
+          Authorization: "Bearer " + req.access_token,
+          signature: cryptoJS
+            .HmacSHA512(
+              getConcatenateBaseString(
+                productUrl,
+                null,
+                "GET"
+              ),
+              process.env.QWIK_CLIENTSECRET
+            )
+            .toString(),
+          dateAtClient: moment().toISOString(),
+        },
+      };
+      var categoryResponse = await axios.request(categoryOptions);
+      console.log("Categories: ",categoryResponse.data);
+*/
+	
+
+
       const productOptions = {
         method: "GET",
         url: productUrl + process.env.QWIK_PRODID,
