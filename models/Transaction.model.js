@@ -11,6 +11,14 @@ const transactionSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    unitPrice: {
+      type: Number,
+      required: true,
+    },
+    quantity: {
+      type: Number,
+      required: true,
+    },
     email: {
       type: String,
       required: true,
@@ -19,11 +27,28 @@ const transactionSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    transactionDetails: String,
+    firstname: String,
+    lastname: String,
+    salutation: String,
+    line1: String,
+    line2: String,
+    city: {
+      type: String,
+      required: true,},
+    region: {
+      type: String,
+      required: true,},
+    postcode: String,
+    yesPayResponse: String,
     status: {
       type: String,
-      enum: ["initiated", "success", "failed", "pending"],
+      enum: ["initiated", "paid", "failed", "pending"],
       default: "initiated",
+    },
+    method: {
+      type: String,
+      enum: ["phonepe", "yespay"],
+      default: "yespay",
     },
   },
   { timestamps: true }
