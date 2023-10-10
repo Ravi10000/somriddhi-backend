@@ -32,8 +32,12 @@ const transactionSchema = new mongoose.Schema(
     salutation: String,
     line1: String,
     line2: String,
-    city: String,
-    region: String,
+    city: {
+      type: String,
+      required: true,},
+    region: {
+      type: String,
+      required: true,},
     postcode: String,
     yesPayResponse: String,
     status: {
