@@ -4,6 +4,7 @@ const { encodeRequest } = require("../utils/encode-request");
 
 exports.createTransaction = async (req, res) => {
   try {
+    console.log("initiated transaction");
     console.log({ body: req.body });
     if (!req.user)
       return res.status(401).json({ status: "error", message: "Unauthorized" });
@@ -60,6 +61,7 @@ exports.createTransaction = async (req, res) => {
 };
 
 exports.updateTransactionStatus = async (req, res) => {
+  console.log("update yes pe transaction status");
   try {
     let { response: yesPayResponse } = req.body;
     yesPayResponse = JSON.parse(yesPayResponse);
@@ -83,6 +85,7 @@ exports.updateTransactionStatus = async (req, res) => {
 };
 
 exports.updateTransactionPhonepe = async (req, res) => {
+  console.log("update phone pe transaction status");
   try {
     let { response: phonePayResponse } = req.body;
     console.log({ phonePayResponse });
@@ -101,6 +104,7 @@ exports.updateTransactionPhonepe = async (req, res) => {
     } else {
       transaction.status = "pending";
     }
+    transaction.phonePeResponse = JSON.stringify(phonePayResponse);
     await transaction.save();
 
     res
@@ -111,6 +115,7 @@ exports.updateTransactionPhonepe = async (req, res) => {
     res.status(500).json({ status: "error", message: err.message });
   }
 };
+
 exports.checkPhonepeTransactionStatus = async (req, res) => {
   try {
     const { id } = req.params;
@@ -145,6 +150,25 @@ exports.getTransaction = async (req, res) => {
       return res
         .status(404)
         .json({ status: "error", message: "Transaction not found" });
+    }
+
+    if (transaction.method === "phonepe") {
+      try {
+        const { data: phonePayResponse } = await axios.get(
+          `${process.env.PHONEPE_PAY_LINK}/status/${process.env.PHONEPE_PAY_MERCHANT_ID}/${transaction._id}`
+        );
+        console.log({ phonePayResponse });
+        if (phonePayResponse.data.status === "COMPLETED") {
+          transaction.status = "paid";
+        } else if (phonePayResponse.data.status === "FAILED") {
+          transaction.status = "failed";
+        } else {
+          transaction.status = "pending";
+        }
+        await transaction.save();
+      } catch (err) {
+        console.log(err.message);
+      }
     }
     res.status(200).json({ status: "success", transaction });
   } catch (err) {

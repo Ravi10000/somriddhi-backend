@@ -6,6 +6,7 @@ const moment = require("moment");
 const fs = require("fs");
 const Razorpay = require("razorpay");
 const path = require("path");
+const User = require("../models/User");
 
 const categoryUrl = "https://extapi12.woohoo.in/rest/v3/catalog/categories";
 //const productUrl = "https://extapi12.woohoo.in/rest/v3/catalog/categories/330/products/";
@@ -22,7 +23,7 @@ function delay(time) {
 
 exports.addGiftCardOrder = async (req, res) => {
   // console.log("sendotp ", req.body);
-
+  console.log("addGiftCardOrder ", req.body);
   const { address, billingAddress, totalAmount, unitPrice, qty, paymentid } =
     req.body;
 
@@ -60,7 +61,6 @@ exports.addGiftCardOrder = async (req, res) => {
     const source = axios.CancelToken.source();
     const timeout = setTimeout(async () => {
       console.log("timeout errr");
-
       var orderStatusResponse;
 
       console.log("Status call 1");
@@ -174,6 +174,7 @@ exports.addGiftCardOrder = async (req, res) => {
             var activatedCardResponse = await axios.request(
               activatedCardOptions
             );
+            console.log({ activatedCardResponse });
             const giftCard = {
               requestBody: JSON.stringify(createOrderBody),
               totalAmount: totalAmount,
@@ -185,7 +186,7 @@ exports.addGiftCardOrder = async (req, res) => {
               status: createOrderResponse.data["status"],
               createdBy: req.user._id,
             };
-            console.log(giftCard);
+            console.log({ giftCard });
             const giftCardObj = await GiftCard.create(giftCard);
             const user = await User.findById(req.user._id);
 
@@ -199,7 +200,7 @@ exports.addGiftCardOrder = async (req, res) => {
 
             res.status(200).json({
               status: "Success",
-              message: "Order Generared Successfully",
+              message: "Order Generated Successfully",
               data: giftCardObj,
             });
           }

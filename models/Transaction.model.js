@@ -38,6 +38,7 @@ const transactionSchema = new mongoose.Schema(
     state: String,
     postcode: String,
     yesPayResponse: String,
+    phonePeResponse: String,
     status: {
       type: String,
       enum: ["initiated", "paid", "failed", "pending"],
