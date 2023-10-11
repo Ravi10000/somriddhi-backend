@@ -7,23 +7,23 @@ console.log(process.env.ASSESTS_BASE_URL);
 console.log({ assestsBaseUrl: process.env.ASSESTS_BASE_URL });
 
 async function sendVoucherEmail(to, voucherDetails) {
-  //   const transporter = createTransport({
-  //     host: process.env.EMAIL_HOST, // TODO: add emailer creds in env
-  //     // port: 587,
-  //     port: process.env.EMAIL_PORT,
-  //     auth: {
-  //       user: process.env.EMAIL_USERNAME,
-  //       pass: process.env.EMAIL_PASSWORD,
-  //     },
-  //   });
   const transporter = createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
+    host: process.env.SMTP_HOST, // TODO: add emailer creds in env
+    // port: 587,
+    port: process.env.SMTP_PORT,
     auth: {
-      user: "sale.mr.phonex@gmail.com",
-      pass: "ysnmjiqskhlhirho",
+      user: process.env.SMTP_USERNAME,
+      pass: process.env.SMTP_PASSWORD,
     },
   });
+  //   const transporter = createTransport({
+  //     host: 'smtp.ethereal.email',
+  //     port: 587,
+  //     auth: {
+  //         user: 'robb.heathcote54@ethereal.email',
+  //         pass: 'nAdwY3vHJpAcuDh987'
+  //     }
+  // });
   const handlebarOptions = {
     viewEngine: {
       extName: ".handlebar",
@@ -36,9 +36,9 @@ async function sendVoucherEmail(to, voucherDetails) {
   transporter.use("compile", hbs(handlebarOptions));
 
   const mailOptions = {
-    from: `voucher details`,
+    from: `Somriddhi.store <giftcard.order@somriddhidigital.com>`,
     to,
-    subject: "Voucher Details",
+    subject: "Somriddhi - You got a gift!",
     template: "voucher-template",
     context: {
       ...voucherDetails,

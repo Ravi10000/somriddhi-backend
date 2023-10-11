@@ -1,20 +1,25 @@
 const axios = require("axios");
-
 module.exports.sendVoucherSms = async ({ phone, voucherDetails }) => {
   const options = {
     method: "POST",
-    url: "https://control.msg91.com/api/v5/flow/",
+    url: process.env.SMS_URL,
     headers: {
       accept: "application/json",
       "content-type": "application/json",
-      authkey: "165254AJVmMEYMU60657de6P1", // TODO: check with template
+      authkey: process.env.SMS_AUTH_KEY, // TODO: check with template
     },
     data: JSON.stringify({
-      template_id: "640049b6d6fc050d3e0772d3", // TODO: check with template
+      template_id: process.env.SMS_VOUCHER_TEMPLATE_ID, // TODO: check with template
       mobiles: "91" + phone,
-      sender: "SMRDHI",
+      sender: process.env.SMS_VOUCHER_SENDER_ID,
       short_url: "1",
-      var1: voucherDetails, // TODO: check with template
+      receiver_name: "",
+      sender_name: "",
+      ref_id: "",
+      gift_card_code: "",
+      amount: "",
+      validity: "",
+      link: "",
     }),
   };
 
@@ -26,3 +31,10 @@ module.exports.sendVoucherSms = async ({ phone, voucherDetails }) => {
     return { error: error.message };
   }
 };
+
+`##receiver_name##, "sender_name" has sent you an Amazon Pay E-Gift Card. 
+Reference ID - ##ref_id##, 
+Gift Card Code - ##gift_card_code##,
+ Amount - Rs ##amount##.00, 
+Validity - ##validity##. Click ##link## to 
+add it to your account. - Team Somriddhi`;

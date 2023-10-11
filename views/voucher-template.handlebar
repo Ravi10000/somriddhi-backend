@@ -1,63 +1,722 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Amazon Voucher Email</title>
-    <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; } body { display: grid;
-      place-content: center; font-family: "Montserrat", sans-serif;
-      --mainBrandColor: #f01c21; --text-clr: #091431; color: var(--text-clr); }
-      main { margin-top: 50px; display: grid; place-items: center; max-width:
-      800px; padding-block: 50px; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-      border-radius: 5px; } .header { display: flex; justify-content:
-      space-between; padding-block: 35px; padding-inline: 10px; } h1 {
-      max-width: 80%; } .header span { color: var(--mainBrandColor); } .header
-      .image { max-width: 150px; height: fit-content; } section.card { display:
-      flex; flex-direction: column; align-items: center; justify-content:
-      center; width: 100%; max-width: 400px; aspect-ratio: 1.66 / 1; background:
-      #fff; border-radius: 10px; padding: 20px; box-shadow: 2px 2px 10px rgba(0,
-      0, 0, 0.1); } section.card p { width: fit-content; } .amount { font-size:
-      2rem; font-weight: 600; color: var(--mainBrandColor); } .row { width:
-      100%; display: flex; max-width: 400px; padding-block: 10px;
-      justify-content: space-between; } @media (min-width: 768px) { main{
-      padding: 50px; } }
-    </style>
+    <title>Document</title>
   </head>
   <body>
-    <main>
-      <div class="header">
-        <div class="left">
-          <h1>
-            Hi
-            <span>{{name}}</span>,
-            <br />
-            You bought an
-            <br />
-            <span>Amazon Shopping Voucher</span>
-          </h1>
-          <p style="letter-spacing: 1px; font-size: 0.8rem; font-weight: 500">
-            SOMRIDDHI.STORE
-          </p>
-        </div>
-        <img class="image" src="{{assestsBaseUrl}}/giftbox.png" alt="giftbox" />
-      </div>
-      <section class="card">
-        <img
-          class="amazon-voucher"
-          src="{{assestsBaseUrl}}/amazon-voucher.png"
-          alt="amazon-voucher"
-        />
-        <h2>Amazon Shopping Voucher</h2>
-        <p class="amount">Rs. {{amount}}</p>
-        <p>{{cardNo}}</p>
-        {{! </div> }}
-      </section>
-    </main>
+    <div align="center">
+      <table
+        width="583"
+        cellspacing="0"
+        border="0"
+        align="center"
+        style="border-collapse: collapse"
+      >
+        <tbody>
+          <tr>
+            <td align="center">
+              <table
+                width="100%"
+                cellspacing="0"
+                cellpadding="0"
+                border="0"
+                style="border-collapse: collapse"
+              >
+                <tbody>
+                  <tr>
+                    <td
+                      style="
+                        font-size: 12px;
+                        vertical-align: middle;
+                        padding-left: 10px;
+                        font-family: Georgia, serif;
+                        line-height: 1.6;
+                        color: rgb(102, 102, 102);
+                      "
+                      align="justify"
+                    >
+                      <span>You've received Amazon Pay E-Gift Card! worth Rs
+                        {{amount}}.00</span><br />
+                    </td>
+                    <td style="text-align: right" align="justify">
+                      <img
+                        border="0"
+                        alt="Somriddhi"
+                        src="https://somriddhi.store/mail-somriddhi.png"
+                      /><br />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <table
+        cellspacing="0"
+        cellpadding="10"
+        border="0"
+        align="center"
+        style="border-collapse: collapse; border: 1px solid #ccc"
+      >
+        <tbody>
+          <tr>
+            <td>
+              <table
+                width="583"
+                cellspacing="0"
+                cellpadding="0"
+                border="0"
+                bgcolor="#FFFFFF"
+                align="center"
+                style="border-collapse: collapse"
+              >
+                <tbody>
+                  <tr>
+                    <td>
+                      <table
+                        width="100%"
+                        cellspacing="0"
+                        cellpadding="0"
+                        border="0"
+                        bgcolor="#fff"
+                        style="
+                          border-collapse: collapse;
+                          background: rgb(255, 255, 255);
+                        "
+                      >
+                        <tbody>
+                          <tr>
+                            <td
+                              width="100%"
+                              valign="top"
+                              bgcolor="#fff"
+                              align="left"
+                              style="background: rgb(255, 255, 255)"
+                            >
+                              <table
+                                width="100%"
+                                cellpadding="5"
+                                border="0"
+                                style="border-collapse: collapse"
+                              >
+                                <tbody>
+                                  <tr>
+                                    <td width="100%" valign="top">
+                                      <div>
+                                        <img
+                                          border="0"
+                                          style="display: block; width: 100%"
+                                          alt="you rock"
+                                          src="https://somriddhi.store/mail-you-rock.png"
+                                          width="100%"
+                                          tabindex="0"
+                                          {{! id="m_9129391856120516873m_30010598511863277821696591754733110001_imgsrc_url_2" }}
+                                          {{! src="https://ci5.googleusercontent.com/proxy/o8EijVF7hMZXuw-HXrpX_pYL7gs67G8z8_uU3M0AfAeaazHn1_LphohXWdSQIpEUQw_xLjFy67VdHo_jQVJ9TlR-BXPu4YMm8oqRXkt51zPEAuhtnHft4ID0a57hqy07jZFMsxAYzOJHJ3U=s0-d-e1-ft#https://d1o7uku192uawx.cloudfront.net/mobile/media/catalog/customoptions/600x250_1_3.png" }}
+                                          {{! class="CToWUd a6T" }}
+                                          {{! data-bit="iit" }}
+                                        />
+                                        <div
+                                          class="a6S"
+                                          dir="ltr"
+                                          style="
+                                            opacity: 0.01;
+                                            left: 541px;
+                                            top: 1373.86px;
+                                          "
+                                        >
+                                          <div
+                                            id=":4q"
+                                            class="T-I J-J5-Ji aQv T-I-ax7 L3 a5q"
+                                            role="button"
+                                            tabindex="0"
+                                            aria-label="Download attachment "
+                                            jslog="91252; u014N:cOuCgd,Kr2w4b,xr6bB; 4:WyIjbXNnLWY6MTc3OTI3Mjk1NzQ4NzEwNDM1NCIsbnVsbCxbXSxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxbXSxbXSxbXV0."
+                                            data-tooltip-class="a1V"
+                                            jsaction="JIbuQc:.CLIENT"
+                                            data-tooltip="Download"
+                                          >
+                                            <div class="akn">
+                                              <div
+                                                class="aSK J-J5-Ji aYr"
+                                              ></div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <table
+                width="583"
+                cellspacing="0"
+                cellpadding="0"
+                border="0"
+                bgcolor="#FFFFFF"
+                align="center"
+                style="border-collapse: collapse"
+              >
+                <tbody>
+                  <tr>
+                    <td
+                      valign="top"
+                      align="left"
+                      style="
+                        font-size: 13px;
+                        font-weight: normal;
+                        text-align: left;
+                        font-family: Helvetica, Arial, sans-serif;
+                        line-height: 24px;
+                        vertical-align: top;
+                        padding: 10px 0px;
+                        color: rgb(149, 149, 149);
+                      "
+                    >
+                      <table
+                        width="100%"
+                        cellspacing="1"
+                        cellpadding="0"
+                        border="0"
+                        style="border-collapse: collapse"
+                      >
+                        <tbody>
+                          <tr>
+                            <td width="261" valign="top" align="right">
+                              <table
+                                cellspacing="3"
+                                cellpadding="0"
+                                border="0"
+                                align="center"
+                                style="border-collapse: collapse"
+                              >
+                                <tbody>
+                                  <tr>
+                                    <td align="right">
+                                      <img
+                                        border="0"
+                                        alt="Amazon India Logo"
+                                        src="https://somriddhi.store/mail-gift-card.png"
+                                        {{! id="m_9129391856120516873m_30010598511863277821696591754733110001_imgsrc_url_3" }}
+                                        {{! src="https://ci3.googleusercontent.com/proxy/LUSUM2NhucoaDr6OxFOo8M4gmOGwt9ez9bMUO3cPwrGDkJ8RV90RxKLgkDZ6PsvOTAhC29n727IOoNK9gWlWBNTtH0YQVSUZON6eTmtGjs50knB14hcrZS4upA=s0-d-e1-ft#https://d1o7uku192uawx.cloudfront.net/mobile/media/images/amazon-new.png" }}
+                                        {{! class="CToWUd" }}
+                                        {{! data-bit="iit" }}
+                                      /><br />
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td
+                                      valign="top"
+                                      align="right"
+                                      style="font-family: arial, sans-serif"
+                                    >
+                                      <div
+                                        style="
+                                          font-family: Arial, Helvetica,
+                                            sans-serif;
+                                          font-size: 13px;
+                                          line-height: 1.4em;
+                                          color: rgb(153, 153, 153);
+                                        "
+                                      >
+                                        Gift Card ID:<br />
+                                      </div>
+                                      <div
+                                        style="
+                                          font-family: Arial, Helvetica,
+                                            sans-serif;
+                                          font-size: 15px;
+                                          line-height: 1em;
+                                          color: rgb(102, 102, 102);
+                                        "
+                                      >
+                                        {{giftCardId}}<br />
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td
+                                      valign="top"
+                                      align="right"
+                                      style="font-family: arial, sans-serif"
+                                    >
+                                      <div
+                                        style="
+                                          font-family: Arial, Helvetica,
+                                            sans-serif;
+                                          font-size: 13px;
+                                          line-height: 1.4em;
+                                          color: rgb(153, 153, 153);
+                                        "
+                                      >
+                                        Gift Card Code:<br />
+                                      </div>
+                                      <div
+                                        style="
+                                          font-family: Arial, Helvetica,
+                                            sans-serif;
+                                          font-size: 15px;
+                                          line-height: 1em;
+                                          color: rgb(102, 102, 102);
+                                        "
+                                      >
+                                        {{voucherCode}}<br />
+                                      </div>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </td>
+                            <td
+                              width="1"
+                              height="181"
+                              bgcolor="#dddddd"
+                              style="font-size: 1px"
+                            >
+                              <br />
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </td>
+                    <td
+                      valign="top"
+                      align="left"
+                      style="
+                        font-size: 13px;
+                        font-weight: normal;
+                        text-align: left;
+                        font-family: Helvetica, Arial, sans-serif;
+                        line-height: 24px;
+                        vertical-align: top;
+                        padding: 10px 0px;
+                        color: rgb(149, 149, 149);
+                      "
+                    >
+                      <table
+                        width="100%"
+                        cellspacing="1"
+                        cellpadding="0"
+                        border="0"
+                        style="border-collapse: collapse"
+                      >
+                        <tbody>
+                          <tr>
+                            <td width="261" valign="top" align="right">
+                              <table
+                                cellspacing="3"
+                                cellpadding="0"
+                                border="0"
+                                align="center"
+                                style="border-collapse: collapse"
+                              >
+                                <tbody>
+                                  <tr>
+                                    <td>
+                                      <span style="color: rgb(51, 51, 51)"><span
+                                          style="
+                                            font-family: Arial, Helvetica,
+                                              sans-serif;
+                                          "
+                                        ><span
+                                            style="
+                                              font-size: 42px;
+                                              line-height: 1em;
+                                            "
+                                          >Rs
+                                            {{amount}}.00</span></span></span><br
+                                      /><br />
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td>
+                                      <a
+                                        {{! href="https://www.amazon.in/gp/css/gc/payment?ie=UTF8&amp;actionType=add&amp;claimCode=2D59-8TFXFS-H7P4&amp;ref_=gc_ya_subnav_balance&amp;txtLeftButton=ApplytoYourAccount" }}
+                                        href="https://www.amazon.in/gp/css/gc/payment?ie=UTF8&amp;actionType=add&amp;claimCode={{voucherCode}}&amp;ref_=gc_ya_subnav_balance&amp;txtLeftButton=ApplytoYourAccount"
+                                        target="_blank"
+                                        data-saferedirecturl="https://www.google.com/url?q=https://www.amazon.in/gp/css/gc/payment?ie%3DUTF8%26actionType%3Dadd%26claimCode%3D2D59-8TFXFS-H7P4%26ref_%3Dgc_ya_subnav_balance%26txtLeftButton%3DApplytoYourAccount&amp;source=gmail&amp;ust=1697006005672000&amp;usg=AOvVaw0ICJiV4YVKBtcMTHD7gEiw"
+                                      ><img
+                                          border="0"
+                                          alt="Add to Your Account"
+                                          src="https://somriddhi.store/mail-add.png"
+                                          {{! id="m_9129391856120516873m_30010598511863277821696591754733110001_imgsrc_url_4" }}
+                                          {{! src="https://ci6.googleusercontent.com/proxy/M8F-c_qYqIxe2EU5YBVaYdeiRxDiFFxi65xlbEDgwMHjvbrVDYMbAsYzAkIRWLw4Ptx6gMVsakNkchmJY9gzaLSVrroIxloxd0fWrGpl0ieVkQdFgbqVeGyftls75y-qLOMYXA=s0-d-e1-ft#https://d1o7uku192uawx.cloudfront.net/mobile/media/images/amazon-addtoaccount.png" }}
+                                          {{! class="CToWUd" }}
+                                          {{! data-bit="iit" }}
+                                        /></a><br /><br />
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td
+                                      valign="top"
+                                      style="font-family: arial, sans-serif"
+                                    >
+                                      <div
+                                        style="
+                                          font-size: 12px;
+                                          line-height: 1.4em;
+                                          color: rgb(153, 153, 153);
+                                        "
+                                      >
+                                        Validity:<span
+                                          style="color: rgb(102, 102, 102)"
+                                        ><span
+                                            style="
+                                              font-family: Arial, Helvetica,
+                                                sans-serif;
+                                            "
+                                          ><span
+                                              style="
+                                                font-size: 15px;
+                                                line-height: 1em;
+                                              "
+                                            >{{validity}}</span></span></span><br
+                                        />
+                                      </div>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                              <table
+                                cellspacing="1"
+                                cellpadding="0"
+                                style="border-collapse: collapse"
+                              >
+                                <tbody>
+                                  <tr>
+                                    <td style="float: right">
+                                      <br /><img
+                                        border="0"
+                                        alt="Issued by Amazon.com"
+                                        src="https://somriddhi.store/mail-qwikcilver.png"
+                                        {{! id="m_9129391856120516873m_30010598511863277821696591754733110001_imgsrc_url_5" }}
+                                        {{! src="https://ci5.googleusercontent.com/proxy/G16-p3IcKO4BFHzCaNivEl_w17XOQexI8nhvakq8lkhytTefFnJxH3hRW7l96GpkRWnkSNfGoxa9QbzirlW-hwRqnsoSBqgdjdo_DrUw4CPGDweO9TrTFPa28nuAeKjFgtTe9jnNFISBuj6ftmQUukl94gi1EajcgvFapos=s0-d-e1-ft#https://d1o7uku192uawx.cloudfront.net/mobile/media/Woohoo/Egv_mail_powered_by/default/QC-logo-issuedby.png" }}
+                                        {{! class="CToWUd" }}
+                                        {{! data-bit="iit" }}
+                                      />
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <table
+                width="583"
+                cellspacing="0"
+                cellpadding="0"
+                border="0"
+                bgcolor="#FFFFFF"
+                align="center"
+                style="border-collapse: collapse"
+              >
+                <tbody>
+                  <tr>
+                    <td
+                      height="1"
+                      style="
+                        line-height: 0;
+                        border-top-color: #dddddd;
+                        border-top-width: 1px;
+                        padding: 0 5px;
+                        border-top-style: solid;
+                        overflow: hidden;
+                      "
+                      colspan="5"
+                    >
+                      <br />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="583" valign="top" bgcolor="#FFFFFF" align="left">
+                      <table
+                        width="100%"
+                        cellspacing="0"
+                        cellpadding="10"
+                        border="0"
+                        align="left"
+                        style="border-collapse: collapse"
+                      >
+                        <tbody>
+                          <tr>
+                            <td align="left">
+                              <span
+                                style="font-family: verdana, arial, sans-serif"
+                              ><span style="font-size: 10px"><span
+                                    style="color: rgb(153, 153, 153)"
+                                  ><div
+                                      style="
+                                        font-size: 18px;
+                                        font-family: 'Lucida Sans', Georgia,
+                                          Arial, Helvetica, sans-serif;
+                                        line-height: 1.3em;
+                                        color: rgb(102, 102, 102);
+                                      "
+                                    >
+                                      Hi,
+                                      {{name}}<br /></div></span></span></span>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <br /><br />
+      <table
+        width="583"
+        cellspacing="0"
+        cellpadding="0"
+        border="0"
+        align="center"
+        style="
+          font-family: arial, sans-serif;
+          font-size: 10px;
+          line-height: 16px;
+          border-collapse: collapse;
+          color: rgb(204, 204, 204);
+        "
+      >
+        <tbody>
+          <tr>
+            <td valign="top" align="justify">
+              <div
+                style="
+                  float: left;
+                  text-align: left;
+                  font-family: Arial, Helvetica, sans-serif;
+                  font-size: 12px;
+                  color: rgb(153, 153, 153);
+                "
+              >
+                <b>How To Add the Gift Card to Your Account </b><br /><br />
+                1. Visit
+                <a
+                  href="https://www.amazon.in/addgiftcard"
+                  target="_blank"
+                  data-saferedirecturl="https://www.google.com/url?q=https://www.amazon.in/addgiftcard&amp;source=gmail&amp;ust=1697006005672000&amp;usg=AOvVaw1Z_yvQq5qguPEsqit11hSk"
+                >www.amazon.in/addgiftcard</a><br />
+                2. Enter the Gift Card Code<br />
+                3. Click on Add to your balance.<br /><br />
+                Your Amazon Pay balance can be selected as a payment option
+                during the checkout process. Alternatively, you can enter the
+                gift card code during checkout.<br /><br />
+                If you are not an Amazon customer yet, please sign up and then
+                add the gift card to your Amazon Pay balance.<br /><br /><br />
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td
+              valign="top"
+              align="justify"
+              style="
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 12px;
+                color: rgb(153, 153, 153);
+              "
+            >
+              <b>Terms and Conditions:</b>
+              <br />
+              <div
+                style="
+                  font-size: 11px;
+                  font-family: Arial, Helvetica, sans-serif;
+                  color: rgb(153, 153, 153);
+                "
+              >
+                <p>
+                  These terms and conditions apply to Amazon.in Gift Cards
+                  ("Gift Cards") issued by Pine Labs Private Limited (Pine Labs)
+                  under the brand name of Qwikcilver and co-branded with Amazon
+                  Pay (India) Private Limited (Amazon Pay). Pine Labs is a
+                  private limited company organized under the laws of India, and
+                  is the issuer of Gift Cards. You may purchase Gift Cards
+                  through various options available on
+                  <a
+                    href="http://www.amazon.in"
+                    target="_blank"
+                    data-saferedirecturl="https://www.google.com/url?q=http://www.amazon.in&amp;source=gmail&amp;ust=1697006005672000&amp;usg=AOvVaw2u70u-JRbp4K7guwKE8-8H"
+                  >www.amazon.in</a>
+                  corresponding mobile site and mobile application
+                  ("Amazon.in"), and also use Gift Cards provided to you by
+                  third parties in the manner provided hereunder By purchasing
+                  or using a Gift Card, you are agreeing to and accept these
+                  terms and conditions.
+                  <br /><br />1.
+                  <b>Redemption.</b><br />
+                  Gift Cards may only be redeemed toward the purchase of
+                  eligible products on
+                  <a
+                    href="https://www.amazon.in/"
+                    target="_blank"
+                    data-saferedirecturl="https://www.google.com/url?q=https://www.amazon.in/&amp;source=gmail&amp;ust=1697006005672000&amp;usg=AOvVaw3t8c5p9gLKdRPJ08DFMemg"
+                  >www.amazon.in</a>. Purchases are deducted from the redeemer's
+                  Amazon Pay balance. Any unused Amazon Pay balance will remain
+                  associated with the redeemer's Amazon.in account and applied
+                  to purchases in order of earliest expiration date. If a
+                  purchase exceeds the redeemer's Amazon Pay balance, the
+                  remaining amount must be paid with by credit card, net banking
+                  or debit card. No fees or charges apply to Gift Cards. Pine
+                  Labs may provide Gift Card purchasers with information about
+                  the redemption status of Gift Cards that they purchase or use.
+                  <br /><br />2.
+                  <b>Limitations.</b><br />
+                  Gift Cards, including any unused Gift Card balances, expire
+                  one year from the date of issuance. Gift Cards may only be
+                  purchased in denominations ranging from Rs. 10 to Rs. 10,000,
+                  or such other limits as Pine Labs may determine. Gift Cards
+                  cannot be used to purchase other gift cards. Gift Cards cannot
+                  be reloaded, resold, transferred for value or redeemed for
+                  cash. Unused Gift Card balances associated with an Amazon.in
+                  account may not be transferred to another Amazon.in account.
+                  No interest will be payable by Pine Labs on any Gift Card or
+                  Gift Card balance. Pine Labs makes no representation or
+                  warranty that
+                  <a
+                    href="http://www.amazon.in/"
+                    target="_blank"
+                    data-saferedirecturl="https://www.google.com/url?q=http://www.amazon.in/&amp;source=gmail&amp;ust=1697006005672000&amp;usg=AOvVaw3hE4mXaCq9yx8HytA8SUT8"
+                  >www.amazon.in</a>
+                  will always be accessible without interruption.<br /><br />3.
+                  <b>Fraud.</b><br />
+                  Pine Labs is not responsible if a Gift Card is lost, stolen,
+                  destroyed or used without permission. Amazon Seller Services
+                  Private Limited ("Amazon") will have the right to close
+                  customer accounts and take payment from alternative forms of
+                  payment if a fraudulently obtained Gift Card is redeemed
+                  and/or used to make purchases on
+                  <a
+                    href="http://www.amazon.in/"
+                    target="_blank"
+                    data-saferedirecturl="https://www.google.com/url?q=http://www.amazon.in/&amp;source=gmail&amp;ust=1697006005672000&amp;usg=AOvVaw3hE4mXaCq9yx8HytA8SUT8"
+                  >www.amazon.in</a>.<br /><br />4.
+                  <b>Governing Law and Jurisdiction.</b><br />
+                  These terms and conditions are governed by and construed in
+                  accordance with the laws of India. You, Pine Labs and Amazon
+                  each agree to submit to the exclusive jurisdiction of the
+                  courts at Bangalore. You agree to indemnify Pine Labs and
+                  Amazon for all claims brought by a third party against it or
+                  its affiliates arising out of or in connection with a breach
+                  of any of these terms and conditions.<br /><br />5.
+                  <b>Limitation of Liability.</b><br />
+                  NEITHER PINE LABS NOR AMAZON MAKE ANY WARRANTIES, EXPRESS OR
+                  IMPLIED, WITH RESPECT TO GIFT CARDS, INCLUDING WITHOUT
+                  LIMITATION, ANY EXPRESS OR IMPLIED WARRANTY OF MERCHANTABILITY
+                  OR FITNESS FOR A PARTICULAR PURPOSE. IN THE EVENT A GIFT CARD
+                  IS NON-FUNCTIONAL, YOUR SOLE REMEDY WILL BE THE REPLACEMENT OF
+                  SUCH GIFT CARD. IF APPLICABLE LAW DOES NOT ALLOW LIMITATIONS
+                  ON IMPLIED WARRANTIES OR THE EXCLUSION OR LIMITATION OF
+                  CERTAIN DAMAGES, SOME OR ALL OF THE ABOVE DISCLAIMERS,
+                  EXCLUSIONS, OR LIMITATIONS MAY NOT APPLY TO YOU, AND YOU MAY
+                  HAVE ADDITIONAL RIGHTS.<br /><br />6.
+                  <b>General Terms.</b><br />
+                  The Amazon.in Conditions of Use apply to Gift Cards. Pine Labs
+                  reserves the right to change these Gift Card terms and
+                  conditions from time to time in its discretion and without
+                  prior notice to you. All terms and conditions are applicable
+                  to the extent permitted by law.<br /><br />7.
+                  <b>Pine Labs Contact Information.</b><br />
+                  Customer Service contact number: 080-69806393<br />
+                  Website address:
+                  <a
+                    href="http://www.qwikcilver.com/"
+                    target="_blank"
+                    data-saferedirecturl="https://www.google.com/url?q=http://www.qwikcilver.com/&amp;source=gmail&amp;ust=1697006005672000&amp;usg=AOvVaw2c1ebSCwN-FHLpac0rPSzk"
+                  >www.qwikcilver.com</a>
+                  <br /><br />
+                </p>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div
+                style="
+                  font-size: 11px;
+                  font-family: Arial, Helvetica, sans-serif;
+                  color: rgb(153, 153, 153);
+                "
+              >
+                <p>
+                  To login &amp; view your gift card transaction statement,
+                  please click
+                  <a
+                    href="https://qwikcilver.com/terms-and-conditions/"
+                    target="_blank"
+                    data-saferedirecturl="https://www.google.com/url?q=https://qwikcilver.com/terms-and-conditions/&amp;source=gmail&amp;ust=1697006005672000&amp;usg=AOvVaw1eup7PXbN20wVPlv6TUXB8"
+                  >here</a>
+                  and go to the tab Amazon.in<br /><br />
+                </p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <table
+        width="583"
+        cellspacing="0"
+        cellpadding="0"
+        border="0"
+        align="center"
+        style="
+          font-family: arial, sans-serif;
+          font-size: 10px;
+          line-height: 16px;
+          border-collapse: collapse;
+          color: rgb(204, 204, 204);
+        "
+      >
+        <tbody>
+          <tr>
+            <td
+              width="50%"
+              valign="top"
+              align="left"
+              style="
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 11px;
+                color: rgb(153, 153, 153);
+              "
+            >
+              <b>Gift Card ID: </b>
+              {{giftCardId}}<br />
+            </td>
+            <td
+              width="50%"
+              valign="top"
+              align="right"
+              style="
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 11px;
+                color: rgb(153, 153, 153);
+              "
+            >
+              <b>Order Number: </b>
+              {{orderId}}<br />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </body>
 </html>
