@@ -5,6 +5,7 @@ const cryptoJS = require("crypto-js");
 const moment = require("moment");
 const fs = require("fs");
 const Razorpay = require("razorpay");
+const path = require("path");
 
 const categoryUrl = "https://extapi12.woohoo.in/rest/v3/catalog/categories";
 //const productUrl = "https://extapi12.woohoo.in/rest/v3/catalog/categories/330/products/";
@@ -13,8 +14,8 @@ const orderUrl = "https://extapi12.woohoo.in/rest/v3/orders";
 const activatedCardUrl = "https://extapi12.woohoo.in/rest/v3/order/";
 const statusUrl = "https://extapi12.woohoo.in/rest/v3/order/";
 
-const productListFilePath = "./productList.txt";
-
+const productListFilePath = path.resolve("productList.txt"); // $ROOT_FOLDER/productList.txt
+console.log("productsListURl : ", path.resolve("productList.txt"));
 function delay(time) {
   return new Promise((resolve) => setTimeout(resolve, time));
 }
@@ -383,19 +384,18 @@ exports.addGiftCardOrder = async (req, res) => {
 };
 
 exports.getGiftCards = async (req, res) => {
-
-  fs.readFile(productListFilePath, 'utf8',async function (err, data) {
-    console.log(productListFilePath,data);
+  fs.readFile(productListFilePath, "utf8", async function (err, data) {
+    console.log(productListFilePath, data);
     //console.log("data ",data);
-    if (err) return console.log(err);
-    if (data) {
-      res.status(200).json({
+    if (err) console.log(err);
+    else if (data) {
+      return res.status(200).json({
         status: "Success",
         data: JSON.parse(data),
       });
     }
     try {
-    /* 
+      /* 
 console.log(productUrl);
       const categoryOptions = {
         method: "GET",
@@ -418,8 +418,6 @@ console.log(productUrl);
       var categoryResponse = await axios.request(categoryOptions);
       console.log("Categories: ",categoryResponse.data);
 */
-	
-
 
       const productOptions = {
         method: "GET",
@@ -440,16 +438,16 @@ console.log(productUrl);
         },
       };
       var productResponse = await axios.request(productOptions);
-      console.log("🙂: ", productResponse.data);
+      console.log("PRODUCT RESPONSE : ", productResponse.data);
       fs.writeFile(
         productListFilePath,
         JSON.stringify(productResponse.data),
-        async function (err) {
+        function (err) {
           console.log("Error while saving file: ", err);
         }
       );
 
-      res.status(200).json({
+      return res.status(200).json({
         status: "Success",
         data: productResponse.data,
       });

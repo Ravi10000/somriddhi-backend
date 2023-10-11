@@ -1,7 +1,8 @@
 const axios = require("axios");
 const fs = require("fs");
+const path = require("path");
 
-const tokenFilePath = "./token.txt";
+const tokenFilePath = path.resolve("token.txt"); // $ROOT_FOLDER/token.txt
 
 const verifyUrl = "https://extapi12.woohoo.in/oauth2/verify";
 const codeUrl = "https://extapi12.woohoo.in/oauth2/token";
@@ -12,13 +13,11 @@ function delay(time) {
 
 exports.generateAccessToken = async (req, res, next) => {
   fs.readFile(tokenFilePath, "utf8", async function (err, data) {
-    console.log(tokenFilePath, data);
-    console.log("data ", data);
-    if (err) return console.log(err);
-    if (data) {
+    console.log({ tokenFilePath, data });
+    if (err) console.log({ "error while reading token": err?.message });
+    else if (data) {
       //   const tokenData = JSON.parse(data);
       //   if (isTokenValid(tokenData)) {
-      console.log(data);
       req.access_token = data;
       return next();
       //   }
