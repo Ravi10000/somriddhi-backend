@@ -99,22 +99,29 @@ exports.addGiftCardOrder = async (req, res) => {
       // billing: billingAddress,
       payments: [
         {
-          code: "SVC",
-          amount: transaction?.amount,
+          code: "svc",
+          amount: parseInt(transaction?.amount),
           poNumber: paymentid,
         },
       ],
-      products: [
-        {
-          sku: process.env.QWIK_PRODID,
-          // sku: "APITESTTIMFAIL",
-          price: transaction?.unitPrice,
-          qty: transaction?.quantity,
-          currency: 356,
-        },
-      ],
+      products: {
+        sku: process.env.QWIK_PRODID,
+        // sku: "APITESTTIMFAIL",
+        price: parseInt(transaction?.unitPrice),
+        qty: parseInt(transaction?.quantity),
+        currency: 356,
+      },
+      // products: [
+      //   {
+      //     sku: process.env.QWIK_PRODID,
+      //     // sku: "APITESTTIMFAIL",
+      //     price: parseInt(transaction?.unitPrice),
+      //     qty: parseInt(transaction?.quantity),
+      //     currency: 356,
+      //   },
+      // ],
       deliveryMode: "API",
-      refno: refno,
+      refno,
       syncOnly: true,
     };
 
@@ -366,6 +373,7 @@ exports.addGiftCardOrder = async (req, res) => {
       },
       cancelToken: source.token,
       data: JSON.stringify(createOrderBody),
+      // data: createOrderBody,
     };
 
     console.log({ createOrderOptions });
@@ -580,7 +588,7 @@ exports.getAllGiftCards = async (req, res) => {
     res.status(200).json({
       status: "success",
       message: "All orders fetched",
-      giftCards: giftCards,
+      giftCards,
     });
   } catch (err) {
     console.log(err);
