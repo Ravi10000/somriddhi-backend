@@ -4,8 +4,8 @@ const path = require("path");
 
 const tokenFilePath = path.resolve("token.txt"); // $ROOT_FOLDER/token.txt
 
-const verifyUrl = "https://extapi12.woohoo.in/oauth2/verify";
-const codeUrl = "https://extapi12.woohoo.in/oauth2/token";
+const verifyUrl = `${process.env.QWIK_BASEURL}/oauth2/verify`;
+const codeUrl = `${process.env.QWIK_BASEURL}/oauth2/token`;
 
 function delay(time) {
   return new Promise((resolve) => setTimeout(resolve, time));

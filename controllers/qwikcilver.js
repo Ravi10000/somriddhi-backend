@@ -9,12 +9,12 @@ const path = require("path");
 const User = require("../models/User");
 const Transaction = require("../models/Transaction.model");
 
-const categoryUrl = "https://extapi12.woohoo.in/rest/v3/catalog/categories";
-//const productUrl = "https://extapi12.woohoo.in/rest/v3/catalog/categories/330/products/";
-const productUrl = "https://extapi12.woohoo.in/rest/v3/catalog/products/";
-const orderUrl = "https://extapi12.woohoo.in/rest/v3/orders";
-const activatedCardUrl = "https://extapi12.woohoo.in/rest/v3/order/";
-const statusUrl = "https://extapi12.woohoo.in/rest/v3/order/";
+const categoryUrl = `${process.env.QWIK_BASEURL}/rest/v3/catalog/categories`;
+//const productUrl = `${process.env.QWIK_BASEURL}/rest/v3/catalog/categories/330/products/";
+const productUrl = `${process.env.QWIK_BASEURL}/rest/v3/catalog/products/`;
+const orderUrl = `${process.env.QWIK_BASEURL}/rest/v3/orders`;
+const activatedCardUrl = `${process.env.QWIK_BASEURL}/rest/v3/order/`;
+const statusUrl = `${process.env.QWIK_BASEURL}/rest/v3/order/`;
 
 const productListFilePath = path.resolve("productList.txt"); // $ROOT_FOLDER/productList.txt
 console.log("productsListURl : ", path.resolve("productList.txt"));
