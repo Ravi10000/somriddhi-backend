@@ -86,31 +86,33 @@ exports.updateTransactionStatus = async (req, res) => {
 };
 
 exports.updateTransactionPhonepe = async (req, res) => {
-  console.log("update phone pe transaction status");
+  console.log("phonePe transaction status - webhhok");
   try {
-    let { response: phonePayResponse } = req.body;
-    console.log({ phonePayResponse });
+    let { response: phonePeResponse } = req.body;
+    console.log({ phonePeResponse });
     const transaction = await Transaction.findById(
-      phonePayResponse.data.merchantTransactionId
+      phonePeResponse.data.merchantTransactionId
     );
     if (!transaction) {
       return res
         .status(404)
         .json({ status: "error", message: "Transaction not found" });
     }
-    if (phonePayResponse.data.status === "COMPLETED") {
-      transaction.status = "paid";
-    } else if (phonePayResponse.data.status === "FAILED") {
-      transaction.status = "failed";
-    } else {
-      transaction.status = "pending";
-    }
-    transaction.phonePeResponse = JSON.stringify(phonePayResponse);
-    await transaction.save();
+    transaction = await setStatusPhonePe(phonePeResponse, transaction);
+    // if (phonePeResponse.data.status === "COMPLETED") {
+    //   transaction.status = "paid";
+    // } else if (phonePeResponse.data.status === "FAILED") {
+    //   transaction.status = "failed";
+    // } else {
+    //   transaction.status = "pending";
+    // }
+    // transaction.phonePeResponse = JSON.stringify(phonePeResponse);
+    // await transaction.save();
 
-    res
-      .status(200)
-      .json({ status: "success", message: "transaction updated successfully" });
+    res.status(200).json({
+      status: "success",
+      message: "transaction updated successfully",
+    });
   } catch (err) {
     console.log({ err });
     res.status(500).json({ status: "error", message: err.message });
@@ -126,12 +128,12 @@ exports.checkPhonepeTransactionStatus = async (req, res) => {
         .status(404)
         .json({ status: "error", message: "Transaction not found" });
     }
-    const { data: phonePayResponse } = await axios.get(
+    const { data: phonePeResponse } = await axios.get(
       `${process.env.PHONEPE_PAY_LINK}/status/${process.env.PHONEPE_PAY_MERCHANT_ID}/${id}`
     );
-    if (phonePayResponse.data.status === "COMPLETED") {
+    if (phonePeResponse.data.status === "COMPLETED") {
       transaction.status = "paid";
-    } else if (phonePayResponse.data.status === "FAILED") {
+    } else if (phonePeResponse.data.status === "FAILED") {
       transaction.status = "failed";
     } else {
       transaction.status = "pending";
@@ -146,49 +148,96 @@ exports.checkPhonepeTransactionStatus = async (req, res) => {
 
 exports.getTransaction = async (req, res) => {
   try {
-    const transaction = await Transaction.findById(req.params.id);
+    let transaction = await Transaction.findById(req.params.id);
     if (!transaction) {
       return res
         .status(404)
         .json({ status: "error", message: "Transaction not found" });
     }
 
-    if (
-      transaction.method === "phonepe" &&
-      (transaction.status === "pending" || transaction.status === "initiated")
-    ) {
-      try {
-        const { data: phonePayResponse } = await axios.get(
-          `${process.env.PHONEPE_PAY_LINK}/status/${process.env.PHONEPE_PAY_MERCHANT_ID}/${transaction._id}`,
-          {
-            headers: {
-              "X-MERCHANT-ID": process.env.PHONEPE_PAY_MERCHANT_ID,
-              "X-VERIFY":
-                SHA256(
-                  `/pg/v1/status/${process.env.PHONEPE_PAY_MERCHANT_ID}/${transaction._id}${process.env.PHONEPE_PAY_SALT}`
-                ) +
-                "###" +
-                process.env.PHONEPE_PAY_SALT_INDEX,
-            },
-          }
-        );
-        console.log({ phonePayResponse });
-        if (phonePayResponse.data.state === "COMPLETED") {
-          transaction.status = "paid";
-        } else if (phonePayResponse.data.state === "FAILED") {
-          transaction.status = "failed";
-        } else {
-          transaction.status = "pending";
-        }
-        await transaction.save();
-        console.log({ transaction });
-      } catch (err) {
-        console.log(err.message);
-      }
-    }
+    // if (
+    //   transaction.method === "phonepe" &&
+    //   (transaction.status === "pending" || transaction.status === "initiated")
+    // ) {
+    //   try {
+    //     const { data: phonePeResponse } = await axios.get(
+    //       `${process.env.PHONEPE_PAY_LINK}/status/${process.env.PHONEPE_PAY_MERCHANT_ID}/${transaction._id}`,
+    //       {
+    //         headers: {
+    //           "X-MERCHANT-ID": process.env.PHONEPE_PAY_MERCHANT_ID,
+    //           "X-VERIFY":
+    //             SHA256(
+    //               `/pg/v1/status/${process.env.PHONEPE_PAY_MERCHANT_ID}/${transaction._id}${process.env.PHONEPE_PAY_SALT}`
+    //             ) +
+    //             "###" +
+    //             process.env.PHONEPE_PAY_SALT_INDEX,
+    //         },
+    //       }
+    //     );
+    //     console.log({ phonePeResponse });
+    //     if (phonePeResponse.data.state === "COMPLETED") {
+    //       transaction.status = "paid";
+    //     } else if (phonePeResponse.data.state === "FAILED") {
+    //       transaction.status = "failed";
+    //     } else {
+    //       transaction.status = "pending";
+    //     }
+    //     transaction.phonePeResponse = JSON.stringify(phonePeResponse);
+    //     await transaction.save();
+    //     console.log({ transaction });
+    //   } catch (err) {
+    //     console.log(err.message);
+    //   }
+    // }
+    transaction = await phonePayStatusUpdate(transaction);
     res.status(200).json({ status: "success", transaction });
   } catch (err) {
     console.log({ err });
     res.status(500).json({ status: "error", message: err.message });
   }
 };
+
+async function phonePayStatusUpdate(transaction) {
+  if (
+    transaction.method === "phonepe" &&
+    (transaction.status === "pending" || transaction.status === "initiated")
+  ) {
+    try {
+      const { data: phonePeResponse } = await axios.get(
+        `${process.env.PHONEPE_PAY_LINK}/status/${process.env.PHONEPE_PAY_MERCHANT_ID}/${transaction._id}`,
+        {
+          headers: {
+            "X-MERCHANT-ID": process.env.PHONEPE_PAY_MERCHANT_ID,
+            "X-VERIFY":
+              SHA256(
+                `/pg/v1/status/${process.env.PHONEPE_PAY_MERCHANT_ID}/${transaction._id}${process.env.PHONEPE_PAY_SALT}`
+              ) +
+              "###" +
+              process.env.PHONEPE_PAY_SALT_INDEX,
+          },
+        }
+      );
+      transaction = await setStatusPhonePe(phonePeResponse, transaction);
+    } catch (err) {
+      console.log({
+        "error while checking phone pe payment status": err.message,
+      });
+    }
+  }
+  return transaction;
+}
+
+async function setStatusPhonePe(phonePeResponse, transaction) {
+  if (phonePeResponse?.data) {
+    console.log({ phonePeResponse });
+    if (phonePeResponse.data.state === "COMPLETED") transaction.status = "paid";
+    else if (phonePeResponse.data.state === "FAILED")
+      transaction.status = "failed";
+    else transaction.status = "pending";
+
+    transaction.phonePeResponse = JSON.stringify(phonePeResponse);
+    await transaction.save();
+    console.log({ transaction });
+  }
+  return transaction;
+}
