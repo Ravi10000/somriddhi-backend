@@ -7,6 +7,7 @@ const fs = require("fs");
 const Razorpay = require("razorpay");
 const path = require("path");
 const User = require("../models/User");
+const Transaction = require("../models/Transaction.model");
 
 const categoryUrl = "https://extapi12.woohoo.in/rest/v3/catalog/categories";
 //const productUrl = "https://extapi12.woohoo.in/rest/v3/catalog/categories/330/products/";
@@ -23,8 +24,57 @@ function delay(time) {
 
 exports.addGiftCardOrder = async (req, res) => {
   console.log("addGiftCardOrder ", req.body);
-  const { address, billingAddress, totalAmount, unitPrice, qty, paymentid } =
-    req.body;
+  const { transactionId } = req.body;
+  const transaction = await Transaction.findById(transactionId);
+  if (!transaction) {
+    return res.status(400).json({
+      status: "Fail",
+      message: "Transaction not found",
+    });
+  }
+
+  // const { address, billingAddress, totalAmount, unitPrice, qty, paymentid } =
+  //   req.body;
+
+  // const {
+  //   amount,
+  //   unitPrice,
+  //   quantity,
+  //   email,
+  //   mobile,
+  //   firstname,
+  //   lastname,
+  //   line1,
+  //   line2,
+  //   district,
+  //   state,
+  //   postcode,
+  //   yesPayResponse,
+  //   phonePeResponse,
+  //   status,
+  //   method,
+  // } = transaction;
+
+  let paymentid = null;
+  let transactionResponse = null;
+
+  if (transaction?.method === "phonepe") {
+    transactionResponse =
+      (await JSON.parse(transaction?.phonePeResponse)) || null;
+    paymentid = transactionResponse?.data?.transactionId || null;
+  } else if (transaction?.method === "yespay") {
+    transactionResponse =
+      (await JSON.parse(transaction?.yesPayResponse)) || null;
+    paymentid =
+      transactionResponse?.transaction_details?.transaction_no || null;
+  }
+
+  if (!transactionResponse || !paymentid) {
+    return res.status(400).json({
+      status: "Fail",
+      message: "no response found for this transaction",
+    });
+  }
 
   try {
     // //create a gift card model document
@@ -32,12 +82,25 @@ exports.addGiftCardOrder = async (req, res) => {
     console.log({ refno });
 
     var createOrderBody = {
-      address: address,
-      billing: billingAddress,
+      // address: address,
+      address: {
+        firstname: transaction?.firstname,
+        ...(transaction?.lastname && { lastname: transaction?.lastname }),
+        email: transaction?.email,
+        telephone: "+91" + transaction?.mobile,
+        line1: transaction?.line1,
+        ...(transaction?.line2 && { line2: transaction?.line2 }),
+        city: transaction?.district,
+        region: transaction?.state,
+        country: "IN",
+        postcode: transaction?.postcode,
+        billToThis: true,
+      },
+      // billing: billingAddress,
       payments: [
         {
-          code: "svc",
-          amount: totalAmount,
+          code: "SVC",
+          amount: transaction?.amount,
           poNumber: paymentid,
         },
       ],
@@ -45,8 +108,8 @@ exports.addGiftCardOrder = async (req, res) => {
         {
           sku: process.env.QWIK_PRODID,
           // sku: "APITESTTIMFAIL",
-          price: unitPrice,
-          qty: qty,
+          price: transaction?.unitPrice,
+          qty: transaction?.quantity,
           currency: 356,
         },
       ],
@@ -374,7 +437,7 @@ exports.addGiftCardOrder = async (req, res) => {
           "An error occured while purchasing giftcard. Your amount will be refunded withing 5-10 business days",
       });
     } else {
-      console.log(err);
+      console.log({ error: err.message });
       res.status(400).json({
         status: "Fail",
         message: err.message,
