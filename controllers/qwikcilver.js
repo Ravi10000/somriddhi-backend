@@ -22,7 +22,6 @@ function delay(time) {
 }
 
 exports.addGiftCardOrder = async (req, res) => {
-  // console.log("sendotp ", req.body);
   console.log("addGiftCardOrder ", req.body);
   const { address, billingAddress, totalAmount, unitPrice, qty, paymentid } =
     req.body;
@@ -30,7 +29,7 @@ exports.addGiftCardOrder = async (req, res) => {
   try {
     // //create a gift card model document
     var refno = "SOMRIDDHI" + Date.now();
-    console.log(refno);
+    console.log({ refno });
 
     var createOrderBody = {
       address: address,
@@ -56,7 +55,7 @@ exports.addGiftCardOrder = async (req, res) => {
       syncOnly: true,
     };
 
-    console.log(createOrderBody);
+    console.log({ createOrderBody });
 
     const source = axios.CancelToken.source();
     const timeout = setTimeout(async () => {
@@ -112,7 +111,7 @@ exports.addGiftCardOrder = async (req, res) => {
         };
 
         orderStatusResponse = await axios.request(orderStatusOptions);
-        console.log(orderStatusResponse.data);
+        console.log({ orderStatusResponseData: orderStatusResponse.data });
 
         if (orderStatusResponse.data["status"] != "COMPLETE") {
           console.log("Status call 3");
@@ -139,7 +138,7 @@ exports.addGiftCardOrder = async (req, res) => {
           };
 
           orderStatusResponse = await axios.request(orderStatusOptions);
-          console.log(orderStatusResponse.data);
+          console.log({ orderStatusResponseData: orderStatusResponse.data });
           if (orderStatusResponse.data["status"] != "COMPLETE") {
             source.cancel();
             var instance = new Razorpay({
@@ -306,18 +305,18 @@ exports.addGiftCardOrder = async (req, res) => {
       data: JSON.stringify(createOrderBody),
     };
 
-    console.log(createOrderOptions);
+    console.log({ createOrderOptions });
 
     var createOrderResponse = await axios.request(createOrderOptions);
     clearTimeout(timeout);
-    console.log(createOrderResponse.data);
+    console.log({ createOrderResponseData: createOrderResponse?.data });
 
     if (createOrderResponse.data["status"] == "COMPLETE") {
       //insert in db
       console.log("completed naturally");
       var _url =
         activatedCardUrl + createOrderResponse.data["orderId"] + "/cards";
-      console.log(_url);
+      console.log({ _url });
       const activatedCardOptions = {
         method: "GET",
         url: _url,
