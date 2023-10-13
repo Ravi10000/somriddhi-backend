@@ -8,6 +8,7 @@ const Razorpay = require("razorpay");
 const path = require("path");
 const User = require("../models/User");
 const Transaction = require("../models/Transaction.model");
+const sendVoucherEmail = require("../utils/send-voucher-email");
 
 const categoryUrl = `${process.env.QWIK_BASEURL}/rest/v3/catalog/categories`;
 //const productUrl = `${process.env.QWIK_BASEURL}/rest/v3/catalog/categories/330/products/";
@@ -80,6 +81,16 @@ exports.addGiftCardOrder = async (req, res) => {
     // //create a gift card model document
     var refno = "SOMRIDDHI" + Date.now();
     console.log({ refno });
+
+    // voucher details to send email
+    // {
+    //   name: "Ravi Sharma",
+    //   amount: "1000",
+    //   voucherCode: "SVAQ-TMDRD9-Z9M",
+    //   giftCardId: "6524e480b36fedcb858b64bd",
+    //   validity: "2024/10/05",
+    //   orderId: "6524e47db36fedcb858b64bb",
+    // }
 
     var createOrderBody = {
       address: {
@@ -259,7 +270,29 @@ exports.addGiftCardOrder = async (req, res) => {
             };
             console.log({ giftCard });
             const giftCardObj = await GiftCard.create(giftCard);
-            const user = await User.findById(req.user._id);
+            // const user = await User.findById(req.user._id);
+
+            // voucher details to send email
+            // {
+            //   name: "Ravi Sharma",
+            //   amount: "1000",
+            //   voucherCode: "SVAQ-TMDRD9-Z9M",
+            //   giftCardId: "6524e480b36fedcb858b64bd",
+            //   validity: "2024/10/05",
+            //   orderId: "6524e47db36fedcb858b64bb",
+            // }
+            let voucher = activatedCardResponse?.data?.cards?.[0];
+            if (voucher) {
+              let voucherDetails = {
+                name: transaction?.firstname + " " + transaction?.lastname,
+                amount: voucher?.amount,
+                voucherCode: voucher?.cardPin,
+                giftCardId: giftCardObj?._id,
+                validity: moment(voucher?.validity).format("YYYY/MM/DD"),
+                orderId: transaction?._id,
+              };
+              await sendVoucherEmail(transaction?.email, voucherDetails);
+            }
 
             // TODO: extract voucher details from activatedCardResponse.data
             // TODO: send sms
@@ -267,7 +300,6 @@ exports.addGiftCardOrder = async (req, res) => {
 
             // TODO: send email
             // TODO: extract voucher card no, amount and user name to send email
-            // await sendVoucherEmail(user.email /* voucher details */);
 
             res.status(200).json({
               status: "Success",
@@ -309,6 +341,18 @@ exports.addGiftCardOrder = async (req, res) => {
           };
           console.log(giftCard);
           const giftCardObj = await GiftCard.create(giftCard);
+          let voucher = activatedCardResponse?.data?.cards?.[0];
+          if (voucher) {
+            let voucherDetails = {
+              name: transaction?.firstname + " " + transaction?.lastname,
+              amount: voucher?.amount,
+              voucherCode: voucher?.cardPin,
+              giftCardId: giftCardObj?._id,
+              validity: moment(voucher?.validity).format("YYYY/MM/DD"),
+              orderId: transaction?._id,
+            };
+            await sendVoucherEmail(transaction?.email, voucherDetails);
+          }
 
           res.status(200).json({
             status: "Success",
@@ -350,6 +394,18 @@ exports.addGiftCardOrder = async (req, res) => {
         };
         console.log(giftCard);
         const giftCardObj = await GiftCard.create(giftCard);
+        let voucher = activatedCardResponse?.data?.cards?.[0];
+        if (voucher) {
+          let voucherDetails = {
+            name: transaction?.firstname + " " + transaction?.lastname,
+            amount: voucher?.amount,
+            voucherCode: voucher?.cardPin,
+            giftCardId: giftCardObj?._id,
+            validity: moment(voucher?.validity).format("YYYY/MM/DD"),
+            orderId: transaction?._id,
+          };
+          await sendVoucherEmail(transaction?.email, voucherDetails);
+        }
 
         res.status(200).json({
           status: "Success",
@@ -418,6 +474,19 @@ exports.addGiftCardOrder = async (req, res) => {
       };
       console.log(giftCard);
       const giftCardObj = await GiftCard.create(giftCard);
+
+      let voucher = activatedCardResponse?.data?.cards?.[0];
+      if (voucher) {
+        let voucherDetails = {
+          name: transaction?.firstname + " " + transaction?.lastname,
+          amount: voucher?.amount,
+          voucherCode: voucher?.cardPin,
+          giftCardId: giftCardObj?._id,
+          validity: moment(voucher?.validity).format("YYYY/MM/DD"),
+          orderId: transaction?._id,
+        };
+        await sendVoucherEmail(transaction?.email, voucherDetails);
+      }
 
       res.status(200).json({
         status: "Success",

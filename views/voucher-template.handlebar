@@ -37,7 +37,7 @@
                       align="justify"
                     >
                       <span>You've received Amazon Pay E-Gift Card! worth Rs
-                        {{amount}}.00</span><br />
+                        {{amount}}</span><br />
                     </td>
                     <td style="text-align: right" align="justify">
                       <img
@@ -333,7 +333,7 @@
                                               line-height: 1em;
                                             "
                                           >Rs
-                                            {{amount}}.00</span></span></span><br
+                                            {{amount}}</span></span></span><br
                                       /><br />
                                     </td>
                                   </tr>
