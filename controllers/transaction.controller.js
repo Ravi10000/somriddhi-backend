@@ -150,7 +150,9 @@ exports.checkPhonepeTransactionStatus = async (req, res) => {
 exports.getTransaction = async (req, res) => {
   try {
     let transaction = await Transaction.findById(req.params.id);
-    if (req?.user?._id !== transaction.user) {
+    console.log({ transaction });
+    console.log(req?.user?._id);
+    if (req?.user?._id !== transaction.user.toString()) {
       return res.status(401).json({ status: "error", message: "Unauthorized" });
     }
     if (!transaction) {
