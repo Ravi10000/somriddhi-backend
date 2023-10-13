@@ -2,6 +2,7 @@ const axios = require("axios");
 const Transaction = require("../models/Transaction.model");
 const { encodeRequest } = require("../utils/encode-request");
 const SHA256 = require("../sha256-hash");
+const User = require("../models/User");
 
 exports.createTransaction = async (req, res) => {
   try {
@@ -149,6 +150,10 @@ exports.checkPhonepeTransactionStatus = async (req, res) => {
 exports.getTransaction = async (req, res) => {
   try {
     let transaction = await Transaction.findById(req.params.id);
+    const user = await User.findById(req.user._id);
+    if (user._id !== transaction.user) {
+      return res.status(401).json({ status: "error", message: "Unauthorized" });
+    }
     if (!transaction) {
       return res
         .status(404)
