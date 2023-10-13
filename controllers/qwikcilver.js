@@ -93,13 +93,25 @@ exports.addGiftCardOrder = async (req, res) => {
         region: transaction?.state,
         country: "IN",
         postcode: transaction?.postcode,
-        billToThis: true,
+        billToThis: false,
+      },
+      billing: {
+        firstname: transaction?.firstname,
+        ...(transaction?.lastname && { lastname: transaction?.lastname }),
+        email: transaction?.email,
+        telephone: "+91" + transaction?.mobile,
+        line1: transaction?.line1,
+        ...(transaction?.line2 && { line2: transaction?.line2 }),
+        city: transaction?.district,
+        region: transaction?.state,
+        country: "IN",
+        postcode: transaction?.postcode,
+        billToThis: false,
       },
       payments: [
         {
           code: "svc",
           amount: parseInt(transaction?.amount),
-          poNumber: paymentid,
         },
       ],
       products: [
@@ -110,15 +122,6 @@ exports.addGiftCardOrder = async (req, res) => {
           currency: 356,
         },
       ],
-      // products: [
-      //   {
-      //     sku: process.env.QWIK_PRODID,
-      //     // sku: "APITESTTIMFAIL",
-      //     price: parseInt(transaction?.unitPrice),
-      //     qty: parseInt(transaction?.quantity),
-      //     currency: 356,
-      //   },
-      // ],
       deliveryMode: "API",
       refno,
       syncOnly: true,
@@ -215,7 +218,7 @@ exports.addGiftCardOrder = async (req, res) => {
               key_secret: process.env.RAZOR_PAY_KEY_SECRET,
             });
             var refundResponse = await instance.payments.refund(paymentid, {
-              amount: totalAmount,
+              amount: parseInt(transaction?.amount),
               speed: "normal",
             });
             console.log(refundResponse);
@@ -245,7 +248,7 @@ exports.addGiftCardOrder = async (req, res) => {
             console.log({ activatedCardResponse });
             const giftCard = {
               requestBody: JSON.stringify(createOrderBody),
-              totalAmount: totalAmount,
+              totalAmount: parseInt(transaction?.amount),
               unitPrice: unitPrice,
               qty: qty,
               refno: refno,
@@ -295,7 +298,7 @@ exports.addGiftCardOrder = async (req, res) => {
           var activatedCardResponse = await axios.request(activatedCardOptions);
           const giftCard = {
             requestBody: JSON.stringify(createOrderBody),
-            totalAmount: totalAmount,
+            totalAmount: parseInt(transaction?.amount),
             unitPrice: unitPrice,
             qty: qty,
             refno: refno,
@@ -336,7 +339,7 @@ exports.addGiftCardOrder = async (req, res) => {
         var activatedCardResponse = await axios.request(activatedCardOptions);
         const giftCard = {
           requestBody: JSON.stringify(createOrderBody),
-          totalAmount: totalAmount,
+          totalAmount: parseInt(transaction?.amount),
           unitPrice: unitPrice,
           qty: qty,
           refno: refno,
@@ -404,7 +407,7 @@ exports.addGiftCardOrder = async (req, res) => {
       var activatedCardResponse = await axios.request(activatedCardOptions);
       const giftCard = {
         requestBody: JSON.stringify(createOrderBody),
-        totalAmount: totalAmount,
+        totalAmount: parseInt(transaction?.amount),
         unitPrice: unitPrice,
         qty: qty,
         refno: refno,
@@ -427,7 +430,7 @@ exports.addGiftCardOrder = async (req, res) => {
         key_secret: process.env.RAZOR_PAY_KEY_SECRET,
       });
       var refundResponse = await instance.payments.refund(paymentid, {
-        amount: totalAmount,
+        amount: parseInt(transaction?.amount),
         speed: "normal",
       });
       res.status(400).json({
