@@ -82,7 +82,6 @@ exports.addGiftCardOrder = async (req, res) => {
     console.log({ refno });
 
     var createOrderBody = {
-      // address: address,
       address: {
         firstname: transaction?.firstname,
         ...(transaction?.lastname && { lastname: transaction?.lastname }),
@@ -96,7 +95,6 @@ exports.addGiftCardOrder = async (req, res) => {
         postcode: transaction?.postcode,
         billToThis: true,
       },
-      // billing: billingAddress,
       payments: [
         {
           code: "svc",
@@ -104,13 +102,14 @@ exports.addGiftCardOrder = async (req, res) => {
           poNumber: paymentid,
         },
       ],
-      products: {
-        sku: process.env.QWIK_PRODID,
-        // sku: "APITESTTIMFAIL",
-        price: parseInt(transaction?.unitPrice),
-        qty: parseInt(transaction?.quantity),
-        currency: 356,
-      },
+      products: [
+        {
+          sku: process.env.QWIK_PRODID,
+          price: parseInt(transaction?.unitPrice),
+          qty: parseInt(transaction?.quantity),
+          currency: 356,
+        },
+      ],
       // products: [
       //   {
       //     sku: process.env.QWIK_PRODID,
