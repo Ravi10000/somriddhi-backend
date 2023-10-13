@@ -539,7 +539,7 @@ exports.getMyCards = async (req, res) => {
     res.status(200).json({
       status: "success",
       message: "All orders fetched",
-      myOrders: myOrders,
+      myOrders,
     });
   } catch (err) {
     res.status(400).json({
@@ -552,7 +552,12 @@ exports.getMyCards = async (req, res) => {
 exports.getActivatedCards = async (req, res) => {
   try {
     const myOrders = await GiftCard.findOne({ orderId: req?.params?.orderid });
-
+    console.log({ myOrders });
+    try {
+    } catch (err) {
+      console.log(JSON.parse(myOrders?.activatedCardRes));
+      console.log({ error: err.message });
+    }
     // var _url = activatedCardUrl + req?.params?.orderid + "/cards";
     // console.log(_url);
     // const activatedCardOptions = {
