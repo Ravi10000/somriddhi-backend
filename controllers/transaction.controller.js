@@ -150,8 +150,7 @@ exports.checkPhonepeTransactionStatus = async (req, res) => {
 exports.getTransaction = async (req, res) => {
   try {
     let transaction = await Transaction.findById(req.params.id);
-    const user = await User.findById(req.user._id);
-    if (user._id !== transaction.user) {
+    if (req?.user?._id !== transaction.user) {
       return res.status(401).json({ status: "error", message: "Unauthorized" });
     }
     if (!transaction) {
@@ -159,41 +158,6 @@ exports.getTransaction = async (req, res) => {
         .status(404)
         .json({ status: "error", message: "Transaction not found" });
     }
-
-    // if (
-    //   transaction.method === "phonepe" &&
-    //   (transaction.status === "pending" || transaction.status === "initiated")
-    // ) {
-    //   try {
-    //     const { data: phonePeResponse } = await axios.get(
-    //       `${process.env.PHONEPE_PAY_LINK}/status/${process.env.PHONEPE_PAY_MERCHANT_ID}/${transaction._id}`,
-    //       {
-    //         headers: {
-    //           "X-MERCHANT-ID": process.env.PHONEPE_PAY_MERCHANT_ID,
-    //           "X-VERIFY":
-    //             SHA256(
-    //               `/pg/v1/status/${process.env.PHONEPE_PAY_MERCHANT_ID}/${transaction._id}${process.env.PHONEPE_PAY_SALT}`
-    //             ) +
-    //             "###" +
-    //             process.env.PHONEPE_PAY_SALT_INDEX,
-    //         },
-    //       }
-    //     );
-    //     console.log({ phonePeResponse });
-    //     if (phonePeResponse.data.state === "COMPLETED") {
-    //       transaction.status = "paid";
-    //     } else if (phonePeResponse.data.state === "FAILED") {
-    //       transaction.status = "failed";
-    //     } else {
-    //       transaction.status = "pending";
-    //     }
-    //     transaction.phonePeResponse = JSON.stringify(phonePeResponse);
-    //     await transaction.save();
-    //     console.log({ transaction });
-    //   } catch (err) {
-    //     console.log(err.message);
-    //   }
-    // }
     transaction = await phonePayStatusUpdate(transaction);
     res.status(200).json({ status: "success", transaction });
   } catch (err) {
