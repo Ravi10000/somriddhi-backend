@@ -4,6 +4,14 @@ const { encodeRequest } = require("../utils/encode-request");
 const SHA256 = require("../sha256-hash");
 const User = require("../models/User");
 
+console.log({
+  PHONEPE_PAY_MERCHANT_ID: process.env.PHONEPE_PAY_MERCHANT_ID,
+  PHONEPE_PAY_LINK: process.env.PHONEPE_PAY_LINK,
+  PHONEPE_PAY_SALT_INDEX: process.env.PHONEPE_PAY_SALT_INDEX,
+  PHONEPE_PAY_REDIRECT_URL: process.env.PHONEPE_PAY_REDIRECT_URL,
+  PHONEPE_PAY_CALLBACK_URL: process.env.PHONEPE_PAY_CALLBACK_URL,
+});
+
 exports.createTransaction = async (req, res) => {
   try {
     console.log("initiated transaction");
