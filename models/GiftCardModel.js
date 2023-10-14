@@ -6,6 +6,10 @@ const GiftCardSchema = new Schema({
     type: String,
     required: true,
   },
+  transaction: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+  },
   requestBody: {
     type: String,
     required: true,

@@ -34,6 +34,15 @@ exports.addGiftCardOrder = async (req, res) => {
     });
   }
 
+  const giftCard = await GiftCard.findOne({ transaction: transactionId });
+  if (giftCard) {
+    return res.status(200).json({
+      status: "Success",
+      message: "Order Generated Successfully",
+      giftCard,
+    });
+  }
+
   // const { address, billingAddress, totalAmount, unitPrice, qty, paymentid } =
   //   req.body;
 
@@ -263,6 +272,7 @@ exports.addGiftCardOrder = async (req, res) => {
               unitPrice: parseInt(transaction?.unitPrice),
               qty: parseInt(transaction?.quantity),
               refno,
+              transaction: transaction?._id,
               orderId: createOrderResponse.data["orderId"],
               activatedCardRes: JSON.stringify(activatedCardResponse.data),
               status: createOrderResponse.data["status"],
@@ -334,6 +344,7 @@ exports.addGiftCardOrder = async (req, res) => {
             unitPrice: parseInt(transaction?.unitPrice),
             qty: parseInt(transaction?.quantity),
             refno,
+            transaction: transaction?._id,
             orderId: createOrderResponse.data["orderId"],
             activatedCardRes: JSON.stringify(activatedCardResponse.data),
             status: createOrderResponse.data["status"],
@@ -387,6 +398,7 @@ exports.addGiftCardOrder = async (req, res) => {
           unitPrice: parseInt(transaction?.unitPrice),
           qty: parseInt(transaction?.quantity),
           refno,
+          transaction: transaction?._id,
           orderId: createOrderResponse.data["orderId"],
           activatedCardRes: JSON.stringify(activatedCardResponse.data),
           status: createOrderResponse.data["status"],
@@ -467,6 +479,7 @@ exports.addGiftCardOrder = async (req, res) => {
         unitPrice: parseInt(transaction?.unitPrice),
         qty: parseInt(transaction?.quantity),
         refno,
+        transaction: transaction?._id,
         orderId: createOrderResponse.data["orderId"],
         activatedCardRes: JSON.stringify(activatedCardResponse.data),
         status: createOrderResponse.data["status"],
