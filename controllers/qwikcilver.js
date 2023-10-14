@@ -34,6 +34,8 @@ exports.addGiftCardOrder = async (req, res) => {
     });
   }
 
+  console.log({ transaction });
+
   const giftCard = await GiftCard.findOne({ transaction: transactionId });
   if (giftCard) {
     return res.status(200).json({
