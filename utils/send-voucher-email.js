@@ -40,10 +40,7 @@ async function sendVoucherEmail(to, voucherDetails) {
     to,
     subject: "Somriddhi - You got a gift!",
     template: "voucher-template",
-    context: {
-      ...voucherDetails,
-      assestsBaseUrl: process.env.ASSESTS_BASE_URL,
-    }, // cardNo, amount, name
+    context: voucherDetails, // cardNo, amount, name
   };
 
   return await transporter.sendMail(mailOptions);
