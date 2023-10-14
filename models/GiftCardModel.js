@@ -8,6 +8,7 @@ const GiftCardSchema = new Schema({
   },
   transaction: {
     type: mongoose.Schema.Types.ObjectId,
+    ref: "Transaction",
     required: true,
   },
   requestBody: {
@@ -43,6 +44,7 @@ const GiftCardSchema = new Schema({
   },
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
     default: Date.now,
   },
 });
