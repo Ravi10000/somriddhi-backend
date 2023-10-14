@@ -44,6 +44,7 @@ exports.addGiftCardOrder = async (req, res) => {
       giftCard,
     });
   }
+  console.log({ giftCard });
 
   // const { address, billingAddress, totalAmount, unitPrice, qty, paymentid } =
   //   req.body;
