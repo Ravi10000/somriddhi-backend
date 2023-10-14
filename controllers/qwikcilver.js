@@ -314,10 +314,10 @@ exports.addGiftCardOrder = async (req, res) => {
             // TODO: send email
             // TODO: extract voucher card no, amount and user name to send email
 
-            res.status(200).json({
+            return res.status(200).json({
               status: "Success",
               message: "Order Generated Successfully",
-              data: giftCardObj,
+              giftCard: giftCardObj,
             });
           }
         } else if (orderStatusResponse.data["status"] == "COMPLETE") {
@@ -368,10 +368,10 @@ exports.addGiftCardOrder = async (req, res) => {
             await sendVoucherEmail(transaction?.email, voucherDetails);
           }
 
-          res.status(200).json({
+          return res.status(200).json({
             status: "Success",
             message: "Order Generared Successfully",
-            data: giftCardObj,
+            giftCard: giftCardObj,
           });
         }
       } else if (orderStatusResponse.data["status"] == "COMPLETE") {
@@ -422,10 +422,10 @@ exports.addGiftCardOrder = async (req, res) => {
           await sendVoucherEmail(transaction?.email, voucherDetails);
         }
 
-        res.status(200).json({
+        return res.status(200).json({
           status: "Success",
           message: "Order Generared Successfully",
-          data: giftCardObj,
+          giftCard: giftCardObj,
         });
       }
     }, 10000);
@@ -504,10 +504,10 @@ exports.addGiftCardOrder = async (req, res) => {
         await sendVoucherEmail(transaction?.email, voucherDetails);
       }
 
-      res.status(200).json({
+      return res.status(200).json({
         status: "Success",
         message: "Order Generared Successfully",
-        data: giftCardObj,
+        giftCard: giftCardObj,
       });
     } else {
       var instance = new Razorpay({
