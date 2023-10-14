@@ -3,8 +3,6 @@ const hbs = require("nodemailer-express-handlebars");
 const path = require("path");
 require("dotenv").config();
 // console.log(path.resolve(path.dirname(__dirname), "views"));
-console.log(process.env.ASSESTS_BASE_URL);
-console.log({ assestsBaseUrl: process.env.ASSESTS_BASE_URL });
 
 async function sendVoucherEmail(to, voucherDetails) {
   const transporter = createTransport({
