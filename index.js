@@ -62,6 +62,18 @@ app.get("/test-hbs", async (req, res) => {
     res.status(500).json({ status: "error", message: err.message });
   }
 });
+app.get("/test-email-template", (req, res) => {
+  // res.send("email template");
+  res.render("voucher-template-2", {
+    layout: false,
+    name: "Ravi Sharma",
+    giftCardId: "6524e480b36fedcb858b64bd",
+    voucherCode: "SVAQ-TMDRD9-Z9M",
+    amount: "1000",
+    validity: "2024/10/05",
+    orderId: "6524e47db36fedcb858b64bb",
+  });
+});
 
 app.use(cors());
 app.use("/api", require("./route/cashback.route"));
@@ -81,6 +93,7 @@ app.use("/api", require("./route/analytic"));
 app.use("/api", require("./route/payment"));
 app.use("/api", require("./route/transaction.route"));
 app.use("/api", require("./route/phone-pe.route"));
+app.use("/api", require("./route/sent-giftcard.route"));
 
 mongoose.connect(process.env.MONGO_URL);
 

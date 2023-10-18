@@ -36,16 +36,12 @@ async function sendVoucherEmail(to, voucherDetails) {
   const mailOptions = {
     from: `Somriddhi.store <giftcard.order@somriddhidigital.com>`,
     to,
-    subject: "Somriddhi - You got a gift!",
+    subject: `Dear ${voucherDetails?.name} here is your Rs ${voucherDetails?.amount} Amazon Shopping Voucher`,
     template: "voucher-template",
-    context: voucherDetails, // cardNo, amount, name
+    context: voucherDetails, // voucherCode, amount, name, validity, giftCardId
   };
 
   return await transporter.sendMail(mailOptions);
-  // transporter.sendMail(mailOptions, (error, info) => {
-  //   error && console.log({ error });
-  //   info && console.log({ info });
-  // });
 }
 
 module.exports = sendVoucherEmail;

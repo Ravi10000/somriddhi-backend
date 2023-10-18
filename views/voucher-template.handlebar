@@ -341,9 +341,10 @@
                                     <td>
                                       <a
                                         {{! href="https://www.amazon.in/gp/css/gc/payment?ie=UTF8&amp;actionType=add&amp;claimCode=2D59-8TFXFS-H7P4&amp;ref_=gc_ya_subnav_balance&amp;txtLeftButton=ApplytoYourAccount" }}
-                                        href="https://www.amazon.in/gp/css/gc/payment?ie=UTF8&amp;actionType=add&amp;claimCode={{voucherCode}}&amp;ref_=gc_ya_subnav_balance&amp;txtLeftButton=ApplytoYourAccount"
+                                        {{!-- href="https://www.amazon.in/gp/css/gc/payment?ie=UTF8&amp;actionType=add&amp;claimCode={{voucherCode}}&amp;ref_=gc_ya_subnav_balance&amp;txtLeftButton=ApplytoYourAccount" --}}
+                                        href="https://www.amazon.in/apay-products/apv/landing?voucherCode={{voucherCode}}"
                                         target="_blank"
-                                        data-saferedirecturl="https://www.google.com/url?q=https://www.amazon.in/gp/css/gc/payment?ie%3DUTF8%26actionType%3Dadd%26claimCode%3D2D59-8TFXFS-H7P4%26ref_%3Dgc_ya_subnav_balance%26txtLeftButton%3DApplytoYourAccount&amp;source=gmail&amp;ust=1697006005672000&amp;usg=AOvVaw0ICJiV4YVKBtcMTHD7gEiw"
+                                        {{!-- data-saferedirecturl="https://www.google.com/url?q=https://www.amazon.in/gp/css/gc/payment?ie%3DUTF8%26actionType%3Dadd%26claimCode%3D2D59-8TFXFS-H7P4%26ref_%3Dgc_ya_subnav_balance%26txtLeftButton%3DApplytoYourAccount&amp;source=gmail&amp;ust=1697006005672000&amp;usg=AOvVaw0ICJiV4YVKBtcMTHD7gEiw" --}}
                                       ><img
                                           border="0"
                                           alt="Add to Your Account"
