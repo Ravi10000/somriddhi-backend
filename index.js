@@ -96,7 +96,7 @@ app.get("/test-sms", async (req, res) => {
   try {
     const response = await sendVoucherSms("9560863067", {
       voucherCode: "SVAQ-TMDRD9-Z9D",
-      senderName: "Ravi",
+      // senderName: "Ravi",
       amount: "100",
       refId: "123456",
       link: "https://somriddhi.store",
