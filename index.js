@@ -62,14 +62,29 @@ app.get("/test-hbs", async (req, res) => {
     res.status(500).json({ status: "error", message: err.message });
   }
 });
-app.get("/test-email-template", (req, res) => {
+app.get("/test-email-template", async (req, res) => {
+  try {
+    const emailResponse = await sendVoucherEmail("ravisince2k@gmail.com", {
+      // layout: false,
+      name: "Ravi Sharma",
+      giftCardId: "6524e480b36fedcb858b64bd",
+      voucherCode: "SVAQ-TMDRD9-Z9D",
+      amount: "1000",
+      senderName: "Rocky Sharma",
+      validity: "2024/10/05",
+      orderId: "6524e47db36fedcb858b64bb",
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
   // res.send("email template");
   res.render("voucher-template-2", {
     layout: false,
     name: "Ravi Sharma",
     giftCardId: "6524e480b36fedcb858b64bd",
-    voucherCode: "SVAQ-TMDRD9-Z9M",
+    voucherCode: "SVAQ-TMDRD9-Z9D",
     amount: "1000",
+    senderName: "Rocky Sharma",
     validity: "2024/10/05",
     orderId: "6524e47db36fedcb858b64bb",
   });

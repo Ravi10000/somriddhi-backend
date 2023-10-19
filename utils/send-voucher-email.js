@@ -37,7 +37,7 @@ async function sendVoucherEmail(to, voucherDetails) {
     from: `Somriddhi.store <giftcard.order@somriddhidigital.com>`,
     to,
     subject: `Dear ${voucherDetails?.name} here is your Rs ${voucherDetails?.amount} Amazon Shopping Voucher`,
-    template: "voucher-template",
+    template: "voucher-template-2",
     context: voucherDetails, // voucherCode, amount, name, validity, giftCardId
   };
 

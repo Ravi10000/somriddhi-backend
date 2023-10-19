@@ -1,0 +1,615 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <table
+      border="0"
+      cellspacing="0"
+      cellpadding="0"
+      width="750"
+      style="width:562.5pt"
+    ><tbody><tr><td
+            style="border:solid #7f7f80 1.5pt;padding:0cm 0cm 0cm 0cm"
+          ><div align="center"><table
+                border="0"
+                cellspacing="0"
+                cellpadding="0"
+                width="100%"
+                style="width:100.0%"
+              ><tbody><tr><td
+                      style="background:#fbe4d5;padding:19.5pt 19.5pt 19.5pt 19.5pt"
+                    ><div align="center"><table
+                          border="0"
+                          cellspacing="0"
+                          cellpadding="0"
+                          width="100%"
+                          style="width:100.0%"
+                        ><tbody><tr><td
+                                style="background:white;padding:19.5pt 19.5pt 19.5pt 19.5pt"
+                              ><div align="center"><table
+                                    border="0"
+                                    cellspacing="0"
+                                    cellpadding="0"
+                                    width="100%"
+                                    style="width:100.0%"
+                                  ><tbody><tr><td
+                                          style="padding:0cm 0cm 0cm 0cm"
+                                        ><p class="MsoNormal"><span
+                                              style="font-size:10.0pt;font-family:&quot;Candara&quot;,sans-serif;color:#262626"
+                                            >
+                                              Hi
+                                              <strong><span
+                                                  style="font-family:&quot;Candara&quot;,sans-serif"
+                                                >{{name}},</span></strong><u
+                                              ></u><u></u></span>
+                                          </p>
+                                          {{#if senderName}}
+                                            <p class="MsoNormal"><span
+                                                style="font-size:10.0pt;font-family:&quot;Candara&quot;,sans-serif;color:#262626"
+                                              >
+                                                <strong><span
+                                                    style="font-family:&quot;Candara&quot;,sans-serif"
+                                                  >{{senderName}},</span></strong><u
+                                                ></u><u></u>
+                                                sent you an Amazon Shopping
+                                                Voucher</span>
+
+                                            </p>
+                                          {{/if}}
+
+                                        </td></tr><tr><td
+                                          style="padding:19.5pt 0cm 19.5pt 0cm"
+                                        >{{#unless senderName}}
+                                            <p class="MsoNormal"><span
+                                                style="font-size:10.0pt;font-family:&quot;Candara&quot;,sans-serif;color:#262626"
+                                              >We thank you for Shopping at
+                                              </span><span
+                                                style="font-size:10.0pt;font-family:&quot;Candara&quot;,sans-serif"
+                                              ><a
+                                                  href="https://somriddhi.store/"
+                                                  target="_blank"
+                                                  data-saferedirecturl="https://www.google.com/url?q=https://somriddhi.store/&amp;source=gmail&amp;ust=1697694845255000&amp;usg=AOvVaw25nkiMVmSVNx4bNgrQtCzU"
+                                                >https://somriddhi.store/</a>
+                                                <span style="color:#262626">for
+                                                  Amazon Shopping Voucher Gift
+                                                  Code.<u></u><u
+                                                  ></u></span></span></p>
+                                          {{/unless}}
+                                        </td></tr><tr><td
+                                          style="padding:0cm 0cm 0cm 0cm"
+                                        ><p class="MsoNormal"><b><span
+                                                style="font-size:10.0pt;font-family:&quot;Candara&quot;,sans-serif;color:#262626"
+                                              >Pls find below the Voucher
+                                                details:
+                                                <u></u><u
+                                                ></u></span></b></p></td></tr></tbody></table></div></td></tr><tr
+                            ><td
+                                style="background:#fbe4d5;padding:15.0pt 0cm 15.0pt 0cm"
+                              ></td></tr><tr><td
+                                style="padding:0cm 0cm 0cm 0cm;border-radius:10px"
+                              ><div align="center"><table
+                                    border="0"
+                                    cellspacing="0"
+                                    cellpadding="0"
+                                    width="100%"
+                                    style="width:100.0%"
+                                  ><tbody><tr><td
+                                          style="padding:0cm 0cm 11.25pt 0cm;border-radius:10px"
+                                        ><div align="center"><table
+                                              border="0"
+                                              cellspacing="0"
+                                              cellpadding="0"
+                                              width="100%"
+                                              style="width:100.0%"
+                                            ><tbody><tr><td
+                                                    style="border:solid #343539 1.0pt;border-bottom:solid #343539 3.0pt;background:white;padding:15.0pt 15.0pt 15.0pt 15.0pt"
+                                                  ><div align="center"><table
+                                                        border="0"
+                                                        cellspacing="0"
+                                                        cellpadding="0"
+                                                        width="100%"
+                                                        style="width:100.0%;background:white"
+                                                      ><tbody><tr><td
+                                                              style="background:#fbe4d5;padding:7.5pt 7.5pt 7.5pt 7.5pt"
+                                                            ><p
+                                                                class="MsoNormal"
+                                                                align="center"
+                                                                style="text-align:center"
+                                                              ><span
+                                                                  style="font-size:10.0pt;font-family:&quot;Candara&quot;,sans-serif;color:black"
+                                                                ><img
+                                                                    border="0"
+                                                                    width="243"
+                                                                    height="125"
+                                                                    style="width:2.5312in;height:1.302in"
+                                                                    id="m_-4703182018790284035m_3654740424060050989Picture_x0020_5"
+                                                                    src="https://mail.google.com/mail/u/0?ui=2&amp;ik=96da6c359d&amp;attid=0.0.1&amp;permmsgid=msg-f:1780071446309758254&amp;th=18b4158c981be52e&amp;view=fimg&amp;fur=ip&amp;sz=s0-l75-ft&amp;attbid=ANGjdJ96ibcSICiDsCwHu9xdEG0ROmQux2_-WtTyr_sBy64nzCOQJGjlfGyW5rrL73Pyeq0opGvGSTI0wgsUSiLei6lYq5Q__xk3wzvEUnBv6j-ty9WXgr9vYxR3fnI&amp;disp=emb&amp;realattid=18b415868004cff311"
+                                                                    data-image-whitelisted=""
+                                                                    class="CToWUd a6T"
+                                                                    data-bit="iit"
+                                                                    tabindex="0"
+                                                                  /><div
+                                                                    class="a6S"
+                                                                    dir="ltr"
+                                                                    style="opacity: 0.01; left: 903.438px; top: 567.422px;"
+                                                                  ><div
+                                                                      id=":u8"
+                                                                      class="T-I J-J5-Ji aQv T-I-ax7 L3 a5q"
+                                                                      role="button"
+                                                                      tabindex="0"
+                                                                      aria-label="Download attachment image001.png"
+                                                                      jslog="91252; u014N:cOuCgd,Kr2w4b,xr6bB; 4:WyIjbXNnLWY6MTc4MDA3MTQ0NjMwOTc1ODI1NCIsbnVsbCxbXSxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxbXSxbXSxbXSxudWxsLG51bGwsbnVsbCxudWxsLFtdXQ.."
+                                                                      data-tooltip-class="a1V"
+                                                                      jsaction="JIbuQc:.CLIENT"
+                                                                      data-tooltip="Download"
+                                                                    ><div
+                                                                        class="akn"
+                                                                      ><div
+                                                                          class="aSK J-J5-Ji aYr"
+                                                                        ></div></div></div><div
+                                                                      id=":u9"
+                                                                      class="T-I J-J5-Ji aQv T-I-ax7 L3 a5q"
+                                                                      role="button"
+                                                                      tabindex="0"
+                                                                      aria-label="Add attachment to Drive image001.png"
+                                                                      jslog="54185; u014N:xr6bB; 1:WyIjdGhyZWFkLWY6MTc4MDA3MTQ0NjMwOTc1ODI1NCIsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsW11d; 4:WyIjbXNnLWY6MTc4MDA3MTQ0NjMwOTc1ODI1NCIsbnVsbCxbXSxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxbXSxbXSxbXSxudWxsLG51bGwsbnVsbCxudWxsLFtdXQ..; 43:WyJpbWFnZS9wbmciLDUwMjkwXQ.."
+                                                                      data-tooltip-class="a1V"
+                                                                      jsaction="JIbuQc:.CLIENT"
+                                                                      data-tooltip="Add to Drive"
+                                                                    ><div
+                                                                        class="akn"
+                                                                      ><div
+                                                                          class="wtScjd J-J5-Ji aYr XG"
+                                                                        ><div
+                                                                            class="T-aT4"
+                                                                            style="display: none;"
+                                                                          ><div
+                                                                            ></div><div
+                                                                              class="T-aT4-JX"
+                                                                            ></div></div></div></div></div><div
+                                                                      id=":ua"
+                                                                      class="T-I J-J5-Ji aQv T-I-ax7 L3 a5q"
+                                                                      role="button"
+                                                                      tabindex="0"
+                                                                      aria-label="Save to Photos"
+                                                                      jslog="54186; u014N:xr6bB; 1:WyIjdGhyZWFkLWY6MTc4MDA3MTQ0NjMwOTc1ODI1NCIsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsW11d; 4:WyIjbXNnLWY6MTc4MDA3MTQ0NjMwOTc1ODI1NCIsbnVsbCxbXSxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxbXSxbXSxbXSxudWxsLG51bGwsbnVsbCxudWxsLFtdXQ..; 43:WyJpbWFnZS9wbmciLDUwMjkwXQ.."
+                                                                      data-tooltip-class="a1V"
+                                                                      jsaction="JIbuQc:.CLIENT"
+                                                                      data-tooltip="Save to Photos"
+                                                                    ><div
+                                                                        class="akn"
+                                                                      ><div
+                                                                          class="J-J5-Ji aYr akS"
+                                                                        ><div
+                                                                            class="T-aT4"
+                                                                            style="display: none;"
+                                                                          ><div
+                                                                            ></div><div
+                                                                              class="T-aT4-JX"
+                                                                            ></div></div></div></div></div></div></span><span
+                                                                  style="font-size:10.0pt;font-family:&quot;Candara&quot;,sans-serif"
+                                                                ><u></u><u
+                                                                  ></u></span></p></td><td
+                                                              style="padding:0cm 0cm 0cm 13.5pt"
+                                                            ><div
+                                                                align="center"
+                                                              ><table
+                                                                  border="0"
+                                                                  cellspacing="16"
+                                                                  cellpadding="0"
+                                                                  width="100%"
+                                                                  style="width:100.0%"
+                                                                ><tbody><tr><td
+                                                                        style="padding:0cm 0cm 0cm 0cm"
+                                                                      ><p
+                                                                          class="MsoNormal"
+                                                                        ><span
+                                                                            style="font-size:10.0pt;font-family:&quot;Candara&quot;,sans-serif;color:#262626"
+                                                                          >Voucher
+                                                                            Code:<u
+                                                                            ></u><u
+                                                                            ></u></span></p></td><td
+                                                                        style="padding:0cm 0cm 0cm 0cm"
+                                                                      ><p
+                                                                          class="MsoNormal"
+                                                                          align="right"
+                                                                          style="text-align:right"
+                                                                        ><strong
+                                                                          ><span
+                                                                              style="font-size:10.0pt;font-family:&quot;Candara&quot;,sans-serif;color:#262626"
+                                                                            >{{voucherCode}}</span></strong><b
+                                                                          ><span
+                                                                              style="font-size:10.0pt;font-family:&quot;Candara&quot;,sans-serif;color:#262626"
+                                                                            >
+                                                                              <u
+                                                                              ></u><u
+                                                                              ></u></span></b></p></td></tr><tr
+                                                                    ><td
+                                                                        style="padding:0cm 0cm 0cm 0cm"
+                                                                      ><p
+                                                                          class="MsoNormal"
+                                                                        ><span
+                                                                            style="font-size:10.0pt;font-family:&quot;Candara&quot;,sans-serif;color:#262626"
+                                                                          >Face
+                                                                            Value:<u
+                                                                            ></u><u
+                                                                            ></u></span></p></td><td
+                                                                        style="padding:0cm 0cm 0cm 0cm"
+                                                                      ><p
+                                                                          class="MsoNormal"
+                                                                          align="right"
+                                                                          style="text-align:right"
+                                                                        ><strong
+                                                                          ><span
+                                                                              style="font-size:10.0pt;font-family:&quot;Candara&quot;,sans-serif;color:#262626"
+                                                                            >Rs.{{amount}}</span></strong><b
+                                                                          ><span
+                                                                              style="font-size:10.0pt;font-family:&quot;Candara&quot;,sans-serif;color:#262626"
+                                                                            >
+                                                                              <u
+                                                                              ></u><u
+                                                                              ></u></span></b></p></td></tr><tr
+                                                                    ><td
+                                                                        style="padding:0cm 0cm 0cm 0cm"
+                                                                      ><p
+                                                                          class="MsoNormal"
+                                                                        ><span
+                                                                            style="font-size:10.0pt;font-family:&quot;Candara&quot;,sans-serif;color:#262626"
+                                                                          >Valid
+                                                                            Till:<u
+                                                                            ></u><u
+                                                                            ></u></span></p></td><td
+                                                                        style="padding:0cm 0cm 0cm 0cm"
+                                                                      ><p
+                                                                          class="MsoNormal"
+                                                                          align="right"
+                                                                          style="text-align:right"
+                                                                        ><strong
+                                                                          ><span
+                                                                              style="font-size:10.0pt;font-family:&quot;Candara&quot;,sans-serif;color:#262626"
+                                                                            >{{validity}}</span></strong><b
+                                                                          ><span
+                                                                              style="font-size:10.0pt;font-family:&quot;Candara&quot;,sans-serif;color:#262626"
+                                                                            >
+                                                                              <u
+                                                                              ></u><u
+                                                                              ></u></span></b></p></td></tr><tr
+                                                                    ><td
+                                                                        style="padding:0cm 0cm 0cm 0cm"
+                                                                      ><p
+                                                                          class="MsoNormal"
+                                                                        ><span
+                                                                            style="font-size:10.0pt;font-family:&quot;Candara&quot;,sans-serif;color:#262626"
+                                                                          >GCID:<u
+                                                                            ></u><u
+                                                                            ></u></span></p></td><td
+                                                                        style="padding:0cm 0cm 0cm 0cm"
+                                                                      >
+                                                                      <p
+                                                                          class="MsoNormal"
+                                                                          align="right"
+                                                                          style="text-align:right"
+                                                                        ><strong
+                                                                          ><span
+                                                                              style="font-size:10.0pt;font-family:&quot;Candara&quot;,sans-serif;color:#262626"
+                                                                            >{{giftCardId}}</span></strong><b
+                                                                          ><span
+                                                                              style="font-size:10.0pt;font-family:&quot;Candara&quot;,sans-serif;color:#262626"
+                                                                            >
+                                                                              <u
+                                                                              ></u><u
+                                                                              ></u></span></b></p></td></tr></tbody></table></div></td></tr></tbody></table></div></td></tr></tbody></table></div></td></tr></tbody></table></div></td></tr></tbody></table></div><p
+                        class="MsoNormal"
+                        align="center"
+                        style="text-align:center"
+                      ><u></u><span
+                          style="margin-left:290px;margin-top:4px;width:116px;height:54px"
+                        ><img
+                            width="116"
+                            height="54"
+                            style="width:1.2083in;height:.5625in"
+                            src="https://ci3.googleusercontent.com/proxy/ghaagC-53MOGFCwQDJRd4KPZrSOYJOlkUgY3tJkdEcR-c8QoFdH6P4ima6DZcSR1GOj4TlfCqyLsl1h_Re5rHnytImf8u8lvpgDnKLWQb1hae2MBsG8k4aB7uB1_P_f0b7TKO6ZQBK479w=s0-d-e1-ft#https://cdn.gyftr.com/comm_engine/prod/images/brands/1669006619452_1sahoic5laqbg5ks.png"
+                            alt="Amazon Shopping Voucher"
+                            class="CToWUd"
+                            data-bit="iit"
+                          /></span><u></u><u></u><u></u></p></td></tr><tr><td
+                      style="background:#fbe4d5;padding:18.0pt 18.0pt 18.0pt 18.0pt"
+                    ><table
+                        border="0"
+                        cellspacing="0"
+                        cellpadding="0"
+                        width="100%"
+                        style="width:100.0%;background:white"
+                      ><tbody><tr><td style="padding:0cm 0cm 3.75pt 0cm"><p
+                                class="MsoNormal"
+                              ><b><span
+                                    style="font-size:10.0pt;font-family:&quot;Candara&quot;,sans-serif;color:#262626"
+                                  >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></b><b
+                                ><span
+                                    style="font-size:10.0pt;font-family:&quot;Candara&quot;,sans-serif"
+                                  ><u></u><u></u></span></b></p><p
+                                class="MsoNormal"
+                              ><b><span
+                                    style="font-size:10.0pt;font-family:&quot;Candara&quot;,sans-serif;color:black"
+                                  >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></b><b
+                                ><span
+                                    style="font-size:10.0pt;font-family:&quot;Candara&quot;,sans-serif;color:#262626"
+                                  >Important Instructions
+                                    <u></u><u></u></span></b></p></td></tr><tr
+                          ><td style="padding:0cm 0cm 0cm 0cm"><table
+                                border="0"
+                                cellspacing="0"
+                                cellpadding="0"
+                                width="100%"
+                                style="width:100.0%"
+                              ><tbody><tr><td
+                                      valign="top"
+                                      style="padding:0cm 0cm 0cm 0cm"
+                                    ><ul type="disc"><li
+                                          class="MsoNormal"
+                                          style="color:#262626"
+                                        ><span
+                                            style="font-size:8.0pt;font-family:&quot;Candara&quot;,sans-serif"
+                                          >Amazon Shopping Voucher can be
+                                            redeemed online at
+                                            <a
+                                              href="http://delivery.gyftr.com/KJHVAN?id=77635=Jh1UAVQGBgUASABVAlBSAQRUBQRSDFVWBVMHUwEEAAZTVFYFUgkDAAcDBlRRU1VUAAkfBA9TXghQClcLQ3IGCQQICB8AXl1KBAIMV1VSBl0BAlVQUAoDVAMfWBZEQltLSgUBXQpHVURMGlIYBRdDSlVeDkotcnkwdS0PC1ROF1c=&amp;fl=DRUQQRALHxlCQ0JPAg5QHllfTQwIF0cJQQBYB0JB"
+                                              target="_blank"
+                                              data-saferedirecturl="https://www.google.com/url?q=http://delivery.gyftr.com/KJHVAN?id%3D77635%3DJh1UAVQGBgUASABVAlBSAQRUBQRSDFVWBVMHUwEEAAZTVFYFUgkDAAcDBlRRU1VUAAkfBA9TXghQClcLQ3IGCQQICB8AXl1KBAIMV1VSBl0BAlVQUAoDVAMfWBZEQltLSgUBXQpHVURMGlIYBRdDSlVeDkotcnkwdS0PC1ROF1c%3D%26fl%3DDRUQQRALHxlCQ0JPAg5QHllfTQwIF0cJQQBYB0JB&amp;source=gmail&amp;ust=1697694845255000&amp;usg=AOvVaw0Lzi_Pbl4g4YwM2eVTxoQF"
+                                            >www.amazon.in/vouchers</a><u></u><u
+                                            ></u></span></li><li
+                                          class="MsoNormal"
+                                          style="color:#262626"
+                                        ><span
+                                            style="font-size:8.0pt;font-family:&quot;Candara&quot;,sans-serif"
+                                          >Amazon Shopping Voucher can be used
+                                            to buy discounted products.<u></u><u
+                                            ></u></span></li><li
+                                          class="MsoNormal"
+                                          style="color:#262626"
+                                        ><span
+                                            style="font-size:8.0pt;font-family:&quot;Candara&quot;,sans-serif"
+                                          >Amazon Shopping Voucher balance can
+                                            be used multiple times.<u></u><u
+                                            ></u></span></li><li
+                                          class="MsoNormal"
+                                          style="color:#262626"
+                                        ><span
+                                            style="font-size:8.0pt;font-family:&quot;Candara&quot;,sans-serif"
+                                          >Amazon Shopping Voucher is NOT
+                                            ELIGIBLE for the following shopping
+                                            transactions on &amp; off Amazon:
+                                            <u></u><u></u></span></li><ul
+                                          type="circle"
+                                        ><li
+                                            class="MsoNormal"
+                                            style="color:#262626"
+                                          ><span
+                                              style="font-size:8.0pt;font-family:&quot;Candara&quot;,sans-serif"
+                                            >Purchase of Kindle eBooks<u></u><u
+                                              ></u></span></li><li
+                                            class="MsoNormal"
+                                            style="color:#262626"
+                                          ><span
+                                              style="font-size:8.0pt;font-family:&quot;Candara&quot;,sans-serif"
+                                            >Purchase of Pharma, Amazon Fresh
+                                              products.<u></u><u
+                                              ></u></span></li><li
+                                            class="MsoNormal"
+                                            style="color:#262626"
+                                          ><span
+                                              style="font-size:8.0pt;font-family:&quot;Candara&quot;,sans-serif"
+                                            >Purchase of Digital Content like
+                                              e-Books, Video Games<u></u><u
+                                              ></u></span></li><li
+                                            class="MsoNormal"
+                                            style="color:#262626"
+                                          ><span
+                                              style="font-size:8.0pt;font-family:&quot;Candara&quot;,sans-serif"
+                                            >Purchase of Amazon Pay Gift Cards
+                                              or Adding Money to Amazon Pay
+                                              Balance<u></u><u
+                                              ></u></span></li><li
+                                            class="MsoNormal"
+                                            style="color:#262626"
+                                          ><span
+                                              style="font-size:8.0pt;font-family:&quot;Candara&quot;,sans-serif"
+                                            >Purchase of Brand Gift Cards that
+                                              are designated Semi-Closed
+                                              Loop(SCLP) Instruments under PPI
+                                              Master Direction<u></u><u
+                                              ></u></span></li><li
+                                            class="MsoNormal"
+                                            style="color:#262626"
+                                          ><span
+                                              style="font-size:8.0pt;font-family:&quot;Candara&quot;,sans-serif"
+                                            >Transaction outside of Amazon.in
+                                              where Amazon Pay is a payment
+                                              option.<u></u><u
+                                              ></u></span></li><li
+                                            class="MsoNormal"
+                                            style="color:#262626"
+                                          ><span
+                                              style="font-size:8.0pt;font-family:&quot;Candara&quot;,sans-serif"
+                                            >Transaction on any Amazon Pay
+                                              Categories including and not
+                                              limited to(including future Pay
+                                              categories available on Amazon Pay
+                                              Dashboard):<u></u><u
+                                              ></u></span></li><li
+                                            class="MsoNormal"
+                                            style="color:#262626"
+                                          ><span
+                                              style="font-size:8.0pt;font-family:&quot;Candara&quot;,sans-serif"
+                                            >Recharges: Mobile, DTH, Google
+                                              Play, FastTag, Metro Bill Payments
+                                              Ticket Bookings: Flight, Train,
+                                              Movies, Bus Investments &amp;
+                                              Insurance Utilities: Gas
+                                              Cylinders, Piped Gas,
+                                              Subscriptions, Cable TV etc.<u
+                                              ></u><u
+                                              ></u></span></li></ul></ul></td></tr></tbody></table></td></tr></tbody></table></td></tr><tr
+                  ><td style="padding:18.0pt 18.0pt 18.0pt 18.0pt"><table
+                        border="0"
+                        cellspacing="0"
+                        cellpadding="0"
+                        width="100%"
+                        style="width:100.0%"
+                      ><tbody><tr><td style="padding:0cm 0cm 3.75pt 0cm"><p
+                                class="MsoNormal"
+                              ><b><span
+                                    style="font-size:8.0pt;font-family:&quot;Candara&quot;,sans-serif;color:#262626"
+                                  >Terms &amp; Conditions
+                                    <u></u><u></u></span></b></p></td></tr><tr
+                          ><td style="padding:0cm 7.5pt 0cm 7.5pt"><table
+                                border="0"
+                                cellspacing="0"
+                                cellpadding="0"
+                                width="100%"
+                                style="width:100.0%"
+                              ><tbody><tr><td
+                                      valign="top"
+                                      style="padding:0cm 0cm 0cm 0cm"
+                                    ><p class="MsoNormal"><span
+                                          style="font-size:8.0pt;font-family:&quot;Candara&quot;,sans-serif"
+                                        >1.These terms and conditions apply to
+                                          all Voucher datasets listed in
+                                          Paragraph below hereto (together,
+                                          "Vouchers") issued by Pine Labs
+                                          Private Limited (Pine Labs) under the
+                                          Brand Name of Qwikcilver and
+                                          co-branded with Amazon Pay (India)
+                                          Private Limited ("Amazon Pay"). The
+                                          Vouchers are semi-closed loop prepaid
+                                          gift instruments. Pine Labs is a
+                                          private limited company organized
+                                          under the laws of India and is the
+                                          issuer of the Vouchers. You may
+                                          purchase the Vouchers through various
+                                          options available on
+                                          <a
+                                            href="http://www.amazon.in"
+                                            target="_blank"
+                                            data-saferedirecturl="https://www.google.com/url?q=http://www.amazon.in&amp;source=gmail&amp;ust=1697694845255000&amp;usg=AOvVaw2Mh8Z6KqfWg4VI00Pa302_"
+                                          >www.amazon.in</a>, and also use
+                                          Vouchers provided to you by third
+                                          parties in the manner provided
+                                          hereunder. By purchasing or using a
+                                          Voucher, you are agreeing to and
+                                          accept these terms and conditions.
+                                          <br />2.Amazon Shopping Voucher -
+                                          Eligibility terms:
+                                          <br />2.1 Can be used to purchase
+                                          physical products from
+                                          <a
+                                            href="http://www.amazon.in"
+                                            target="_blank"
+                                            data-saferedirecturl="https://www.google.com/url?q=http://www.amazon.in&amp;source=gmail&amp;ust=1697694845255000&amp;usg=AOvVaw2Mh8Z6KqfWg4VI00Pa302_"
+                                          >www.amazon.in</a>
+                                          <br />2.2 Is not applicable for
+                                          purchase of digital contents like
+                                          e-books, video games .<br />2.3 Is not
+                                          applicable on global store, recharges,
+                                          bill payments, ticket booking and
+                                          financial products .<br />2.4 Is not
+                                          eligible to buy Amazon Pay gift cards.
+                                          <br />2.5 Cannot be used to pay for
+                                          mixed item order if the order has at
+                                          least one non-eligible item.
+                                          <br />2.6 Cannot be used to purchase
+                                          prescription drugs and fresh products.
+                                          <br />2.7 For more details refer to
+                                          Shopping voucher eligibility.<br
+                                          />3.For more details please visit the
+                                          link below:
+                                          <a
+                                            href="https://www.amazon.in/gp/help/customer/display.html?nodeId=GT4BFAMD9JJJCMSK"
+                                            target="_blank"
+                                            data-saferedirecturl="https://www.google.com/url?q=https://www.amazon.in/gp/help/customer/display.html?nodeId%3DGT4BFAMD9JJJCMSK&amp;source=gmail&amp;ust=1697694845255000&amp;usg=AOvVaw35b3eMbDtr5F0toylBt5bN"
+                                          >https://www.amazon.in/gp/help/<wbr
+                                            />customer/display.html?nodeId=<wbr
+                                            />GT4BFAMD9JJJCMSK</a>"
+                                          <br />4.For any queries related to GV
+                                          / GC, raise a request at
+                                          <a
+                                            href="https://somriddhi.store/terms-and-conditions"
+                                            target="_blank"
+                                            data-saferedirecturl="https://www.google.com/url?q=https://somriddhi.store/terms-and-conditions&amp;source=gmail&amp;ust=1697694845255000&amp;usg=AOvVaw1x8SkdWCbrch1Gg9QHhc3W"
+                                          >https://somriddhi.store/terms-<wbr
+                                            />and-conditions</a><u></u><u
+                                          ></u></span></p></td></tr></tbody></table></td></tr></tbody></table></td></tr><tr
+                  ><td
+                      style="background:black;padding:0cm 0cm 0cm 0cm"
+                    ></td></tr><tr style="height:26.35pt"><td
+                      style="background:#fbe4d5;padding:22.5pt 0cm 22.5pt 0cm;height:26.35pt"
+                    ><p
+                        class="MsoNormal"
+                        align="center"
+                        style="text-align:center"
+                      ><u></u><span
+                          style="margin-left:370px;margin-top:42px;width:48px;height:48px"
+                        ><a
+                            href="https://www.linkedin.com/company/somriddhi-digital-private-limited/"
+                            target="_blank"
+                            data-saferedirecturl="https://www.google.com/url?q=https://www.linkedin.com/company/somriddhi-digital-private-limited/&amp;source=gmail&amp;ust=1697694845255000&amp;usg=AOvVaw3gw91XeTvaVMehZQn1-gJo"
+                          ><img
+                              border="0"
+                              width="48"
+                              height="48"
+                              style="width:.5in;height:.5in"
+                              src="https://ci5.googleusercontent.com/proxy/iukZWu7UtZ_6pbS2tKN5-OZr1CGopDNx5v-bp788o0f5O0aRTaKoczA9odjhqZAFjfG2kUHL_2BiLn-yMGCRQhGP430uYMvbDVS4Bg=s0-d-e1-ft#https://cdn.gyftr.com/vouchermailers/gyftr-gv/linkdin.png"
+                              title=""
+                              class="CToWUd"
+                              data-bit="iit"
+                            /></a></span><u></u><u></u><span
+                          style="margin-left:316px;margin-top:41px;width:48px;height:48px"
+                        ><a
+                            href="https://www.facebook.com/aessdpl/"
+                            target="_blank"
+                            data-saferedirecturl="https://www.google.com/url?q=https://www.facebook.com/aessdpl/&amp;source=gmail&amp;ust=1697694845255000&amp;usg=AOvVaw1e962N4RiZMWfxMGdxQSd8"
+                          ><img
+                              border="0"
+                              width="48"
+                              height="48"
+                              style="width:.5in;height:.5in"
+                              src="https://ci3.googleusercontent.com/proxy/plgabkbQQhAHzbbLFTPZYec8lsvmHa0k9INQOz54K3YXnVSoHcojnkF9NwNlKx5atp4IYhGGE4HGYaDB1f0mO2zvj62dSXuHyn5W28M=s0-d-e1-ft#https://cdn.gyftr.com/vouchermailers/gyftr-gv/facebook.png"
+                              title=""
+                              class="CToWUd"
+                              data-bit="iit"
+                            /></a></span><u></u><span
+                          style="font-size:10.0pt;font-family:&quot;Candara&quot;,sans-serif;color:#343539;letter-spacing:.75pt"
+                        >Get Latest Updates
+                          <br />&amp; Discounts | Follow Us On<u></u><u
+                          ></u></span></p></td></tr><tr><td
+                      style="background:#fbe4d5;padding:0cm 0cm 22.5pt 0cm"
+                    ></td></tr><tr><td
+                      style="background:white;padding:7.5pt 6.0pt 7.5pt 6.0pt"
+                    ><p class="MsoNormal"><u></u><span><span
+                            style="width:111px;height:43px"
+                          ><a
+                              href="https://somriddhi.store/"
+                              target="_blank"
+                              data-saferedirecturl="https://www.google.com/url?q=https://somriddhi.store/&amp;source=gmail&amp;ust=1697694845255000&amp;usg=AOvVaw25nkiMVmSVNx4bNgrQtCzU"
+                            ><img
+                                border="0"
+                                width="111"
+                                height="43"
+                                style="width:1.1562in;height:.4479in"
+                                src="https://mail.google.com/mail/u/0?ui=2&amp;ik=96da6c359d&amp;attid=0.0.2&amp;permmsgid=msg-f:1780071446309758254&amp;th=18b4158c981be52e&amp;view=fimg&amp;fur=ip&amp;sz=s0-l75-ft&amp;attbid=ANGjdJ8ov8M41mS1wuMHVbYtme8Tt14QcR7d3rhilvd2N2OP764CRBHFup0HVQ9C8hVulPFLRhpuRINNfNnYIhPFt5QjxgBwuSXH13m4rX7pycdOObSqSFTdid1ryJw&amp;disp=emb&amp;realattid=18b41586800692e332"
+                                alt="logo"
+                                title=""
+                                data-image-whitelisted=""
+                                class="CToWUd"
+                                data-bit="iit"
+                              /></a></span></span><u></u><span
+                          style="font-size:10.0pt;font-family:&quot;Candara&quot;,sans-serif"
+                        ><u></u><u></u></span></p><p class="MsoNormal"><span
+                          style="font-size:9.0pt;font-family:&quot;Tahoma&quot;,sans-serif"
+                        ><u></u>&nbsp;<u
+                          ></u></span></p></td></tr></tbody></table></div></td></tr></tbody></table>
+  </body>
+</html>
