@@ -135,6 +135,7 @@ app.use("/api", require("./route/payment"));
 app.use("/api", require("./route/transaction.route"));
 app.use("/api", require("./route/phone-pe.route"));
 app.use("/api", require("./route/sent-giftcard.route"));
+app.use("/api", require("./route/giftcard-discount.route"));
 
 mongoose.connect(process.env.MONGO_URL);
 
