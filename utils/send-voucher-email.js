@@ -26,12 +26,12 @@ async function sendVoucherEmail(to, voucherDetails) {
   // });
   const handlebarOptions = {
     viewEngine: {
-      extName: ".handlebar",
+      extName: ".hbs",
       partialsDir: path.resolve(path.dirname(__dirname), "views", "partials"),
       defaultLayout: false,
     },
     viewPath: path.resolve(path.dirname(__dirname), "views"),
-    extName: ".handlebar",
+    extName: ".hbs",
   };
   transporter.use("compile", hbs(handlebarOptions));
 

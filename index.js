@@ -19,8 +19,8 @@ var certificate = fs.readFileSync("api_somriddhi_store.crt", "utf8");
 
 var credentials = { key: privateKey, cert: certificate };
 
-app.engine("handlebar", engine());
-app.set("view engine", "handlebar");
+app.engine("hbs", engine());
+app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "views"));
 
 app.use("/public", express.static(__dirname + "/public"));
@@ -70,10 +70,11 @@ app.get("/test-email-template", async (req, res) => {
       giftCardId: "6524e480b36fedcb858b64bd",
       voucherCode: "SVAQ-TMDRD9-Z9D",
       amount: "1000",
-      // senderName: "Rocky Sharma",
+      senderName: "Rocky Sharma",
       validity: "2024/10/05",
       orderId: "6524e47db36fedcb858b64bb",
     });
+    console.log({ emailResponse });
   } catch (err) {
     console.error(err.message);
   }
