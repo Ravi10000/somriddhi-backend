@@ -26,15 +26,17 @@ module.exports.sendGiftcard = async (req, res, next) => {
       });
 
     const activatedCardRes = JSON.parse(giftcard?.activatedCardRes);
-    let voucher = activatedCardRes?.data?.cards?.[0];
+    let voucher = activatedCardRes?.cards?.[0];
     let voucherDetails = {
       name: receiverName,
+      senderName,
       giftCardId: giftcard?._id,
       amount: voucher?.amount,
       voucherCode: voucher?.cardPin,
       validity: moment(voucher?.validity).format("YYYY/MM/DD"),
       orderId: giftcard?.transaction,
     };
+    console.log({ voucherDetails });
     await sendVoucherEmail(receiverEmail, voucherDetails);
     const sentGiftCard = await SentGiftcard.create({
       senderName,
