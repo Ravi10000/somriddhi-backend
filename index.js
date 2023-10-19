@@ -70,7 +70,7 @@ app.get("/test-email-template", async (req, res) => {
       giftCardId: "6524e480b36fedcb858b64bd",
       voucherCode: "SVAQ-TMDRD9-Z9D",
       amount: "1000",
-      senderName: "Rocky Sharma",
+      // senderName: "Rocky Sharma",
       validity: "2024/10/05",
       orderId: "6524e47db36fedcb858b64bb",
     });
