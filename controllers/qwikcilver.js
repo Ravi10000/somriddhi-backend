@@ -9,6 +9,7 @@ const path = require("path");
 const User = require("../models/User");
 const Transaction = require("../models/Transaction.model");
 const sendVoucherEmail = require("../utils/send-voucher-email");
+const { sendVoucherSms } = require("../utils/send-voucher-sms");
 
 const categoryUrl = `${process.env.QWIK_BASEURL}/rest/v3/catalog/categories`;
 //const productUrl = `${process.env.QWIK_BASEURL}/rest/v3/catalog/categories/330/products/";
@@ -305,6 +306,7 @@ exports.addGiftCardOrder = async (req, res) => {
                 orderId: transaction?._id,
               };
               await sendVoucherEmail(transaction?.email, voucherDetails);
+              await sendVoucherSms(transaction?.mobile, voucherDetails);
             }
 
             // TODO: extract voucher details from activatedCardResponse.data
@@ -366,6 +368,7 @@ exports.addGiftCardOrder = async (req, res) => {
               orderId: transaction?._id,
             };
             await sendVoucherEmail(transaction?.email, voucherDetails);
+            await sendVoucherSms(transaction?.mobile, voucherDetails);
           }
 
           return res.status(200).json({
@@ -420,6 +423,7 @@ exports.addGiftCardOrder = async (req, res) => {
             orderId: transaction?._id,
           };
           await sendVoucherEmail(transaction?.email, voucherDetails);
+          await sendVoucherSms(transaction?.mobile, voucherDetails);
         }
 
         return res.status(200).json({
@@ -502,6 +506,7 @@ exports.addGiftCardOrder = async (req, res) => {
           orderId: transaction?._id,
         };
         await sendVoucherEmail(transaction?.email, voucherDetails);
+        await sendVoucherSms(transaction?.mobile, voucherDetails);
       }
 
       return res.status(200).json({

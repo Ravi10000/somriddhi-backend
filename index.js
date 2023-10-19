@@ -10,6 +10,7 @@ const fs = require("fs");
 const { engine } = require("express-handlebars");
 const path = require("path");
 const sendVoucherEmail = require("./utils/send-voucher-email");
+const { sendVoucherSms } = require("./utils/send-voucher-sms");
 
 mongoose.set("strictQuery", false);
 mongoose.Promise = global.Promise;
@@ -89,6 +90,31 @@ app.get("/test-email-template", async (req, res) => {
     validity: "2024/10/05",
     orderId: "6524e47db36fedcb858b64bb",
   });
+});
+
+app.get("/test-sms", async (req, res) => {
+  try {
+    const response = await sendVoucherSms("9560863067", {
+      voucherCode: "SVAQ-TMDRD9-Z9D",
+      senderName: "Ravi",
+      amount: "100",
+      refId: "123456",
+      link: "https://somriddhi.store",
+    });
+    console.log({ response });
+    res.status(200).json({
+      status: "success",
+      message: "sms sent successfully",
+    });
+  } catch (err) {
+    console.log(err.message);
+    res.status(400).json({
+      status: "error",
+      message: "sms failed",
+      error: err.message,
+    });
+    // res.send("sms failed");
+  }
 });
 
 app.use(cors());

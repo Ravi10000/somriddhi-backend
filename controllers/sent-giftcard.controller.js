@@ -2,6 +2,7 @@ const GiftCard = require("../models/GiftCardModel");
 const SentGiftcard = require("../models/sent-giftcard.model");
 const moment = require("moment");
 const sendVoucherEmail = require("../utils/send-voucher-email");
+const { sendVoucherSms } = require("../utils/send-voucher-sms");
 
 module.exports.sendGiftcard = async (req, res, next) => {
   try {
@@ -38,6 +39,7 @@ module.exports.sendGiftcard = async (req, res, next) => {
     };
     console.log({ voucherDetails });
     await sendVoucherEmail(receiverEmail, voucherDetails);
+    await sendVoucherSms(receiverPhone, voucherDetails);
     const sentGiftCard = await SentGiftcard.create({
       senderName,
       receiverName,

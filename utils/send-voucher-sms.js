@@ -1,5 +1,6 @@
 const axios = require("axios");
-module.exports.sendVoucherSms = async ({ phone, voucherDetails }) => {
+require("dotenv").config();
+module.exports.sendVoucherSms = async (phone, voucherDetails) => {
   const options = {
     method: "POST",
     url: process.env.SMS_URL,
@@ -11,18 +12,15 @@ module.exports.sendVoucherSms = async ({ phone, voucherDetails }) => {
     data: JSON.stringify({
       template_id: process.env.SMS_VOUCHER_TEMPLATE_ID, // TODO: check with template
       mobiles: "91" + phone,
-      sender: process.env.SMS_VOUCHER_SENDER_ID,
       short_url: "1",
-      receiver_name: "",
-      sender_name: "",
-      ref_id: "",
-      gift_card_code: "",
-      amount: "",
-      validity: "",
-      link: "",
+      sender: process.env.SMS_VOUCHER_SENDER_ID,
+      var: voucherDetails?.voucherCode, //voucher code
+      var1: voucherDetails.name, //sender name
+      var2: voucherDetails?.giftCardId, // ref id / no
+      var3: voucherDetails?.amount, // amount
+      var4: `https://www.amazon.in/apay-products/apv/landing?voucherCode=${voucherDetails?.voucherCode}`, // link
     }),
   };
-
   try {
     const response = await axios.request(options);
     return response;
@@ -32,9 +30,4 @@ module.exports.sendVoucherSms = async ({ phone, voucherDetails }) => {
   }
 };
 
-`##receiver_name##, "sender_name" has sent you an Amazon Pay E-Gift Card. 
-Reference ID - ##ref_id##, 
-Gift Card Code - ##gift_card_code##,
- Amount - Rs ##amount##.00, 
-Validity - ##validity##. Click ##link## to 
-add it to your account. - Team Somriddhi`;
+// ##var1## has sent you a Amazon Shopping Voucher. Ref ID - ##var2##, SVC Code - ##var##, Amount - Rs##var3##, . Click link ##var4## to access your purchased vouchers - Team somriddhi.store -SOMRIDDHI
