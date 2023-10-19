@@ -13,6 +13,9 @@ module.exports.sendGiftcard = async (req, res, next) => {
       receiverEmail,
       giftcard: giftcardId,
     } = req.body;
+
+    console.log({ body: req.body });
+
     const user = req?.user?._id;
     if (!user)
       return res.status(400).json({
