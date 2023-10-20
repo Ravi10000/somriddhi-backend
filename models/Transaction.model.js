@@ -7,6 +7,10 @@ const transactionSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    discountedAmount: {
+      type: Number,
+      default: 0,
+    },
     amount: {
       type: Number,
       required: true,

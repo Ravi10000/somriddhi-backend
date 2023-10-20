@@ -2,6 +2,7 @@ const express = require("express");
 const validateReq = require("../middleware/validate-req");
 const {
   manageGiftcardDiscount,
+  fetchDiscount,
 } = require("../controllers/giftcard-discount.controller");
 const { body } = require("express-validator");
 const { fetchuser, isAdmin } = require("../middleware/Auth");
@@ -10,7 +11,7 @@ const router = express.Router();
 router.post(
   "/giftcard/discount",
   fetchuser,
-    // isAdmin,
+  isAdmin,
   [
     body("discountPercentage")
       .isNumeric()
@@ -22,8 +23,6 @@ router.post(
   manageGiftcardDiscount
 );
 
-router.get("/giftcard/discount", (req, res)=>{
-    res.send("heoo")
-})
+router.get("/giftcard/discount", fetchDiscount);
 
 module.exports = router;

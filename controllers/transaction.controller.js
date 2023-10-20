@@ -21,7 +21,7 @@ exports.createTransaction = async (req, res) => {
         "merchantId": "${process.env.PHONEPE_PAY_MERCHANT_ID}",
         "merchantTransactionId": "${transaction._id}",
         "merchantUserId": "${req.user._id}",
-        "amount": ${parseInt(req.body.amount) * 100},
+        "amount": ${parseFloat(req.body.discountedAmount) * 100},
         "redirectUrl": "${process.env.PHONEPE_PAY_REDIRECT_URL}/${
         transaction?._id
       }",

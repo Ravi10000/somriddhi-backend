@@ -1,6 +1,5 @@
 const axios = require("axios");
 require("dotenv").config();
-// console.log(process.env.SMS_VOUCHER_TEMPLATE_ID);
 module.exports.sendVoucherSms = async (phone, voucherDetails) => {
   console.log({ phone, voucherDetails });
   if (!voucherDetails?.senderName) voucherDetails.senderName = "Somriddhi";
@@ -27,7 +26,6 @@ module.exports.sendVoucherSms = async (phone, voucherDetails) => {
   };
   try {
     const response = await axios.request(options);
-    // console.log({ response: response });
     return response;
   } catch (error) {
     console.error(error);

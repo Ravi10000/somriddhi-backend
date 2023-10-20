@@ -2,10 +2,7 @@ const { createTransport } = require("nodemailer");
 const hbs = require("nodemailer-express-handlebars");
 const path = require("path");
 require("dotenv").config();
-// console.log(path.resolve(path.dirname(__dirname), "views"));
-console.log(process.env.SMTP_HOST);
-console.log(process.env.SMTP_USERNAME);
-console.log(process.env.SMTP_PASSWORD);
+
 async function sendVoucherEmail(to, voucherDetails) {
   const transporter = createTransport({
     host: process.env.SMTP_HOST, // TODO: add emailer creds in env
