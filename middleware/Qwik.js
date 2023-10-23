@@ -11,7 +11,7 @@ function delay(time) {
   return new Promise((resolve) => setTimeout(resolve, time));
 }
 
-exports.generateAccessToken = async (req, res, next) => {
+module.exports.generateAccessToken = async (req, res, next) => {
   fs.readFile(tokenFilePath, "utf8", async function (err, data) {
     console.log({ tokenFilePath, data });
     if (err) console.log({ "error while reading token": err?.message });
@@ -36,8 +36,8 @@ exports.generateAccessToken = async (req, res, next) => {
           password: process.env.QWIK_PASSWORD,
         }),
       };
-      var verifyResponse = await axios.request(verifyOptions);
-      var authCode = verifyResponse.data["authorizationCode"];
+      let verifyResponse = await axios.request(verifyOptions);
+      let authCode = verifyResponse.data["authorizationCode"];
       console.log("AuthCode", verifyResponse.data, verifyOptions);
 
       //then call token api
@@ -55,8 +55,8 @@ exports.generateAccessToken = async (req, res, next) => {
         }),
       };
 
-      var codeResponse = await axios.request(codeOptions);
-      var authToken = codeResponse.data["token"];
+      let codeResponse = await axios.request(codeOptions);
+      let authToken = codeResponse.data["token"];
       console.log("authToken", codeResponse.data, codeOptions);
       fs.writeFile(tokenFilePath, authToken, async function (err) {
         console.log("Error while saving file: ", err);
@@ -71,6 +71,7 @@ exports.generateAccessToken = async (req, res, next) => {
   });
 };
 
+module.exports.tokenFilePath = tokenFilePath;
 // function isTokenValid(tokenData) {
 //   const currentDate = new Date().valueOf();
 //   const tokenExpiryDate = new Date(tokenData[".expires"]).valueOf();

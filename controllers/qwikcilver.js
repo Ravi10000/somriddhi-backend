@@ -10,6 +10,7 @@ const User = require("../models/User");
 const Transaction = require("../models/Transaction.model");
 const sendVoucherEmail = require("../utils/send-voucher-email");
 const { sendVoucherSms } = require("../utils/send-voucher-sms");
+const { tokenFilePath } = require("../middleware/Qwik");
 
 const categoryUrl = `${process.env.QWIK_BASEURL}/rest/v3/catalog/categories`;
 //const productUrl = `${process.env.QWIK_BASEURL}/rest/v3/catalog/categories/330/products/";
@@ -24,7 +25,7 @@ function delay(time) {
   return new Promise((resolve) => setTimeout(resolve, time));
 }
 
-exports.addGiftCardOrder = async (req, res) => {
+exports.addGiftCardOrder = async (req, res, next) => {
   console.log("addGiftCardOrder ", req.body);
   const { transactionId } = req.body;
   const transaction = await Transaction.findById(transactionId);
@@ -530,6 +531,10 @@ exports.addGiftCardOrder = async (req, res) => {
       });
     }
   } catch (err) {
+    if (err.response.statusCode == 401 || err.message.includes("401")) {
+      fs.unlinkSync(tokenFilePath);
+      return next();
+    }
     if (err.message == "canceled") {
       res.status(400).json({
         status: "Fail",

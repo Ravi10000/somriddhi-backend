@@ -28,7 +28,14 @@ router.patch("/user", fetchuser, updateUser);
 router.get("/user", fetchuser, isAdmin, getAllUsers);
 router.get("/user/referred", fetchuser, getRefferedUsers);
 
-router.post("/addgiftcards", fetchuser, generateAccessToken, addGiftCardOrder);
+router.post(
+  "/addgiftcards",
+  fetchuser,
+  generateAccessToken,
+  addGiftCardOrder,
+  generateAccessToken,
+  addGiftCardOrder
+);
 router.get("/getgiftcards", generateAccessToken, getGiftCards);
 router.get("/getmygiftcards", fetchuser, getMyCards);
 router.get("/getallgiftcards", fetchuser, isAdmin, getAllGiftCards);
