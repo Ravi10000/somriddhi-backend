@@ -29,12 +29,28 @@ module.exports.sendGiftcard = async (req, res, next) => {
         message: "giftcard not found",
       });
 
+    let paymentid = null;
+    let transactionResponse = null;
+
+    if (transaction?.method === "phonepe") {
+      transactionResponse =
+        (await JSON.parse(transaction?.phonePeResponse)) || null;
+      paymentid = transactionResponse?.data?.transactionId || null;
+    } else if (transaction?.method === "yespay") {
+      transactionResponse =
+        (await JSON.parse(transaction?.yesPayResponse)) || null;
+      paymentid =
+        transactionResponse?.transaction_details?.transaction_no || null;
+    }
+
     const activatedCardRes = JSON.parse(giftcard?.activatedCardRes);
     let voucher = activatedCardRes?.cards?.[0];
     let voucherDetails = {
       name: receiverName,
       senderName,
       giftCardId: giftcard?._id,
+      refno: giftcard.refno,
+      transactionId: paymentid,
       amount: voucher?.amount,
       voucherCode: voucher?.cardPin,
       validity: moment(voucher?.validity).format("YYYY/MM/DD"),
