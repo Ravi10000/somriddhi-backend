@@ -3,6 +3,7 @@ const SentGiftcard = require("../models/sent-giftcard.model");
 const moment = require("moment");
 const sendVoucherEmail = require("../utils/send-voucher-email");
 const { sendVoucherSms } = require("../utils/send-voucher-sms");
+const Transaction = require("../models/Transaction.model");
 
 module.exports.sendGiftcard = async (req, res, next) => {
   try {
@@ -29,6 +30,7 @@ module.exports.sendGiftcard = async (req, res, next) => {
         message: "giftcard not found",
       });
 
+    const transaction = await Transaction.findById(giftcard?.transaction);
     let paymentid = null;
     let transactionResponse = null;
 
