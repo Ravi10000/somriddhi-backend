@@ -156,37 +156,11 @@ exports.addGiftCardOrder = async (req, res, next) => {
 
     const source = axios.CancelToken.source();
     const timeout = setTimeout(async () => {
-      console.log("timeout errr");
-      var orderStatusResponse;
+      try {
+        console.log("timeout errr");
+        var orderStatusResponse;
 
-      console.log("Status call 1");
-      var orderStatusOptions = {
-        method: "GET",
-        url: statusUrl + refno + "/status",
-        headers: {
-          "content-type": "application/json",
-          Authorization: "Bearer " + req.access_token,
-          signature: cryptoJS
-            .HmacSHA512(
-              getConcatenateBaseString(
-                statusUrl + refno + "/status",
-                null,
-                "GET"
-              ),
-              process.env.QWIK_CLIENTSECRET
-            )
-            .toString(),
-          dateAtClient: moment().toISOString(),
-        },
-      };
-
-      orderStatusResponse = await axios.request(orderStatusOptions);
-      console.log(orderStatusResponse.data);
-
-      if (orderStatusResponse.data["status"] != "COMPLETE") {
-        console.log("Status call 2");
-        await delay(15000);
-
+        console.log("Status call 1");
         var orderStatusOptions = {
           method: "GET",
           url: statusUrl + refno + "/status",
@@ -208,10 +182,10 @@ exports.addGiftCardOrder = async (req, res, next) => {
         };
 
         orderStatusResponse = await axios.request(orderStatusOptions);
-        console.log({ orderStatusResponseData: orderStatusResponse.data });
+        console.log(orderStatusResponse.data);
 
         if (orderStatusResponse.data["status"] != "COMPLETE") {
-          console.log("Status call 3");
+          console.log("Status call 2");
           await delay(15000);
 
           var orderStatusOptions = {
@@ -236,19 +210,124 @@ exports.addGiftCardOrder = async (req, res, next) => {
 
           orderStatusResponse = await axios.request(orderStatusOptions);
           console.log({ orderStatusResponseData: orderStatusResponse.data });
+
           if (orderStatusResponse.data["status"] != "COMPLETE") {
-            source.cancel();
-            var instance = new Razorpay({
-              key_id: process.env.RAZOR_PAY_KEY_ID,
-              key_secret: process.env.RAZOR_PAY_KEY_SECRET,
-            });
-            var refundResponse = await instance.payments.refund(paymentid, {
-              amount: parseInt(transaction?.amount),
-              speed: "normal",
-            });
-            console.log(refundResponse);
+            console.log("Status call 3");
+            await delay(15000);
+
+            var orderStatusOptions = {
+              method: "GET",
+              url: statusUrl + refno + "/status",
+              headers: {
+                "content-type": "application/json",
+                Authorization: "Bearer " + req.access_token,
+                signature: cryptoJS
+                  .HmacSHA512(
+                    getConcatenateBaseString(
+                      statusUrl + refno + "/status",
+                      null,
+                      "GET"
+                    ),
+                    process.env.QWIK_CLIENTSECRET
+                  )
+                  .toString(),
+                dateAtClient: moment().toISOString(),
+              },
+            };
+
+            orderStatusResponse = await axios.request(orderStatusOptions);
+            console.log({ orderStatusResponseData: orderStatusResponse.data });
+            if (orderStatusResponse.data["status"] != "COMPLETE") {
+              source.cancel();
+              var instance = new Razorpay({
+                key_id: process.env.RAZOR_PAY_KEY_ID,
+                key_secret: process.env.RAZOR_PAY_KEY_SECRET,
+              });
+              var refundResponse = await instance.payments.refund(paymentid, {
+                amount: parseInt(transaction?.amount),
+                speed: "normal",
+              });
+              console.log(refundResponse);
+            } else if (orderStatusResponse.data["status"] == "COMPLETE") {
+              console.log("Completed after call 3");
+              //todo
+              var _url =
+                activatedCardUrl +
+                orderStatusResponse.data["orderId"] +
+                "/cards";
+              console.log(_url);
+              const activatedCardOptions = {
+                method: "GET",
+                url: _url,
+                headers: {
+                  Authorization: "Bearer " + req.access_token,
+                  signature: cryptoJS
+                    .HmacSHA512(
+                      getConcatenateBaseString(_url, null, "GET"),
+                      process.env.QWIK_CLIENTSECRET
+                    )
+                    .toString(),
+                  dateAtClient: moment().toISOString(),
+                },
+              };
+              var activatedCardResponse = await axios.request(
+                activatedCardOptions
+              );
+              console.log({ activatedCardResponse });
+              const giftCard = {
+                requestBody: JSON.stringify(createOrderBody),
+                totalAmount: parseInt(transaction?.amount),
+                unitPrice: parseInt(transaction?.unitPrice),
+                qty: parseInt(transaction?.quantity),
+                refno,
+                transaction: transaction?._id,
+                orderId: createOrderResponse.data["orderId"],
+                activatedCardRes: JSON.stringify(activatedCardResponse.data),
+                status: createOrderResponse.data["status"],
+                createdBy: req.user._id,
+              };
+              console.log({ giftCard });
+              const giftCardObj = await GiftCard.create(giftCard);
+              // const user = await User.findById(req.user._id);
+
+              // voucher details to send email
+              // {
+              //   name: "Ravi Sharma",
+              //   amount: "1000",
+              //   voucherCode: "SVAQ-TMDRD9-Z9M",
+              //   giftCardId: "6524e480b36fedcb858b64bd",
+              //   validity: "2024/10/05",
+              //   orderId: "6524e47db36fedcb858b64bb",
+              // }
+              let voucher = activatedCardResponse?.data?.cards?.[0];
+              if (voucher) {
+                let voucherDetails = {
+                  name: transaction?.firstname + " " + transaction?.lastname,
+                  amount: voucher?.amount,
+                  voucherCode: voucher?.cardPin,
+                  giftCardId: giftCardObj?._id,
+                  validity: moment(voucher?.validity).format("YYYY/MM/DD"),
+                  orderId: transaction?._id,
+                };
+                await sendVoucherEmail(transaction?.email, voucherDetails);
+                await sendVoucherSms(transaction?.mobile, voucherDetails);
+              }
+
+              // TODO: extract voucher details from activatedCardResponse.data
+              // TODO: send sms
+              // await sendVoucherSms(user.phone, activatedCardResponse.data);
+
+              // TODO: send email
+              // TODO: extract voucher card no, amount and user name to send email
+
+              return res.status(200).json({
+                status: "Success",
+                message: "Order Generated Successfully",
+                giftCard: giftCardObj,
+              });
+            }
           } else if (orderStatusResponse.data["status"] == "COMPLETE") {
-            console.log("Completed after call 3");
+            console.log("Completed after call 2");
             //todo
             var _url =
               activatedCardUrl + orderStatusResponse.data["orderId"] + "/cards";
@@ -270,7 +349,6 @@ exports.addGiftCardOrder = async (req, res, next) => {
             var activatedCardResponse = await axios.request(
               activatedCardOptions
             );
-            console.log({ activatedCardResponse });
             const giftCard = {
               requestBody: JSON.stringify(createOrderBody),
               totalAmount: parseInt(transaction?.amount),
@@ -283,19 +361,8 @@ exports.addGiftCardOrder = async (req, res, next) => {
               status: createOrderResponse.data["status"],
               createdBy: req.user._id,
             };
-            console.log({ giftCard });
+            console.log(giftCard);
             const giftCardObj = await GiftCard.create(giftCard);
-            // const user = await User.findById(req.user._id);
-
-            // voucher details to send email
-            // {
-            //   name: "Ravi Sharma",
-            //   amount: "1000",
-            //   voucherCode: "SVAQ-TMDRD9-Z9M",
-            //   giftCardId: "6524e480b36fedcb858b64bd",
-            //   validity: "2024/10/05",
-            //   orderId: "6524e47db36fedcb858b64bb",
-            // }
             let voucher = activatedCardResponse?.data?.cards?.[0];
             if (voucher) {
               let voucherDetails = {
@@ -310,21 +377,14 @@ exports.addGiftCardOrder = async (req, res, next) => {
               await sendVoucherSms(transaction?.mobile, voucherDetails);
             }
 
-            // TODO: extract voucher details from activatedCardResponse.data
-            // TODO: send sms
-            // await sendVoucherSms(user.phone, activatedCardResponse.data);
-
-            // TODO: send email
-            // TODO: extract voucher card no, amount and user name to send email
-
             return res.status(200).json({
               status: "Success",
-              message: "Order Generated Successfully",
+              message: "Order Generared Successfully",
               giftCard: giftCardObj,
             });
           }
         } else if (orderStatusResponse.data["status"] == "COMPLETE") {
-          console.log("Completed after call 2");
+          console.log("Completed after call 1");
           //todo
           var _url =
             activatedCardUrl + orderStatusResponse.data["orderId"] + "/cards";
@@ -378,60 +438,8 @@ exports.addGiftCardOrder = async (req, res, next) => {
             giftCard: giftCardObj,
           });
         }
-      } else if (orderStatusResponse.data["status"] == "COMPLETE") {
-        console.log("Completed after call 1");
-        //todo
-        var _url =
-          activatedCardUrl + orderStatusResponse.data["orderId"] + "/cards";
-        console.log(_url);
-        const activatedCardOptions = {
-          method: "GET",
-          url: _url,
-          headers: {
-            Authorization: "Bearer " + req.access_token,
-            signature: cryptoJS
-              .HmacSHA512(
-                getConcatenateBaseString(_url, null, "GET"),
-                process.env.QWIK_CLIENTSECRET
-              )
-              .toString(),
-            dateAtClient: moment().toISOString(),
-          },
-        };
-        var activatedCardResponse = await axios.request(activatedCardOptions);
-        const giftCard = {
-          requestBody: JSON.stringify(createOrderBody),
-          totalAmount: parseInt(transaction?.amount),
-          unitPrice: parseInt(transaction?.unitPrice),
-          qty: parseInt(transaction?.quantity),
-          refno,
-          transaction: transaction?._id,
-          orderId: createOrderResponse.data["orderId"],
-          activatedCardRes: JSON.stringify(activatedCardResponse.data),
-          status: createOrderResponse.data["status"],
-          createdBy: req.user._id,
-        };
-        console.log(giftCard);
-        const giftCardObj = await GiftCard.create(giftCard);
-        let voucher = activatedCardResponse?.data?.cards?.[0];
-        if (voucher) {
-          let voucherDetails = {
-            name: transaction?.firstname + " " + transaction?.lastname,
-            amount: voucher?.amount,
-            voucherCode: voucher?.cardPin,
-            giftCardId: giftCardObj?._id,
-            validity: moment(voucher?.validity).format("YYYY/MM/DD"),
-            orderId: transaction?._id,
-          };
-          await sendVoucherEmail(transaction?.email, voucherDetails);
-          await sendVoucherSms(transaction?.mobile, voucherDetails);
-        }
-
-        return res.status(200).json({
-          status: "Success",
-          message: "Order Generared Successfully",
-          giftCard: giftCardObj,
-        });
+      } catch (err) {
+        console.log("error in timeout ", err.message);
       }
     }, 10000);
 
@@ -531,6 +539,7 @@ exports.addGiftCardOrder = async (req, res, next) => {
       });
     }
   } catch (err) {
+    console.log({ err });
     if (err?.statusCode == 401 || err?.message?.includes("401")) {
       console.log("Deleting token file.");
       fs.unlinkSync(tokenFilePath);
