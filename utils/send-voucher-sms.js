@@ -19,10 +19,11 @@ module.exports.sendVoucherSms = async (phone, voucherDetails) => {
       sender: process.env.SMS_VOUCHER_SENDER_ID,
       var: voucherDetails?.voucherCode, //voucher code
       var1: voucherDetails?.senderName, //sender name
-      var2: voucherDetails?.giftCardId, // ref id / no
+      var2: voucherDetails?.refno, // ref id / no
       var3: voucherDetails?.amount, // amount
       var4: `https://www.amazon.in/apay-products/apv/landing?voucherCode=${voucherDetails?.voucherCode}`, // link
     }),
+    // var2: voucherDetails?.giftCardId, // ref id / no
   };
   try {
     const response = await axios.request(options);

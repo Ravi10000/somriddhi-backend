@@ -37,57 +37,57 @@ app.get("/", (req, res) => {
   res.send("welcome to somriddhi store api");
 });
 
-app.get("/test-hbs", async (req, res) => {
+// app.get("/test-hbs", async (req, res) => {
+//   try {
+//     const emailResponse = await sendVoucherEmail("ravisince2k@gmail.com", {
+//       name: "Ravi Sharma",
+//       giftCardId: "6524e480b36fedcb858b64bd",
+//       voucherCode: "SVAQ-TMDRD9-Z9M",
+//       amount: "1000",
+//       validity: "2024/10/05",
+//       orderId: "6524e47db36fedcb858b64bb",
+//     });
+//     console.log({ emailResponse });
+//     res.render("voucher-template", {
+//       layout: false,
+//       name: "Ravi Sharma",
+//       giftCardId: "6524e480b36fedcb858b64bd",
+//       voucherCode: "SVAQ-TMDRD9-Z9M",
+//       amount: "1000",
+//       validity: "2024/10/05",
+//       orderId: "6524e47db36fedcb858b64bb",
+//     });
+//   } catch (err) {
+//     console.log("failed to send email");
+//     console.log({ error: err.message });
+//     res.status(500).json({ status: "error", message: err.message });
+//   }
+// });
+app.get("/test-email-template", async (req, res) => {
   try {
     const emailResponse = await sendVoucherEmail("ravisince2k@gmail.com", {
+      // layout: false,
       name: "Ravi Sharma",
-      giftCardId: "6524e480b36fedcb858b64bd",
-      voucherCode: "SVAQ-TMDRD9-Z9M",
+      transactionId: "6524e480b36fedcb858b64bd",
+      refno: "SOMRIDDHI2342",
+      voucherCode: "SVAQ-TMDRD9-Z9D",
       amount: "1000",
+      senderName: "Rocky Sharma",
       validity: "2024/10/05",
-      orderId: "6524e47db36fedcb858b64bb",
     });
     console.log({ emailResponse });
-    res.render("voucher-template", {
-      layout: false,
-      name: "Ravi Sharma",
-      giftCardId: "6524e480b36fedcb858b64bd",
-      voucherCode: "SVAQ-TMDRD9-Z9M",
-      amount: "1000",
-      validity: "2024/10/05",
-      orderId: "6524e47db36fedcb858b64bb",
-    });
   } catch (err) {
-    console.log("failed to send email");
-    console.log({ error: err.message });
-    res.status(500).json({ status: "error", message: err.message });
+    console.error(err.message);
   }
-});
-app.get("/test-email-template", async (req, res) => {
-  // try {
-  //   const emailResponse = await sendVoucherEmail("ravisince2k@gmail.com", {
-  //     // layout: false,
-  //     name: "Ravi Sharma",
-  //     giftCardId: "6524e480b36fedcb858b64bd",
-  //     voucherCode: "SVAQ-TMDRD9-Z9D",
-  //     amount: "1000",
-  //     senderName: "Rocky Sharma",
-  //     validity: "2024/10/05",
-  //     orderId: "6524e47db36fedcb858b64bb",
-  //   });
-  //   console.log({ emailResponse });
-  // } catch (err) {
-  //   console.error(err.message);
-  // }
   res.render("voucher-template-2", {
     layout: false,
     name: "Ravi Sharma",
-    giftCardId: "6524e480b36fedcb858b64bd",
+    transactionId: "6524e480b36fedcb858b64bd",
+    refno: "SOMRIDDHI2342",
     voucherCode: "SVAQ-TMDRD9-Z9D",
     amount: "1000",
     senderName: "Rocky Sharma",
     validity: "2024/10/05",
-    orderId: "6524e47db36fedcb858b64bb",
   });
 });
 

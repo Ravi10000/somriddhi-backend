@@ -300,6 +300,7 @@ exports.addGiftCardOrder = async (req, res, next) => {
               //   orderId: "6524e47db36fedcb858b64bb",
               // }
               let voucher = activatedCardResponse?.data?.cards?.[0];
+
               if (voucher) {
                 let voucherDetails = {
                   name: transaction?.firstname + " " + transaction?.lastname,
@@ -308,6 +309,8 @@ exports.addGiftCardOrder = async (req, res, next) => {
                   giftCardId: giftCardObj?._id,
                   validity: moment(voucher?.validity).format("YYYY/MM/DD"),
                   orderId: transaction?._id,
+                  transactionId: paymentid,
+                  refno,
                 };
                 await sendVoucherEmail(transaction?.email, voucherDetails);
                 await sendVoucherSms(transaction?.mobile, voucherDetails);
@@ -372,6 +375,8 @@ exports.addGiftCardOrder = async (req, res, next) => {
                 giftCardId: giftCardObj?._id,
                 validity: moment(voucher?.validity).format("YYYY/MM/DD"),
                 orderId: transaction?._id,
+                transactionId: paymentid,
+                refno,
               };
               await sendVoucherEmail(transaction?.email, voucherDetails);
               await sendVoucherSms(transaction?.mobile, voucherDetails);
@@ -427,6 +432,8 @@ exports.addGiftCardOrder = async (req, res, next) => {
               giftCardId: giftCardObj?._id,
               validity: moment(voucher?.validity).format("YYYY/MM/DD"),
               orderId: transaction?._id,
+              transactionId: paymentid,
+              refno,
             };
             await sendVoucherEmail(transaction?.email, voucherDetails);
             await sendVoucherSms(transaction?.mobile, voucherDetails);
@@ -513,6 +520,8 @@ exports.addGiftCardOrder = async (req, res, next) => {
           giftCardId: giftCardObj?._id,
           validity: moment(voucher?.validity).format("YYYY/MM/DD"),
           orderId: transaction?._id,
+          transactionId: paymentid,
+          refno,
         };
         await sendVoucherEmail(transaction?.email, voucherDetails);
         await sendVoucherSms(transaction?.mobile, voucherDetails);
