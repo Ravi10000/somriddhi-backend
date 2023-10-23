@@ -531,7 +531,8 @@ exports.addGiftCardOrder = async (req, res, next) => {
       });
     }
   } catch (err) {
-    if (err.response.statusCode == 401 || err.message.includes("401")) {
+    if (err?.statusCode == 401 || err?.message?.includes("401")) {
+      console.log("Deleting token file.");
       fs.unlinkSync(tokenFilePath);
       return next();
     }
