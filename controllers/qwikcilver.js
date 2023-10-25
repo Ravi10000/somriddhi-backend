@@ -35,6 +35,12 @@ exports.addGiftCardOrder = async (req, res, next) => {
       message: "Transaction not found",
     });
   }
+  if (transaction?.status !== "paid") {
+    return res.status(400).json({
+      status: "error",
+      message: "payment not completed",
+    });
+  }
 
   console.log({ transaction });
 
@@ -48,28 +54,6 @@ exports.addGiftCardOrder = async (req, res, next) => {
   }
   console.log({ giftCard });
 
-  // const { address, billingAddress, totalAmount, unitPrice, qty, paymentid } =
-  //   req.body;
-
-  // const {
-  //   amount,
-  //   unitPrice,
-  //   quantity,
-  //   email,
-  //   mobile,
-  //   firstname,
-  //   lastname,
-  //   line1,
-  //   line2,
-  //   district,
-  //   state,
-  //   postcode,
-  //   yesPayResponse,
-  //   phonePeResponse,
-  //   status,
-  //   method,
-  // } = transaction;
-
   let paymentid = null;
   let transactionResponse = null;
 
@@ -82,6 +66,10 @@ exports.addGiftCardOrder = async (req, res, next) => {
       (await JSON.parse(transaction?.yesPayResponse)) || null;
     paymentid =
       transactionResponse?.transaction_details?.transaction_no || null;
+  } else if (transaction?.method === "upigateway") {
+    transactionResponse =
+      (await JSON.parse(transaction?.upigatewayResponse)) || null;
+    paymentid = transactionResponse?.data?.data?.upi_txn_id || null;
   }
 
   if (!transactionResponse || !paymentid) {

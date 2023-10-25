@@ -3,15 +3,22 @@ const Transaction = require("../models/Transaction.model");
 const { encodeRequest } = require("../utils/encode-request");
 const SHA256 = require("../sha256-hash");
 const User = require("../models/User");
+const moment = require("moment");
 
 exports.createTransaction = async (req, res) => {
   try {
     console.log("initiated transaction");
     console.log({ body: req.body });
+    const {
+      yesPayResponse: _unauthorisedYesPayResponse,
+      phonePeResponse: _unauthorisedPhonePeResponse,
+      status: _unauthorisedStatus,
+      ...restTransactionData
+    } = req.body;
     if (!req.user)
       return res.status(401).json({ status: "error", message: "Unauthorized" });
     const transaction = await Transaction.create({
-      ...req.body,
+      ...restTransactionData,
       user: req.user._id,
     });
     console.log({ transaction });
@@ -50,6 +57,16 @@ exports.createTransaction = async (req, res) => {
       console.log(JSON.stringify(data));
       redirectUrl = data?.data?.instrumentResponse?.redirectInfo?.url;
     }
+    if (req?.body?.method === "upigateway") {
+      const response = await initialUPIGatewayTransaction(transaction);
+      if (!response?.data?.status) {
+        return res.status(500).json({
+          status: "error",
+          message: "internal server error",
+        });
+      }
+      redirectUrl = response?.data?.payment_url;
+    }
     res.status(201).json({
       status: "success",
       message: "Transaction created successfully",
@@ -57,7 +74,7 @@ exports.createTransaction = async (req, res) => {
       redirectUrl,
     });
   } catch (err) {
-    console.log({ err });
+    console.log({ error: err.message });
     res.status(500).json({ status: "error", message: err.message });
   }
 };
@@ -160,7 +177,30 @@ exports.getTransaction = async (req, res) => {
         .status(404)
         .json({ status: "error", message: "Transaction not found" });
     }
-    transaction = await phonePayStatusUpdate(transaction);
+    if (
+      transaction?.method === "phonepe" &&
+      ["pending, initiated"].includes(transaction?.status)
+    )
+      transaction = await phonePayStatusUpdate(transaction);
+    else if (
+      transaction?.method === "upigateway" &&
+      ["pending, initiated"].includes(transaction?.status)
+    ) {
+      const transactionResponse = await checkUPIGatewayTransactionStatus(
+        transaction
+      );
+      if (!transactionResponse?.data?.status)
+        return res
+          .status(500)
+          .json({ status: "error", message: "internal server error" });
+    }
+    transaction.upigatewayResponse = JSON.stringify(transactionResponse);
+    if (transactionResponse?.data?.data?.status === "success") {
+      transaction.status = "paid";
+    } else if (transactionResponse?.data?.data?.status === "failed") {
+      transaction.status = "failed";
+    }
+    await transaction.save();
     res.status(200).json({ status: "success", transaction });
   } catch (err) {
     console.log({ err });
@@ -169,33 +209,29 @@ exports.getTransaction = async (req, res) => {
 };
 
 async function phonePayStatusUpdate(transaction) {
-  if (
-    transaction.method === "phonepe" &&
-    (transaction.status === "pending" || transaction.status === "initiated")
-  ) {
-    try {
-      const { data: phonePeResponse } = await axios.get(
-        `${process.env.PHONEPE_PAY_LINK}/status/${process.env.PHONEPE_PAY_MERCHANT_ID}/${transaction._id}`,
-        {
-          headers: {
-            "X-MERCHANT-ID": process.env.PHONEPE_PAY_MERCHANT_ID,
-            "X-VERIFY":
-              SHA256(
-                `/pg/v1/status/${process.env.PHONEPE_PAY_MERCHANT_ID}/${transaction._id}${process.env.PHONEPE_PAY_SALT}`
-              ) +
-              "###" +
-              process.env.PHONEPE_PAY_SALT_INDEX,
-          },
-        }
-      );
-      transaction = await setStatusPhonePe(phonePeResponse, transaction);
-    } catch (err) {
-      console.log({
-        "error while checking phone pe payment status": err.message,
-      });
-    }
+  try {
+    const { data: phonePeResponse } = await axios.get(
+      `${process.env.PHONEPE_PAY_LINK}/status/${process.env.PHONEPE_PAY_MERCHANT_ID}/${transaction._id}`,
+      {
+        headers: {
+          "X-MERCHANT-ID": process.env.PHONEPE_PAY_MERCHANT_ID,
+          "X-VERIFY":
+            SHA256(
+              `/pg/v1/status/${process.env.PHONEPE_PAY_MERCHANT_ID}/${transaction._id}${process.env.PHONEPE_PAY_SALT}`
+            ) +
+            "###" +
+            process.env.PHONEPE_PAY_SALT_INDEX,
+        },
+      }
+    );
+    transaction = await setStatusPhonePe(phonePeResponse, transaction);
+  } catch (err) {
+    console.log({
+      "error while checking phone pe payment status": err.message,
+    });
+  } finally {
+    return transaction;
   }
-  return transaction;
 }
 
 async function setStatusPhonePe(phonePeResponse, transaction) {
@@ -211,4 +247,62 @@ async function setStatusPhonePe(phonePeResponse, transaction) {
     console.log({ transaction });
   }
   return transaction;
+}
+
+async function initialUPIGatewayTransaction(transaction) {
+  const data = JSON.stringify({
+    key: process.env.UPIGATEWAY_KEY,
+    client_txn_id: transaction?._id,
+    amount: transaction?.discountedAmount.toString(),
+    p_info: "Amazon Shopping Voucher",
+    customer_name: transaction?.firstname + " " + transaction?.lastname,
+    customer_email: transaction?.email,
+    customer_mobile: transaction?.mobile,
+    redirect_url: "https://somriddhi.store/payment-status/" + transaction._id,
+  });
+
+  console.log({ requestData: JSON.parse(data) });
+
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: "https://api.ekqr.in/api/create_order",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data,
+  };
+  try {
+    const response = await axios(config);
+    console.log({ response: response.data });
+    return response;
+  } catch (err) {
+    console.error({ error: err.message });
+    return null;
+  }
+}
+
+async function checkUPIGatewayTransactionStatus(transaction) {
+  try {
+    const data = JSON.stringify({
+      key: process.env.UPIGATEWAY_KEY,
+      client_txn_id: transaction?._id,
+      txn_date: moment(transaction.createdAt).format("DD-MM-YYYY"),
+    });
+
+    const config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "https://api.ekqr.in/api/check_order_status",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data,
+    };
+    const response = await axios(config);
+    return response;
+  } catch (err) {
+    console.log({ error: err.message });
+    return null;
+  }
 }

@@ -21,6 +21,11 @@ router.post(
       .withMessage("amount should be a number")
       .notEmpty()
       .withMessage("amount is required"),
+    body("discountedAmount")
+      .isNumeric()
+      .withMessage("discounted amount should be a number")
+      .notEmpty()
+      .withMessage("discounted amount is required"),
     body("email")
       .isEmail()
       .withMessage("invalid email address")
@@ -48,8 +53,10 @@ router.post(
     body("postcode").notEmpty().withMessage("postcode is required"),
     body("method")
       .optional()
-      .isIn(["phonepe", "yespay"])
-      .withMessage("invalid payment method"),
+      .isIn(["phonepe", "yespay", "upigateway"])
+      .withMessage(
+        "invalid payment method, allowed values are phonepe, yespay, upigateway"
+      ),
   ],
   validateReq,
   createTransaction

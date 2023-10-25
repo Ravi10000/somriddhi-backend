@@ -43,6 +43,7 @@ const transactionSchema = new mongoose.Schema(
     postcode: String,
     yesPayResponse: String,
     phonePeResponse: String,
+    upigatewayResponse: String,
     status: {
       type: String,
       enum: ["initiated", "paid", "failed", "pending"],
@@ -50,8 +51,8 @@ const transactionSchema = new mongoose.Schema(
     },
     method: {
       type: String,
-      enum: ["phonepe", "yespay"],
-      default: "yespay",
+      enum: ["phonepe", "yespay", "upigateway"],
+      default: "phonepe",
     },
   },
   { timestamps: true }
