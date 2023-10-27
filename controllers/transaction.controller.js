@@ -182,19 +182,19 @@ exports.getTransaction = async (req, res) => {
       ["pending, initiated"].includes(transaction?.status)
     )
       transaction = await phonePayStatusUpdate(transaction);
-    else if (
-      transaction?.method === "upigateway" &&
-      ["pending, initiated"].includes(transaction?.status)
-    ) {
-      const transactionResponse = await checkUPIGatewayTransactionStatus(
-        transaction
-      );
-      if (!transactionResponse?.data?.status)
-        return res
-          .status(500)
-          .json({ status: "error", message: "internal server error" });
-    }
-    transaction.upigatewayResponse = JSON.stringify(transactionResponse);
+    // else if (
+    //   transaction?.method === "upigateway" &&
+    //   ["pending, initiated"].includes(transaction?.status)
+    // ) {
+    //   const transactionResponse = await checkUPIGatewayTransactionStatus(
+    //     transaction
+    //   );
+    //   if (!transactionResponse?.data?.status)
+    //     return res
+    //       .status(500)
+    //       .json({ status: "error", message: "internal server error" });
+    // }
+    // transaction.upigatewayResponse = JSON.stringify(transactionResponse);
     if (transactionResponse?.data?.data?.status === "success") {
       transaction.status = "paid";
     } else if (transactionResponse?.data?.data?.status === "failed") {
@@ -224,6 +224,8 @@ async function phonePayStatusUpdate(transaction) {
         },
       }
     );
+    if (!phonePeResponse?.data?.state)
+      throw new Error("error while checking phone pe payment status");
     transaction = await setStatusPhonePe(phonePeResponse, transaction);
   } catch (err) {
     console.log({
