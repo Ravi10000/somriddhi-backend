@@ -195,11 +195,11 @@ exports.getTransaction = async (req, res) => {
     //       .json({ status: "error", message: "internal server error" });
     // }
     // transaction.upigatewayResponse = JSON.stringify(transactionResponse);
-    if (transactionResponse?.data?.data?.status === "success") {
-      transaction.status = "paid";
-    } else if (transactionResponse?.data?.data?.status === "failed") {
-      transaction.status = "failed";
-    }
+    // if (transactionResponse?.data?.data?.status === "success") {
+    //   transaction.status = "paid";
+    // } else if (transactionResponse?.data?.data?.status === "failed") {
+    //   transaction.status = "failed";
+    // }
     await transaction.save();
     res.status(200).json({ status: "success", transaction });
   } catch (err) {
