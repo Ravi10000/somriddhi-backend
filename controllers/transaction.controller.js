@@ -177,11 +177,17 @@ exports.getTransaction = async (req, res) => {
         .status(404)
         .json({ status: "error", message: "Transaction not found" });
     }
+    console.log({ transaction });
+    console.log({
+      status: ["pending, initiated"].includes(transaction?.status),
+    });
     if (
       transaction?.method === "phonepe" &&
-      ["pending, initiated"].includes(transaction?.status)
-    )
+      (transaction?.status === "pending" || transaction?.status === "initiated")
+    ) {
+      console.log("checking phone pe payment status");
       transaction = await phonePayStatusUpdate(transaction);
+    }
     // else if (
     //   transaction?.method === "upigateway" &&
     //   ["pending, initiated"].includes(transaction?.status)
@@ -200,7 +206,7 @@ exports.getTransaction = async (req, res) => {
     // } else if (transactionResponse?.data?.data?.status === "failed") {
     //   transaction.status = "failed";
     // }
-    await transaction.save();
+    // await transaction.save();
     res.status(200).json({ status: "success", transaction });
   } catch (err) {
     console.log({ err });
@@ -209,6 +215,7 @@ exports.getTransaction = async (req, res) => {
 };
 
 async function phonePayStatusUpdate(transaction) {
+  console.log("checking phone pe payment status function");
   try {
     const { data: phonePeResponse } = await axios.get(
       `${process.env.PHONEPE_PAY_LINK}/status/${process.env.PHONEPE_PAY_MERCHANT_ID}/${transaction._id}`,
@@ -224,6 +231,7 @@ async function phonePayStatusUpdate(transaction) {
         },
       }
     );
+    console.log({ phonePeResponse });
     if (!phonePeResponse?.data?.state)
       throw new Error("error while checking phone pe payment status");
     transaction = await setStatusPhonePe(phonePeResponse, transaction);
