@@ -276,33 +276,35 @@ exports.addGiftCardOrder = async (req, res, next) => {
               };
               console.log({ giftCard });
               const giftCardObj = await GiftCard.create(giftCard);
-              // const user = await User.findById(req.user._id);
-
-              // voucher details to send email
-              // {
-              //   name: "Ravi Sharma",
-              //   amount: "1000",
-              //   voucherCode: "SVAQ-TMDRD9-Z9M",
-              //   giftCardId: "6524e480b36fedcb858b64bd",
-              //   validity: "2024/10/05",
-              //   orderId: "6524e47db36fedcb858b64bb",
-              // }
-              let voucher = activatedCardResponse?.data?.cards?.[0];
-
-              if (voucher) {
-                let voucherDetails = {
-                  name: transaction?.firstname + " " + transaction?.lastname,
-                  amount: voucher?.amount,
-                  voucherCode: voucher?.cardPin,
-                  giftCardId: giftCardObj?._id,
-                  validity: moment(voucher?.validity).format("YYYY/MM/DD"),
-                  orderId: transaction?._id,
-                  transactionId: paymentid,
-                  refno,
-                };
-                await sendVoucherEmail(transaction?.email, voucherDetails);
-                await sendVoucherSms(transaction?.mobile, voucherDetails);
+              const voucherRequests = activatedCardResponse?.data?.cards?.map(
+                (voucher) =>
+                  sendVoucher(
+                    transaction,
+                    voucher,
+                    giftCardObj,
+                    paymentid,
+                    refno
+                  )
+              );
+              for await (const request of voucherRequests) {
+                console.log({ request });
               }
+              // let voucher = activatedCardResponse?.data?.cards?.[0];
+
+              // if (voucher) {
+              //   let voucherDetails = {
+              //     name: transaction?.firstname + " " + transaction?.lastname,
+              //     amount: voucher?.amount,
+              //     voucherCode: voucher?.cardPin,
+              //     giftCardId: giftCardObj?._id,
+              //     validity: moment(voucher?.validity).format("YYYY/MM/DD"),
+              //     orderId: transaction?._id,
+              //     transactionId: paymentid,
+              //     refno,
+              //   };
+              //   await sendVoucherEmail(transaction?.email, voucherDetails);
+              //   await sendVoucherSms(transaction?.mobile, voucherDetails);
+              // }
 
               // TODO: extract voucher details from activatedCardResponse.data
               // TODO: send sms
@@ -354,21 +356,28 @@ exports.addGiftCardOrder = async (req, res, next) => {
             };
             console.log(giftCard);
             const giftCardObj = await GiftCard.create(giftCard);
-            let voucher = activatedCardResponse?.data?.cards?.[0];
-            if (voucher) {
-              let voucherDetails = {
-                name: transaction?.firstname + " " + transaction?.lastname,
-                amount: voucher?.amount,
-                voucherCode: voucher?.cardPin,
-                giftCardId: giftCardObj?._id,
-                validity: moment(voucher?.validity).format("YYYY/MM/DD"),
-                orderId: transaction?._id,
-                transactionId: paymentid,
-                refno,
-              };
-              await sendVoucherEmail(transaction?.email, voucherDetails);
-              await sendVoucherSms(transaction?.mobile, voucherDetails);
+            const voucherRequests = activatedCardResponse?.data?.cards?.map(
+              (voucher) =>
+                sendVoucher(transaction, voucher, giftCardObj, paymentid, refno)
+            );
+            for await (const request of voucherRequests) {
+              console.log({ request });
             }
+            // let voucher = activatedCardResponse?.data?.cards?.[0];
+            // if (voucher) {
+            //   let voucherDetails = {
+            //     name: transaction?.firstname + " " + transaction?.lastname,
+            //     amount: voucher?.amount,
+            //     voucherCode: voucher?.cardPin,
+            //     giftCardId: giftCardObj?._id,
+            //     validity: moment(voucher?.validity).format("YYYY/MM/DD"),
+            //     orderId: transaction?._id,
+            //     transactionId: paymentid,
+            //     refno,
+            //   };
+            //   await sendVoucherEmail(transaction?.email, voucherDetails);
+            //   await sendVoucherSms(transaction?.mobile, voucherDetails);
+            // }
 
             return res.status(200).json({
               status: "Success",
@@ -411,21 +420,28 @@ exports.addGiftCardOrder = async (req, res, next) => {
           };
           console.log(giftCard);
           const giftCardObj = await GiftCard.create(giftCard);
-          let voucher = activatedCardResponse?.data?.cards?.[0];
-          if (voucher) {
-            let voucherDetails = {
-              name: transaction?.firstname + " " + transaction?.lastname,
-              amount: voucher?.amount,
-              voucherCode: voucher?.cardPin,
-              giftCardId: giftCardObj?._id,
-              validity: moment(voucher?.validity).format("YYYY/MM/DD"),
-              orderId: transaction?._id,
-              transactionId: paymentid,
-              refno,
-            };
-            await sendVoucherEmail(transaction?.email, voucherDetails);
-            await sendVoucherSms(transaction?.mobile, voucherDetails);
+          const voucherRequests = activatedCardResponse?.data?.cards?.map(
+            (voucher) =>
+              sendVoucher(transaction, voucher, giftCardObj, paymentid, refno)
+          );
+          for await (const request of voucherRequests) {
+            console.log({ request });
           }
+          // let voucher = activatedCardResponse?.data?.cards?.[0];
+          // if (voucher) {
+          //   let voucherDetails = {
+          //     name: transaction?.firstname + " " + transaction?.lastname,
+          //     amount: voucher?.amount,
+          //     voucherCode: voucher?.cardPin,
+          //     giftCardId: giftCardObj?._id,
+          //     validity: moment(voucher?.validity).format("YYYY/MM/DD"),
+          //     orderId: transaction?._id,
+          //     transactionId: paymentid,
+          //     refno,
+          //   };
+          //   await sendVoucherEmail(transaction?.email, voucherDetails);
+          //   await sendVoucherSms(transaction?.mobile, voucherDetails);
+          // }
 
           return res.status(200).json({
             status: "Success",
@@ -499,20 +515,27 @@ exports.addGiftCardOrder = async (req, res, next) => {
       console.log(giftCard);
       const giftCardObj = await GiftCard.create(giftCard);
 
-      let voucher = activatedCardResponse?.data?.cards?.[0];
-      if (voucher) {
-        let voucherDetails = {
-          name: transaction?.firstname + " " + transaction?.lastname,
-          amount: voucher?.amount,
-          voucherCode: voucher?.cardPin,
-          giftCardId: giftCardObj?._id,
-          validity: moment(voucher?.validity).format("YYYY/MM/DD"),
-          orderId: transaction?._id,
-          transactionId: paymentid,
-          refno,
-        };
-        await sendVoucherEmail(transaction?.email, voucherDetails);
-        await sendVoucherSms(transaction?.mobile, voucherDetails);
+      // let voucher = activatedCardResponse?.data?.cards?.[0];
+      // if (voucher) {
+      //   let voucherDetails = {
+      //     name: transaction?.firstname + " " + transaction?.lastname,
+      //     amount: voucher?.amount,
+      //     voucherCode: voucher?.cardPin,
+      //     giftCardId: giftCardObj?._id,
+      //     validity: moment(voucher?.validity).format("YYYY/MM/DD"),
+      //     orderId: transaction?._id,
+      //     transactionId: paymentid,
+      //     refno,
+      //   };
+      //   await sendVoucherEmail(transaction?.email, voucherDetails);
+      //   await sendVoucherSms(transaction?.mobile, voucherDetails);
+      // }
+      const voucherRequests = activatedCardResponse?.data?.cards?.map(
+        (voucher) =>
+          sendVoucher(transaction, voucher, giftCardObj, paymentid, refno)
+      );
+      for await (const request of voucherRequests) {
+        console.log({ request });
       }
 
       return res.status(200).json({
@@ -772,3 +795,24 @@ let fixedEncodeURIComponent = (str) => {
     return "%" + c.charCodeAt(0).toString(16).toUpperCase();
   });
 };
+
+async function sendVoucher(transaction, voucher, giftCard, paymentid, refno) {
+  try {
+    let voucherDetails = {
+      name: transaction?.firstname + " " + transaction?.lastname,
+      amount: voucher?.amount,
+      voucherCode: voucher?.cardPin,
+      giftCardId: giftCard?._id,
+      validity: moment(voucher?.validity).format("YYYY/MM/DD"),
+      orderId: transaction?._id,
+      transactionId: paymentid,
+      refno,
+    };
+    await sendVoucherEmail(transaction?.email, voucherDetails);
+    await sendVoucherSms(transaction?.mobile, voucherDetails);
+    return true;
+  } catch (err) {
+    return false;
+    console.log({ error: err.message });
+  }
+}

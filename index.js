@@ -63,6 +63,7 @@ app.get("/", (req, res) => {
 //     res.status(500).json({ status: "error", message: err.message });
 //   }
 // });
+
 app.get("/test-email-template", async (req, res) => {
   try {
     const emailResponse = await sendVoucherEmail("ravisince2k@gmail.com", {
