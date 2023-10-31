@@ -56,16 +56,18 @@ exports.createTransaction = async (req, res) => {
       const { data } = await axios(options);
       console.log(JSON.stringify(data));
       redirectUrl = data?.data?.instrumentResponse?.redirectInfo?.url;
-    }
-    if (req?.body?.method === "upigateway") {
-      const response = await initialUPIGatewayTransaction(transaction);
-      if (!response?.data?.status) {
+    } else if (req?.body?.method === "upigateway") {
+      const response = await initiateUPIGatewayTransaction(transaction);
+      console.log({ response });
+      console.log({ data: response?.data });
+      if (!response?.status) {
         return res.status(500).json({
           status: "error",
           message: "internal server error",
         });
       }
       redirectUrl = response?.data?.payment_url;
+      console.log({ redirectUrl });
     }
     res.status(201).json({
       status: "success",
@@ -187,26 +189,30 @@ exports.getTransaction = async (req, res) => {
     ) {
       console.log("checking phone pe payment status");
       transaction = await phonePayStatusUpdate(transaction);
+    } else if (
+      transaction?.method === "upigateway" &&
+      (transaction?.status === "pending" || transaction?.status === "initiated")
+    ) {
+      const transactionResponse = await checkUPIGatewayTransactionStatus(
+        transaction
+      );
+      console.log({ transactionResponse });
+      console.log({ status: transactionResponse?.data?.status });
+      if (!transactionResponse?.data?.status)
+        return res
+          .status(500)
+          .json({ status: "error", message: "internal server error" });
+      transaction.upigatewayResponse = JSON.stringify(transactionResponse);
+      if (transactionResponse?.data?.status === "success") {
+        transaction.status = "paid";
+      } else if (
+        transactionResponse?.data?.status === "failed" ||
+        transactionResponse?.data?.status === "failure"
+      ) {
+        transaction.status = "failed";
+      }
+      await transaction.save();
     }
-    // else if (
-    //   transaction?.method === "upigateway" &&
-    //   ["pending, initiated"].includes(transaction?.status)
-    // ) {
-    //   const transactionResponse = await checkUPIGatewayTransactionStatus(
-    //     transaction
-    //   );
-    //   if (!transactionResponse?.data?.status)
-    //     return res
-    //       .status(500)
-    //       .json({ status: "error", message: "internal server error" });
-    // }
-    // transaction.upigatewayResponse = JSON.stringify(transactionResponse);
-    // if (transactionResponse?.data?.data?.status === "success") {
-    //   transaction.status = "paid";
-    // } else if (transactionResponse?.data?.data?.status === "failed") {
-    //   transaction.status = "failed";
-    // }
-    // await transaction.save();
     res.status(200).json({ status: "success", transaction });
   } catch (err) {
     console.log({ err });
@@ -259,7 +265,7 @@ async function setStatusPhonePe(phonePeResponse, transaction) {
   return transaction;
 }
 
-async function initialUPIGatewayTransaction(transaction) {
+async function initiateUPIGatewayTransaction(transaction) {
   const data = JSON.stringify({
     key: process.env.UPIGATEWAY_KEY,
     client_txn_id: transaction?._id,
@@ -285,7 +291,7 @@ async function initialUPIGatewayTransaction(transaction) {
   try {
     const response = await axios(config);
     console.log({ response: response.data });
-    return response;
+    return response?.data || null;
   } catch (err) {
     console.error({ error: err.message });
     return null;
@@ -310,7 +316,8 @@ async function checkUPIGatewayTransactionStatus(transaction) {
       data,
     };
     const response = await axios(config);
-    return response;
+    console.log({ response: response?.data });
+    return response?.data || null;
   } catch (err) {
     console.log({ error: err.message });
     return null;

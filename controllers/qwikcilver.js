@@ -69,7 +69,7 @@ exports.addGiftCardOrder = async (req, res, next) => {
   } else if (transaction?.method === "upigateway") {
     transactionResponse =
       (await JSON.parse(transaction?.upigatewayResponse)) || null;
-    paymentid = transactionResponse?.data?.data?.upi_txn_id || null;
+    paymentid = transactionResponse?.data?.client_txn_id || null;
   }
 
   if (!transactionResponse || !paymentid) {
