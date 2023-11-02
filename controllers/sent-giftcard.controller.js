@@ -43,6 +43,10 @@ module.exports.sendGiftcard = async (req, res, next) => {
         (await JSON.parse(transaction?.yesPayResponse)) || null;
       paymentid =
         transactionResponse?.transaction_details?.transaction_no || null;
+    } else if (transaction?.method === "upigateway") {
+      transactionResponse =
+        (await JSON.parse(transaction?.upigatewayResponse)) || null;
+      paymentid = transactionResponse?.data?.client_txn_id || null;
     }
 
     console.log({ giftcard });
