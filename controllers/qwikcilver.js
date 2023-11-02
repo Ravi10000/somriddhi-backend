@@ -283,7 +283,8 @@ exports.addGiftCardOrder = async (req, res, next) => {
                     voucher,
                     giftCardObj,
                     paymentid,
-                    refno
+                    refno,
+                    createOrderResponse.data["orderId"]
                   )
               );
               for await (const request of voucherRequests) {
@@ -716,7 +717,17 @@ exports.getActivatedCards = async (req, res) => {
 
 exports.getAllGiftCards = async (req, res) => {
   try {
-    const giftCards = await GiftCard.find();
+    const { from, to } = req.query;
+    console.log({ from });
+
+    const giftCards = await GiftCard.find({
+      ...((from || to) && {
+        createdAt: {
+          ...(from && { $gte: from }),
+          ...(to && { $lte: to }),
+        },
+      }),
+    });
     res.status(200).json({
       status: "success",
       message: "All orders fetched",
@@ -796,7 +807,14 @@ let fixedEncodeURIComponent = (str) => {
   });
 };
 
-async function sendVoucher(transaction, voucher, giftCard, paymentid, refno) {
+async function sendVoucher(
+  transaction,
+  voucher,
+  giftCard,
+  paymentid,
+  refno,
+  orderId
+) {
   try {
     let voucherDetails = {
       name: transaction?.firstname + " " + transaction?.lastname,
@@ -807,6 +825,7 @@ async function sendVoucher(transaction, voucher, giftCard, paymentid, refno) {
       orderId: transaction?._id,
       transactionId: paymentid,
       refno,
+      orderId,
     };
     await sendVoucherEmail(transaction?.email, voucherDetails);
     await sendVoucherSms(transaction?.mobile, voucherDetails);

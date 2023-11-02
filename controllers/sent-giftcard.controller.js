@@ -56,7 +56,7 @@ module.exports.sendGiftcard = async (req, res, next) => {
       amount: voucher?.amount,
       voucherCode: voucher?.cardPin,
       validity: moment(voucher?.validity).format("YYYY/MM/DD"),
-      orderId: giftcard?.transaction,
+      orderId: giftcard?.orderId,
     };
     console.log({ voucherDetails });
     await sendVoucherEmail(receiverEmail, voucherDetails);
