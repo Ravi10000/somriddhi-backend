@@ -45,6 +45,8 @@ module.exports.sendGiftcard = async (req, res, next) => {
         transactionResponse?.transaction_details?.transaction_no || null;
     }
 
+    console.log({ giftcard });
+
     const activatedCardRes = JSON.parse(giftcard?.activatedCardRes);
     let voucher = activatedCardRes?.cards?.[0];
     let voucherDetails = {

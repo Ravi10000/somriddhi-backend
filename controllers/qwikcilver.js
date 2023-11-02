@@ -807,14 +807,7 @@ let fixedEncodeURIComponent = (str) => {
   });
 };
 
-async function sendVoucher(
-  transaction,
-  voucher,
-  giftCard,
-  paymentid,
-  refno,
-  orderId
-) {
+async function sendVoucher(transaction, voucher, giftCard, paymentid, refno) {
   try {
     let voucherDetails = {
       name: transaction?.firstname + " " + transaction?.lastname,
@@ -822,10 +815,10 @@ async function sendVoucher(
       voucherCode: voucher?.cardPin,
       giftCardId: giftCard?._id,
       validity: moment(voucher?.validity).format("YYYY/MM/DD"),
-      orderId: transaction?._id,
+      // orderId: transaction?._id,
       transactionId: paymentid,
       refno,
-      orderId,
+      orderId: giftCard?.orderId,
     };
     await sendVoucherEmail(transaction?.email, voucherDetails);
     await sendVoucherSms(transaction?.mobile, voucherDetails);
