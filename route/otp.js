@@ -42,7 +42,7 @@ router.get("/getallgiftcards", fetchuser, isAdmin, getAllGiftCards);
 router.get(
   "/getActivatedCards/:orderid",
   fetchuser,
-  generateAccessToken,
+  // generateAccessToken,
   getActivatedCards
 );
 

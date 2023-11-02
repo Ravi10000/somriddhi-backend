@@ -727,7 +727,7 @@ exports.getAllGiftCards = async (req, res) => {
           ...(to && { $lte: to }),
         },
       }),
-    });
+    }).sort({ createdAt: -1 });
     res.status(200).json({
       status: "success",
       message: "All orders fetched",
