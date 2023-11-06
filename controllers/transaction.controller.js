@@ -4,6 +4,7 @@ const { encodeRequest } = require("../utils/encode-request");
 const SHA256 = require("../sha256-hash");
 const User = require("../models/User");
 const moment = require("moment");
+const GiftCard = require("../models/GiftCardModel");
 
 exports.createTransaction = async (req, res) => {
   try {
@@ -15,8 +16,19 @@ exports.createTransaction = async (req, res) => {
       status: _unauthorisedStatus,
       ...restTransactionData
     } = req.body;
+
     if (!req.user)
       return res.status(401).json({ status: "error", message: "Unauthorized" });
+
+    const limit = await checkLimit(req?.user?._id, req?.body?.amount);
+    console.log({ limit });
+    if (limit?.status === "exceeded")
+      return res.status(400).json({
+        status: "error",
+        message: "limit exceeded",
+        flashMessage: limit?.flashMessage,
+      });
+
     const transaction = await Transaction.create({
       ...restTransactionData,
       user: req.user._id,
@@ -322,4 +334,50 @@ async function checkUPIGatewayTransactionStatus(transaction) {
     console.log({ error: err.message });
     return null;
   }
+}
+
+async function checkLimit(userId, amount) {
+  const today = moment();
+  const startOfWeek = moment().startOf("week");
+  const startOfMonth = moment().startOf("month");
+
+  const weeklyTransactions = await Transaction.find({
+    user: userId,
+    status: "paid",
+    createdAt: {
+      $gte: startOfWeek,
+      $lte: today,
+    },
+  });
+  const weeklyExpense = calculateExpense(weeklyTransactions);
+  if (weeklyExpense + amount > 10_000) {
+    return {
+      status: "exceeded",
+      flashMessage: "Weekly Limit of ₹10,000 Reached.",
+    };
+  }
+  const monthlyTransactions = await Transaction.find({
+    user: userId,
+    status: "paid",
+    createdAt: {
+      $gte: startOfMonth,
+      $lte: today,
+    },
+  });
+
+  const monthlyExpense = calculateExpense(monthlyTransactions);
+  if (monthlyExpense + amount > 20_000) {
+    return {
+      status: "exceeded",
+      flashMessage: "Monthly Limit of ₹20,000 Reached.",
+    };
+  }
+  return { status: "not-exceeded" };
+}
+
+function calculateExpense(transactions) {
+  return transactions.reduce(
+    (acc, transaction) => acc + transaction?.amount,
+    0
+  );
 }

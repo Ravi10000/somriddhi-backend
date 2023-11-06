@@ -1,7 +1,3 @@
-const referralCodeGenerator = require("referral-code-generator");
-const User = require("./models/User");
-const Deal = require("./models/Deal");
-const Category = require("./models/Category");
 const mongoose = require("mongoose");
 const env = require("dotenv");
 env.config();
@@ -10,23 +6,23 @@ mongoose.set("strictQuery", false);
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGO_URL);
 
-// async function insertReferralCode() {
-//   const users = await User.find();
-//   users.forEach(async (user) => {
-//     const referralCode = referralCodeGenerator.alpha("uppercase", 12);
-//     user.referralCode = referralCode;
-//     user.isContactVerified = true;
-//     await user.save();
-//     console.log({ user });
-//   });
-// }
+const moment = require("moment");
+const Transaction = require("./models/Transaction.model");
 
-// insertReferralCode();
+async function testLimit() {
+  const today = moment("2023-11-02");
+  const startOfWeek = today.startOf("week");
+  console.log({ today, startOfWeek });
 
-async function searchDeals() {
-  const deals = await Deal.find({ $text: { $search: "amazon" } });
-  const categories = await Category.find({ $text: { $search: "beauty" } });
-  console.log({ deals, categories });
+  const transactions = await Transaction.find({
+    user: "642cf4aefd8b7a0586d83802",
+    status: "paid",
+    createdAt: {
+      $gte: startOfWeek,
+      $lte: today,
+    },
+  });
+  console.log({ transactions });
 }
 
-searchDeals();
+testLimit();

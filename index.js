@@ -113,7 +113,6 @@ app.get("/test-sms", async (req, res) => {
       message: "sms failed",
       error: err.message,
     });
-    // res.send("sms failed");
   }
 });
 
