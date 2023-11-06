@@ -719,15 +719,21 @@ exports.getAllGiftCards = async (req, res) => {
   try {
     const { from, to } = req.query;
     console.log({ from });
-
-    const giftCards = await GiftCard.find({
+    const query = {
       ...((from || to) && {
         createdAt: {
-          ...(from && { $gte: from }),
-          ...(to && { $lte: to }),
+          ...(from && {
+            $gte: new Date(new Date(from).setHours("00", "00", "00")),
+          }),
+          ...(to && {
+            $lte: new Date(new Date(to).setHours("23", "59", "59")),
+          }),
         },
       }),
-    }).sort({ createdAt: -1 });
+    };
+    const giftCards = await GiftCard.find(query).sort({
+      createdAt: -1,
+    });
     res.status(200).json({
       status: "success",
       message: "All orders fetched",
