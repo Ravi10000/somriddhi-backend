@@ -717,8 +717,8 @@ exports.getActivatedCards = async (req, res) => {
 
 exports.getAllGiftCards = async (req, res) => {
   try {
-    const { from, to } = req.query;
-    console.log({ from });
+    const { from, to, skip = 0, limit } = req.query;
+    console.log({ from, to, skip, limit });
     const query = {
       ...((from || to) && {
         createdAt: {
@@ -731,18 +731,52 @@ exports.getAllGiftCards = async (req, res) => {
         },
       }),
     };
-    const giftCards = await GiftCard.find(query).sort({
-      createdAt: -1,
-    });
+    const giftCards = await GiftCard.find(query)
+      .sort({
+        createdAt: -1,
+      })
+      .limit(parseInt(limit ?? 25))
+      .skip(parseInt(skip));
+
+    const giftcardsCount = await GiftCard.countDocuments(query);
     res.status(200).json({
       status: "success",
       message: "All orders fetched",
       giftCards,
+      giftcardsCount,
     });
   } catch (err) {
     console.log(err);
   }
 };
+// exports.getAllGiftCards = async (req, res) => {
+//   try {
+//     const { from, to } = req.query;
+//     console.log({ from });
+//     const query = {
+//       ...((from || to) && {
+//         createdAt: {
+//           ...(from && {
+//             $gte: new Date(new Date(from).setHours("00", "00", "00")),
+//           }),
+//           ...(to && {
+//             $lte: new Date(new Date(to).setHours("23", "59", "59")),
+//           }),
+//         },
+//       }),
+//     };
+//     const giftCards = await GiftCard.find(query).sort({
+//       createdAt: -1,
+//     });
+//     res.status(200).json({
+//       status: "success",
+//       message: "All orders fetched",
+//       giftCards,
+//     });
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };
 
 let sortObject = (object) => {
   if (object instanceof Array) {
