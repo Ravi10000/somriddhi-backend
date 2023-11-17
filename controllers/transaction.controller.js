@@ -20,7 +20,8 @@ exports.createTransaction = async (req, res) => {
     if (!req.user)
       return res.status(401).json({ status: "error", message: "Unauthorized" });
 
-    const limit = await checkLimit(req?.user?._id, req?.body?.amount);
+    // const limit = await checkLimit(req?.user?._id, req?.body?.amount);
+    const limit = await checkLimit(req?.body?.email, req?.body?.amount);
     console.log({ limit });
     if (limit?.status === "exceeded")
       return res.status(400).json({
@@ -336,32 +337,36 @@ async function checkUPIGatewayTransactionStatus(transaction) {
   }
 }
 
-async function checkLimit(userId, amount) {
+async function checkLimit(email, amount) {
   const today = moment();
-  const startOfWeek = moment().startOf("week");
+  // const startOfWeek = moment().startOf("week");
   const startOfMonth = moment().startOf("month");
 
-  const weeklyTransactions = await Transaction.find({
-    user: userId,
-    status: "paid",
-    createdAt: {
-      $gte: startOfWeek,
-      $lte: today,
-    },
-  });
-  const weeklyExpense = calculateExpense(weeklyTransactions);
-  if (weeklyExpense + amount > 10_000) {
-    return {
-      status: "exceeded",
-      flashMessage: "Weekly Limit of ₹10,000 Reached.",
-    };
-  }
+  // const weeklyTransactions = await Transaction.find({
+  //   // user: userId,
+  //   email,
+  //   status: "paid",
+  //   createdAt: {
+  //     $gte: new Date(new Date(startOfWeek).setHours("00", "00", "00")),
+  //     $lte: new Date(new Date(today).setHours("23", "59", "59")),
+  //   },
+  // });
+  // const weeklyExpense = calculateExpense(weeklyTransactions);
+  // if (weeklyExpense + amount > 10_000) {
+  //   return {
+  //     status: "exceeded",
+  //     flashMessage: "Weekly Limit of ₹10,000 Reached.",
+  //   };
+  // }
   const monthlyTransactions = await Transaction.find({
-    user: userId,
+    // user: userId,
+    email,
     status: "paid",
     createdAt: {
-      $gte: startOfMonth,
-      $lte: today,
+      // $gte: startOfMonth,
+      // $lte: today,
+      $gte: new Date(new Date(startOfMonth).setHours("00", "00", "00")),
+      $lte: new Date(new Date(today).setHours("23", "59", "59")),
     },
   });
 
