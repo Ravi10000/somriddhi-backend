@@ -189,7 +189,7 @@ exports.newUser = async (req, res) => {
       newData.lname = lname;
     }
     if (email) {
-      newData.email = email;
+      newData.email = email?.toLowerCase();
     }
     if (phone) {
       newData.phone = phone;
@@ -246,7 +246,7 @@ exports.updateUser = async (req, res) => {
       newData.lname = lname;
     }
     if (email) {
-      newData.email = email;
+      newData.email = email.toLowerCase();
     }
     if (phone) {
       newData.phone = phone;

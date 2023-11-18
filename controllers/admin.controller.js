@@ -12,7 +12,10 @@ module.exports.loginAdmin = async (req, res, next) => {
         .status(400)
         .json({ message: "userId and password are required" });
     }
-    const user = await User.findOne({ email: userId, usertype: "admin" });
+    const user = await User.findOne({
+      email: userId?.toLowerCase(),
+      usertype: "admin",
+    });
     if (!user) {
       return res
         .status(400)
@@ -79,7 +82,7 @@ module.exports.generateResetPasswordRequest = async (req, res) => {
         .status(400)
         .json({ status: "error", message: "Email is required" });
     }
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: email?.toLowerCase() });
     if (!user || user?.usertype !== "admin") {
       return res
         .status(400)
@@ -95,7 +98,6 @@ module.exports.generateResetPasswordRequest = async (req, res) => {
     res.status(200).json({
       status: "success",
       message: "Reset Password Link Sent",
-      link: resetPasswordLink,
     });
   } catch (err) {
     console.log(err);
