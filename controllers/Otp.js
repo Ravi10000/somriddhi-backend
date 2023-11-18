@@ -165,11 +165,23 @@ exports.newUser = async (req, res) => {
   console.log("body", req?.body);
   console.log("user", req?.user);
   // console.log("user", req.user);
-  const { fname, lname, email, phone, referredBy } = req?.body;
+  const { fname, lname, email, phone, entity, panNo, referredBy } = req?.body;
 
   try {
     // Create a newNote object
     const newData = {};
+    if (entity) {
+      newData.entity = entity;
+    }
+    if (entity === "business") {
+      if (!panNo) {
+        return res.status(400).json({
+          status: "fail",
+          message: "Pan Number is required",
+        });
+      }
+      newData.panNo = panNo.toUpperCase();
+    }
     if (fname) {
       newData.fname = fname;
     }

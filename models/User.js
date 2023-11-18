@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const UserSchema = new Schema({
+  userId: String,
+  hash: String,
   fname: {
     type: String,
     required: false,
@@ -20,12 +22,13 @@ const UserSchema = new Schema({
   },
   phone: {
     type: String,
-    required: true,
-    unique: true,
+    // required: true,
+    // unique: true,
   },
   isContactVerified: {
     type: Boolean,
-    required: true,
+    default: false,
+    // required: true,
   },
   referralCode: {
     type: String,
@@ -39,6 +42,13 @@ const UserSchema = new Schema({
     type: String,
     enum: ["customer", "admin"],
     required: true,
+    lowercase: true,
+  },
+  panNo: String,
+  entity: {
+    type: String,
+    enum: ["individual", "business"],
+    default: "individual",
     lowercase: true,
   },
   walletId: {
