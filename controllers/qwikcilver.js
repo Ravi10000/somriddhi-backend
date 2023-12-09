@@ -849,8 +849,13 @@ let fixedEncodeURIComponent = (str) => {
 
 async function sendVoucher(transaction, voucher, giftCard, paymentid, refno) {
   try {
+    const name =
+      transaction?.receiver?.name ||
+      transaction?.firstname + " " + transaction?.lastname;
+    const email = transaction?.receiver?.email || transaction?.email;
+    const mobile = transaction?.receiver?.mobile || transaction?.mobile;
     let voucherDetails = {
-      name: transaction?.firstname + " " + transaction?.lastname,
+      name,
       amount: voucher?.amount,
       voucherCode: voucher?.cardPin,
       giftCardId: giftCard?._id,
@@ -860,8 +865,8 @@ async function sendVoucher(transaction, voucher, giftCard, paymentid, refno) {
       refno,
       orderId: giftCard?.orderId,
     };
-    await sendVoucherEmail(transaction?.email, voucherDetails);
-    await sendVoucherSms(transaction?.mobile, voucherDetails);
+    await sendVoucherEmail(email, voucherDetails);
+    await sendVoucherSms(mobile, voucherDetails);
     return true;
   } catch (err) {
     return false;

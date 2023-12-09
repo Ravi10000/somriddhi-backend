@@ -44,6 +44,11 @@ const transactionSchema = new mongoose.Schema(
     yesPayResponse: String,
     phonePeResponse: String,
     upigatewayResponse: String,
+    receiver: {
+      name: String,
+      email: String,
+      mobile: String,
+    },
     status: {
       type: String,
       enum: ["initiated", "paid", "failed", "pending"],

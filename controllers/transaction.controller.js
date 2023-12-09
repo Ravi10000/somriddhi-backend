@@ -21,7 +21,11 @@ exports.createTransaction = async (req, res) => {
       return res.status(401).json({ status: "error", message: "Unauthorized" });
 
     // const limit = await checkLimit(req?.user?._id, req?.body?.amount);
-    const limit = await checkLimit(req?.body?.email, req?.body?.amount);
+    const limit = await checkLimit(
+      req?.body?.email,
+      req?.body?.amount,
+      req.user?._id
+    );
     console.log({ limit });
     if (limit?.status === "exceeded")
       return res.status(400).json({
@@ -341,7 +345,6 @@ async function checkLimit(email, amount) {
   const today = moment();
   // const startOfWeek = moment().startOf("week");
   const startOfMonth = moment().startOf("month");
-
   // const weeklyTransactions = await Transaction.find({
   //   // user: userId,
   //   email,
@@ -371,6 +374,13 @@ async function checkLimit(email, amount) {
   });
 
   const monthlyExpense = calculateExpense(monthlyTransactions);
+  // TODO: check user entity and set limit accordingly (20k for individual, 50k for business)
+  // FIXME: entity is set on user, but we are checking limit on email how to we get entity type of user if limit is set based on email
+  const limits = {
+    individual: 20_000,
+    business: 50_000,
+    default: 20_000,
+  };
   if (monthlyExpense + amount > 20_000) {
     return {
       status: "exceeded",
