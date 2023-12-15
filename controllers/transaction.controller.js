@@ -104,7 +104,7 @@ exports.updateTransactionStatus = async (req, res) => {
     let { response: yesPayResponse } = req.body;
     yesPayResponse = JSON.parse(yesPayResponse);
     console.log({ yesPayResponse });
-    console.log({transactionId: yesPayResponse.request_id});
+    console.log({ transactionId: yesPayResponse.request_id });
     const transaction = await Transaction.findById(yesPayResponse.request_id);
     console.log({ transaction });
     if (!transaction) {
