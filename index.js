@@ -11,6 +11,7 @@ const { engine } = require("express-handlebars");
 const path = require("path");
 const sendVoucherEmail = require("./utils/send-voucher-email");
 const { sendVoucherSms } = require("./utils/send-voucher-sms");
+const axios = require("axios");
 
 mongoose.set("strictQuery", false);
 mongoose.Promise = global.Promise;
@@ -139,6 +140,39 @@ app.use("/api", require("./route/giftcard-discount.route"));
 app.use("/api/admin", require("./route/admin.route"));
 
 mongoose.connect(process.env.MONGO_URL);
+
+const panFilePath = path.join(__dirname, "accountId_59687_public_key.pem");
+console.log({ panFilePath });
+app.post("/verify-pan", async (req, res) => {
+  const { panNumber } = req.body;
+  try {
+    const options = {
+      method: "GET",
+      url: `https://pan-card-verification-at-lowest-price.p.rapidapi.com/verifyPan/FNLPM8635N`,
+      headers: {
+        "x-rapid-api": "rapid-api-database",
+        "X-RapidAPI-Key": "b9683fa74dmshd30ef30c102bca8p1c80f9jsnd1a76cf1bc42",
+        "X-RapidAPI-Host":
+          "pan-card-verification-at-lowest-price.p.rapidapi.com",
+      },
+    };
+
+    const response = await axios.request(options);
+    console.log({ response });
+    res.status(200).json({
+      status: "success",
+      message: "pan verified successfully",
+      data: response.data,
+    });
+  } catch (err) {
+    console.log({ err });
+    res.status(400).json({
+      status: "error",
+      message: "pan verification failed",
+      error: err.message,
+    });
+  }
+});
 
 // app.listen(process.env.PORT, () => {
 //   console.log(`Server is listening on port ${process.env.PORT} `);

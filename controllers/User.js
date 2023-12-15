@@ -198,7 +198,7 @@ exports.login = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
   console.log("body", req.body);
-  const { fname, lname, email, phone, usertype } = req.body;
+  const { fname, lname, email, phone, usertype, pan } = req.body;
 
   try {
     // Create a newNote object
@@ -217,6 +217,17 @@ exports.updateUser = async (req, res) => {
     }
     if (usertype) {
       newData.usertype = usertype;
+    }
+    if (usertype === "business") {
+      if (!pan) {
+        return res
+          .status(400)
+          .json({
+            status: false,
+            message: "pan is required for business accounts",
+          });
+      }
+      newData.pan = pan;
     }
 
     // Find the note to be updated and update it
