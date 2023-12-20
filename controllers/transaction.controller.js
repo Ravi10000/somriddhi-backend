@@ -379,11 +379,11 @@ async function checkLimit(email, amount) {
   // TODO: check user entity and set limit accordingly (20k for individual, 50k for business)
   // FIXME: entity is set on user, but we are checking limit on email how to we get entity type of user if limit is set based on email
   const limits = {
-    individual: 20_000,
+    individual: 30_000,
     business: 50_000,
-    default: 20_000,
+    default: 30_000,
   };
-  if (monthlyExpense + amount > 20_000) {
+  if (monthlyExpense + amount > 30_000) {
     return {
       status: "exceeded",
       flashMessage: "Monthly Limit of ₹20,000 Reached.",
