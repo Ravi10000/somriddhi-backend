@@ -104,8 +104,10 @@ exports.updateTransactionStatus = async (req, res) => {
     let { response: yesPayResponse } = req.body;
     yesPayResponse = JSON.parse(yesPayResponse);
     console.log({ yesPayResponse });
-    console.log({ transactionId: yesPayResponse.request_id });
-    const transaction = await Transaction.findById(yesPayResponse.request_id);
+    console.log({ transactionId: yesPayResponse?.request_id });
+    const transaction =
+      yesPayResponse?.request_id &&
+      (await Transaction.findById(yesPayResponse?.request_id));
     console.log({ transaction });
     if (!transaction) {
       return res
@@ -113,7 +115,8 @@ exports.updateTransactionStatus = async (req, res) => {
         .json({ status: "error", message: "Transaction not found" });
     }
     transaction.status =
-      yesPayResponse.transaction_details.transaction_status.toLowerCase();
+      yesPayResponse?.transaction_details?.transaction_status?.toLowerCase?.() ||
+      "pending";
     transaction.yesPayResponse = JSON.stringify(yesPayResponse);
     await transaction.save();
 

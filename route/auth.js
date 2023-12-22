@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { body } = require("express-validator");
+const { body, param } = require("express-validator");
 const { fetchuser } = require("../middleware/Auth");
 
 const {
@@ -11,8 +11,10 @@ const {
   logout,
   checkAuthentication,
   createUserByAdmin,
+  verifyPan,
 } = require("../controllers/User");
 const otpController = require("../controllers/Otp");
+const validateReq = require("../middleware/validate-req");
 
 // ROUTE 1: Create a User using: POST "/api/auth/createuser". No login required
 // router.post("/signup", [
@@ -41,6 +43,17 @@ router.delete("/deleteUser/:id", fetchuser, deleteUser);
 router.post("/newuser", fetchuser, createUserByAdmin);
 
 router.delete("/logout", fetchuser, logout);
+
+router.get(
+  "/auth/verify-pan/:pan",
+  // param("pan", "Invalid PAN number.")
+  //   .escape()
+  //   .exists({ checkFalsy: true })
+  //   .isLength({ min: 10, max: 10 })
+  //   .matches(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/),
+  // validateReq,
+  verifyPan
+);
 // router.delete("/deleteUser/:id", fetchuser, deleteUser);
 // router.put("/updatePassword/:id", [
 //   body('password', 'Password must be atleast 5 characters').isLength({ min: 5 }),], fetchuser, resetPassword);

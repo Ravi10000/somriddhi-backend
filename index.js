@@ -65,57 +65,57 @@ app.get("/", (req, res) => {
 //   }
 // });
 
-app.get("/test-email-template", async (req, res) => {
-  try {
-    const emailResponse = await sendVoucherEmail("ravisince2k@gmail.com", {
-      // layout: false,
-      name: "Ravi Sharma",
-      transactionId: "6524e480b36fedcb858b64bd",
-      refno: "SOMRIDDHI2342",
-      voucherCode: "SVAQ-TMDRD9-Z9D",
-      amount: "1000",
-      senderName: "Rocky Sharma",
-      validity: "2024/10/05",
-    });
-    console.log({ emailResponse });
-  } catch (err) {
-    console.error(err.message);
-  }
-  res.render("voucher-template-2", {
-    layout: false,
-    name: "Ravi Sharma",
-    transactionId: "6524e480b36fedcb858b64bd",
-    refno: "SOMRIDDHI2342",
-    voucherCode: "SVAQ-TMDRD9-Z9D",
-    amount: "1000",
-    senderName: "Rocky Sharma",
-    validity: "2024/10/05",
-  });
-});
+// app.get("/test-email-template", async (req, res) => {
+//   try {
+//     const emailResponse = await sendVoucherEmail("ravisince2k@gmail.com", {
+//       // layout: false,
+//       name: "Ravi Sharma",
+//       transactionId: "6524e480b36fedcb858b64bd",
+//       refno: "SOMRIDDHI2342",
+//       voucherCode: "SVAQ-TMDRD9-Z9D",
+//       amount: "1000",
+//       senderName: "Rocky Sharma",
+//       validity: "2024/10/05",
+//     });
+//     console.log({ emailResponse });
+//   } catch (err) {
+//     console.error(err.message);
+//   }
+//   res.render("voucher-template-2", {
+//     layout: false,
+//     name: "Ravi Sharma",
+//     transactionId: "6524e480b36fedcb858b64bd",
+//     refno: "SOMRIDDHI2342",
+//     voucherCode: "SVAQ-TMDRD9-Z9D",
+//     amount: "1000",
+//     senderName: "Rocky Sharma",
+//     validity: "2024/10/05",
+//   });
+// });
 
-app.get("/test-sms", async (req, res) => {
-  try {
-    const response = await sendVoucherSms("9560863067", {
-      voucherCode: "SVAQ-TMDRD9-Z9D",
-      // senderName: "Ravi",
-      amount: "100",
-      refId: "123456",
-      link: "https://somriddhi.store",
-    });
-    console.log({ response });
-    res.status(200).json({
-      status: "success",
-      message: "sms sent successfully",
-    });
-  } catch (err) {
-    console.log(err.message);
-    res.status(400).json({
-      status: "error",
-      message: "sms failed",
-      error: err.message,
-    });
-  }
-});
+// app.get("/test-sms", async (req, res) => {
+//   try {
+//     const response = await sendVoucherSms("9560863067", {
+//       voucherCode: "SVAQ-TMDRD9-Z9D",
+//       // senderName: "Ravi",
+//       amount: "100",
+//       refId: "123456",
+//       link: "https://somriddhi.store",
+//     });
+//     console.log({ response });
+//     res.status(200).json({
+//       status: "success",
+//       message: "sms sent successfully",
+//     });
+//   } catch (err) {
+//     console.log(err.message);
+//     res.status(400).json({
+//       status: "error",
+//       message: "sms failed",
+//       error: err.message,
+//     });
+//   }
+// });
 
 app.use(cors());
 app.use("/api", require("./route/cashback.route"));
@@ -141,38 +141,38 @@ app.use("/api/admin", require("./route/admin.route"));
 
 mongoose.connect(process.env.MONGO_URL);
 
-const panFilePath = path.join(__dirname, "accountId_59687_public_key.pem");
-console.log({ panFilePath });
-app.post("/verify-pan", async (req, res) => {
-  const { panNumber } = req.body;
-  try {
-    const options = {
-      method: "GET",
-      url: `https://pan-card-verification-at-lowest-price.p.rapidapi.com/verifyPan/FNLPM8635N`,
-      headers: {
-        "x-rapid-api": "rapid-api-database",
-        "X-RapidAPI-Key": "b9683fa74dmshd30ef30c102bca8p1c80f9jsnd1a76cf1bc42",
-        "X-RapidAPI-Host":
-          "pan-card-verification-at-lowest-price.p.rapidapi.com",
-      },
-    };
+// const panFilePath = path.join(__dirname, "accountId_59687_public_key.pem");
+// console.log({ panFilePath });
+// app.post("/verify-pan", async (req, res) => {
+//   const { panNumber } = req.body;
+//   try {
+//     const options = {
+//       method: "GET",
+//       url: `https://pan-card-verification-at-lowest-price.p.rapidapi.com/verifyPan/FNLPM8635N`,
+//       headers: {
+//         "x-rapid-api": "rapid-api-database",
+//         "X-RapidAPI-Key": "b9683fa74dmshd30ef30c102bca8p1c80f9jsnd1a76cf1bc42",
+//         "X-RapidAPI-Host":
+//           "pan-card-verification-at-lowest-price.p.rapidapi.com",
+//       },
+//     };
 
-    const response = await axios.request(options);
-    console.log({ response });
-    res.status(200).json({
-      status: "success",
-      message: "pan verified successfully",
-      data: response.data,
-    });
-  } catch (err) {
-    console.log({ err });
-    res.status(400).json({
-      status: "error",
-      message: "pan verification failed",
-      error: err.message,
-    });
-  }
-});
+//     const response = await axios.request(options);
+//     console.log({ response });
+//     res.status(200).json({
+//       status: "success",
+//       message: "pan verified successfully",
+//       data: response.data,
+//     });
+//   } catch (err) {
+//     console.log({ err });
+//     res.status(400).json({
+//       status: "error",
+//       message: "pan verification failed",
+//       error: err.message,
+//     });
+//   }
+// });
 
 // app.listen(process.env.PORT, () => {
 //   console.log(`Server is listening on port ${process.env.PORT} `);

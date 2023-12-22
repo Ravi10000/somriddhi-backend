@@ -6,6 +6,7 @@ const bcrypt = require("bcryptjs");
 var jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
 const { exists } = require("../models/Otp");
+const axios = require("axios");
 // const Error = require("../utils/appError");
 // const FormResponseModel = require("../models/FormResponse");
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -220,12 +221,10 @@ exports.updateUser = async (req, res) => {
     }
     if (usertype === "business") {
       if (!pan) {
-        return res
-          .status(400)
-          .json({
-            status: false,
-            message: "pan is required for business accounts",
-          });
+        return res.status(400).json({
+          status: false,
+          message: "pan is required for business accounts",
+        });
       }
       newData.pan = pan;
     }
@@ -410,3 +409,41 @@ exports.createUserByAdmin = async (req, res) => {
 // };
 
 // module.exports = router;
+
+exports.verifyPan = async (req, res) => {
+  try {
+    const { pan } = req.params;
+    const panRes = await axios.post(
+      "https://api.cashfree.com/verification/pan",
+      {
+        pan,
+      },
+      {
+        headers: {
+          "x-client-id": process.env.CASHFREE_CLIENT_ID,
+          "x-client-secret": process.env.CASHFREE_CLIENT_SECRET,
+          "x-api-version": "v1",
+        },
+      }
+    );
+    const data = panRes?.data;
+
+    if (!data?.valid) {
+      return res.status(400).json({
+        status: "error",
+        message: "Invalid PAN number",
+      });
+    }
+    res.status(200).json({
+      status: "success",
+      message: "Pan verified Successfully",
+      panResponse: panRes.data,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error",
+    });
+  }
+};
