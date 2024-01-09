@@ -389,7 +389,7 @@ async function checkLimit(email, amount) {
   if (monthlyExpense + amount > 30_000) {
     return {
       status: "exceeded",
-      flashMessage: "Monthly Limit of ₹20,000 Reached.",
+      flashMessage: "Monthly Limit of ₹30,000 Reached.",
     };
   }
   return { status: "not-exceeded" };
